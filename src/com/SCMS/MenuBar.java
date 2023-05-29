@@ -1,3 +1,4 @@
+package com.SCMS;
 import java.awt.event.*;
 import javax.swing.*;
 
@@ -104,6 +105,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
         // Handle menu item clicks
         if (e.getSource() == supplierItem) {
             // Code to open supplier window
+            System.out.println("Supplier");
         } else if (e.getSource() == productItem) {
             // Code to open product window
         } else if (e.getSource() == reportItem) {
