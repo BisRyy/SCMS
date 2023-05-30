@@ -169,7 +169,7 @@ public class orders extends JPanel {
 		lblNewLabel_5_2.setBounds(10, 125, 79, 13);
 		panel_2.add(lblNewLabel_5_2);
 		
-		JLabel lblNewLabel_6_2 = new JLabel("Ararsa");
+		JLabel lblNewLabel_6_2 = new JLabel("Birhanu");
 		lblNewLabel_6_2.setBounds(216, 56, 45, 13);
 		panel_2.add(lblNewLabel_6_2);
 		
@@ -223,7 +223,7 @@ public class orders extends JPanel {
 		lblNewLabel_5_3.setBounds(10, 125, 79, 13);
 		panel_3.add(lblNewLabel_5_3);
 		
-		JLabel lblNewLabel_6_3 = new JLabel("Ararsa");
+		JLabel lblNewLabel_6_3 = new JLabel("Bisrat");
 		lblNewLabel_6_3.setBounds(216, 56, 79, 13);
 		panel_3.add(lblNewLabel_6_3);
 		
@@ -265,7 +265,7 @@ public class orders extends JPanel {
 		lblNewLabel_5_2_1.setBounds(10, 125, 79, 13);
 		panel_2_1.add(lblNewLabel_5_2_1);
 		
-		JLabel lblNewLabel_6_2_1 = new JLabel("Ararsa");
+		JLabel lblNewLabel_6_2_1 = new JLabel("Biruk");
 		lblNewLabel_6_2_1.setBounds(216, 56, 79, 13);
 		panel_2_1.add(lblNewLabel_6_2_1);
 		
@@ -403,7 +403,7 @@ public class orders extends JPanel {
 		lblNewLabel_5_2_4.setBounds(10, 125, 79, 13);
 		panel_2_4.add(lblNewLabel_5_2_4);
 		
-		JLabel lblNewLabel_6_2_4 = new JLabel("Ararsa");
+		JLabel lblNewLabel_6_2_4 = new JLabel("Biyaol");
 		lblNewLabel_6_2_4.setBounds(216, 56, 79, 13);
 		panel_2_4.add(lblNewLabel_6_2_4);
 		
