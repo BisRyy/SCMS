@@ -8,14 +8,14 @@ public class Menu extends JFrame {
     public MenuBar menuBar;
     public JButton[] menuItems = new JButton[10];
     public JButton current;
-    orders order = new orders();
+    public JPanel order;
     public Menu() {
         super("Supply Chain Management System");
 
         // Initialize components
         menuBar = new MenuBar();
         navBar = new NavBar();
-        
+        order = new orders();
         
         setJMenuBar(menuBar);
         add(navBar);
@@ -23,6 +23,7 @@ public class Menu extends JFrame {
         workSpace.setBounds(240, 0, 1400 - 240, 760);
         workSpace.setBackground(Color.CYAN);
         JButton button = new JButton("Click Me");
+        workSpace.setLayout(new GridLayout(1,1));
         workSpace.add(button);
 
         String[] menuItemsNames = {"Dashboard", "Inventory", "Orders", "Suppliers", "Customers", "Employees", "Reports", "Settings", "Help", "Logout"};
