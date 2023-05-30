@@ -8,7 +8,7 @@ public class Menu extends JFrame {
     public MenuBar menuBar;
     public JButton[] menuItems = new JButton[10];
     public JButton current;
-
+    orders order = new orders();
     public Menu() {
         super("Supply Chain Management System");
 
@@ -42,7 +42,7 @@ public class Menu extends JFrame {
                 current = (JButton) e.getSource();
 
                     if (current == menuItems[2]) {
-                        workSpace.add(new JLabel("This is " + menuItemsNames[2]));
+                        workSpace.add(order);
                         menuItems[2].setBackground(Color.LIGHT_GRAY);
                         menuItems[2].setForeground(Color.WHITE);
                     } else {
