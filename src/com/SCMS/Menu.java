@@ -40,16 +40,16 @@ public class Menu extends JFrame {
                 workSpace.repaint();
                 workSpace.revalidate();
                 current = (JButton) e.getSource();
-                for (int j = 0; j < menuItems.length; j++) {
-                    if (current == menuItems[j]) {
-                        workSpace.add(new JLabel("This is " + menuItemsNames[j]));
-                        menuItems[j].setBackground(Color.LIGHT_GRAY);
-                        menuItems[j].setForeground(Color.WHITE);
+
+                    if (current == menuItems[2]) {
+                        workSpace.add(new JLabel("This is " + menuItemsNames[2]));
+                        menuItems[2].setBackground(Color.LIGHT_GRAY);
+                        menuItems[2].setForeground(Color.WHITE);
                     } else {
-                        menuItems[j].setBackground(Color.WHITE);
-                        menuItems[j].setForeground(Color.BLACK);
+                        menuItems[2].setBackground(Color.WHITE);
+                        menuItems[2].setForeground(Color.BLACK);
                     }
-                }
+
             });
         }
 

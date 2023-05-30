@@ -1,4 +1,5 @@
 package com.SCMS;
+
 import javax.swing.SwingUtilities;
 
 public class Main{
