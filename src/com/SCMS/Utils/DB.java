@@ -1,4 +1,4 @@
-package com.SCMS;
+package com.SCMS.Utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
