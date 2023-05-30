@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class orders extends JPanel {
 	private JTextField textField;
@@ -25,12 +26,15 @@ public class orders extends JPanel {
 		add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(255, 255, 255));
 		panel.setBounds(31, 87, 329, 164);
 		add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("QH29");
-		lblNewLabel_1.setBounds(10, 10, 45, 13);
+		JLabel lblNewLabel_1 = new JLabel("#QH29");
+		lblNewLabel_1.setForeground(new Color(112, 128, 144));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		lblNewLabel_1.setBounds(10, 21, 64, 25);
 		panel.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Customer");
@@ -70,7 +74,7 @@ public class orders extends JPanel {
 		panel.add(lblNewLabel_9);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(0, 33, 329, 2);
+		separator_1.setBounds(0, 21, 329, 2);
 		panel.add(separator_1);
 		
 		JButton btnNewButton = new JButton("Accept");
@@ -85,7 +89,13 @@ public class orders extends JPanel {
 		btnNewButton_2.setBounds(226, 143, 85, 21);
 		panel.add(btnNewButton_2);
 		
+		JLabel lblNewLabel_10 = new JLabel("15 may 2023, 13:00");
+		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblNewLabel_10.setBounds(10, 0, 143, 23);
+		panel.add(lblNewLabel_10);
+		
 		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setLayout(null);
 		panel_1.setBounds(31, 261, 329, 164);
 		add(panel_1);
@@ -134,6 +144,7 @@ public class orders extends JPanel {
 		panel_1.add(separator);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(255, 255, 255));
 		panel_2.setLayout(null);
 		panel_2.setBounds(427, 87, 329, 164);
 		add(panel_2);
@@ -187,6 +198,7 @@ public class orders extends JPanel {
 		panel_2.add(btnNewButton_5);
 		
 		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 255, 255));
 		panel_3.setLayout(null);
 		panel_3.setBounds(427, 261, 329, 164);
 		add(panel_3);
@@ -228,6 +240,7 @@ public class orders extends JPanel {
 		panel_3.add(lblNewLabel_9_3);
 		
 		JPanel panel_2_1 = new JPanel();
+		panel_2_1.setBackground(new Color(255, 255, 255));
 		panel_2_1.setLayout(null);
 		panel_2_1.setBounds(833, 87, 329, 164);
 		add(panel_2_1);
@@ -322,6 +335,7 @@ public class orders extends JPanel {
 		panel_2_2.add(lblNewLabel_9_2_2);
 		
 		JPanel panel_2_3 = new JPanel();
+		panel_2_3.setBackground(new Color(255, 255, 255));
 		panel_2_3.setLayout(null);
 		panel_2_3.setBounds(31, 435, 329, 164);
 		add(panel_2_3);
@@ -364,6 +378,7 @@ public class orders extends JPanel {
 		panel_2_3.add(lblNewLabel_9_2_3);
 		
 		JPanel panel_2_4 = new JPanel();
+		panel_2_4.setBackground(new Color(255, 255, 255));
 		panel_2_4.setLayout(null);
 		panel_2_4.setBounds(427, 435, 329, 164);
 		add(panel_2_4);
@@ -444,6 +459,14 @@ public class orders extends JPanel {
 		JLabel lblNewLabel_9_2_5 = new JLabel("cancelled");
 		lblNewLabel_9_2_5.setBounds(216, 125, 79, 13);
 		panel_2_5.add(lblNewLabel_9_2_5);
+		
+		JButton btnNewButton_9 = new JButton("Next page");
+		btnNewButton_9.setBounds(632, 654, 124, 21);
+		add(btnNewButton_9);
+		
+		JButton btnNewButton_9_1 = new JButton("Previous Page");
+		btnNewButton_9_1.setBounds(427, 654, 124, 21);
+		add(btnNewButton_9_1);
 
 	}
 }
