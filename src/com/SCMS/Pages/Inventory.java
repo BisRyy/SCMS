@@ -57,7 +57,7 @@ public class Inventory extends JPanel{
     }
 
 public static void main(String[] args) {
-        Inventory inventoryPage = new Inventory();
+	InventoryManagementPage inventoryPage = new InventoryManagementPage();
         }
 }
     
