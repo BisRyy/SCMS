@@ -49,7 +49,7 @@ public class Menu extends JFrame {
             panel.add(button);
             views[i] = panel;
             if(menuItemsNames[i] == "Inventory")
-            	workSpace.add(new Orders(), menuItemsNames[i]);
+            	workSpace.add(new Inventory(), menuItemsNames[i]);
             else if(menuItemsNames[i] == "Orders")
                 workSpace.add(new Orders(), menuItemsNames[i]);
             else if(menuItemsNames[i] == "Dashboard")
