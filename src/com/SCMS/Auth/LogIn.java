@@ -1,6 +1,10 @@
-package com.SCMS;
+package com.SCMS.Auth;
 import java.awt.*;
 import javax.swing.*;
+
+import com.SCMS.Menu;
+import com.SCMS.Utils.DB;
+
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
