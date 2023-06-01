@@ -29,22 +29,22 @@ public class Inventory extends JPanel{
         inventoryTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                    int row = inventoryTable.getSelectedRow();
-                    int col = inventoryTable.getSelectedColumn();
+                    // int row = inventoryTable.getSelectedRow();
+                    // int col = inventoryTable.getSelectedColumn();
 
-                    if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product A")) {
-                    ProductAPage productAPage = new ProductAPage();
-                    productAPage.setVisible(true);
-                    }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product B")) {
-                    ProductBPage productBPage = new ProductBPage();
-                    productBPage.setVisible(true);
-                    }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product C")) {
-                    ProductCPage productCPage = new ProductCPage();
-                    productCPage.setVisible(true);
-                    }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product D")) {
-                    ProductDPage productDPage = new ProductDPage();
-                    productDPage.setVisible(true);
-                    }
+                    // if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product A")) {
+                    // ProductAPage productAPage = new ProductAPage();
+                    // productAPage.setVisible(true);
+                    // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product B")) {
+                    // ProductBPage productBPage = new ProductBPage();
+                    // productBPage.setVisible(true);
+                    // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product C")) {
+                    // ProductCPage productCPage = new ProductCPage();
+                    // productCPage.setVisible(true);
+                    // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product D")) {
+                    // ProductDPage productDPage = new ProductDPage();
+                    // productDPage.setVisible(true);
+                    // }
             }
         });
 
@@ -57,7 +57,7 @@ public class Inventory extends JPanel{
     }
 
 public static void main(String[] args) {
-	InventoryManagementPage inventoryPage = new InventoryManagementPage();
+	// InventoryManagementPage inventoryPage = new InventoryManagementPage();
         }
 }
     
