@@ -13,7 +13,7 @@ import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
 
 public class Order extends JPanel {
-        String status;
+        
 	/**
 	 * Create the panel.
 	 */
