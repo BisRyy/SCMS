@@ -23,7 +23,7 @@ public class Orders extends JPanel {
 	String[] price = {"200$"};
 	String[] status= {"Deliverd","Delayed","cancelled"};
  	private JTextField textField;
- 	private order oder;
+ 	private com.SCMS.Components.Order oder;
         public Orders() {
 		setBackground(new Color(0, 0, 0));
 		setLayout(null);
@@ -51,7 +51,7 @@ public class Orders extends JPanel {
 		add(panel_10);
 		panel_10.setLayout(new GridLayout(3, 3, 10, 10));
 		for(int i=0; i<customers.length; i++) {
-			panel_10.add(oder = new order(cid[i], customers[i], product[0], price[0], status[1], dayanddate[0]));
+			panel_10.add(oder = new com.SCMS.Components.Order(cid[i], customers[i], product[0], price[0], status[1], dayanddate[0]));
 		}
 		
 		
