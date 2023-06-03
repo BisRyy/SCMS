@@ -1,5 +1,11 @@
 package com.SCMS.Pages;
 
-public class Purchase {
+import javax.swing.JPanel;
+
+public class Purchase extends JPanel{
+
+    public Purchase(){
+        
+    }
     
 }

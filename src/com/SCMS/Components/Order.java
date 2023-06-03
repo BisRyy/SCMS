@@ -13,7 +13,8 @@ import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
 
 public class Order extends JPanel {
-        
+
+     
 	/**
 	 * Create the panel.
 	 */
@@ -61,7 +62,9 @@ public class Order extends JPanel {
 		add(lblNewLabel_8);
 		
 		JLabel lblNewLabel_9 = new JLabel(status);
-		if(status=="Deliverd") {
+
+		if(status=="Delivered") {
+
 		lblNewLabel_9.setForeground(new Color(0, 255, 64));
 		}else {
 			lblNewLabel_9.setForeground(new Color(56, 25, 64));
@@ -77,7 +80,10 @@ public class Order extends JPanel {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 lblNewLabel_9.setText("Accepted");
-				 lblNewLabel_9.setForeground(Color.gray);
+
+
+				 lblNewLabel_9.setForeground(Color.MAGENTA);
+
 				 
 			}
 		});
@@ -118,4 +124,7 @@ public class Order extends JPanel {
 
 	}
 
+
 }
+
+

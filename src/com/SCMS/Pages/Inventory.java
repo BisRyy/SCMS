@@ -1,9 +1,8 @@
 package com.SCMS.Pages;
 import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+
+import javax.swing.*;
+
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,6 +13,7 @@ public class Inventory extends JPanel{
 
     public Inventory(){
         setBackground(Color.LIGHT_GRAY);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
          String[] columnNames = {"Item", "Quantity", "Location", "Description", "Cost per item", "Inventory value"};
         Object[][] data = {
             {"Product A", 100, "Warehouse 1", "Something good", 300, 30000},
@@ -29,22 +29,25 @@ public class Inventory extends JPanel{
         inventoryTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                    // int row = inventoryTable.getSelectedRow();
-                    // int col = inventoryTable.getSelectedColumn();
 
-                    // if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product A")) {
-                    // ProductAPage productAPage = new ProductAPage();
-                    // productAPage.setVisible(true);
-                    // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product B")) {
-                    // ProductBPage productBPage = new ProductBPage();
-                    // productBPage.setVisible(true);
-                    // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product C")) {
-                    // ProductCPage productCPage = new ProductCPage();
-                    // productCPage.setVisible(true);
-                    // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product D")) {
-                    // ProductDPage productDPage = new ProductDPage();
-                    // productDPage.setVisible(true);
-                    // }
+
+                int row = inventoryTable.getSelectedRow();
+                int col = inventoryTable.getSelectedColumn();
+
+                if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product A")) {
+                // ProductAPage productAPage = new ProductAPage();
+                // productAPage.setVisible(true);
+                // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product B")) {
+                // ProductBPage productBPage = new ProductBPage();
+                // productBPage.setVisible(true);
+                // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product C")) {
+                // ProductCPage productCPage = new ProductCPage();
+                // productCPage.setVisible(true);
+                // }else if (col == 0 && inventoryTable.getValueAt(row, col).equals("Product D")) {
+                // ProductDPage productDPage = new ProductDPage();
+                // productDPage.setVisible(true);
+                }
+
             }
         });
 
@@ -56,10 +59,11 @@ public class Inventory extends JPanel{
         setVisible(true);
     }
 
+
 public static void main(String[] args) {
 	// InventoryManagementPage inventoryPage = new InventoryManagementPage();
         }
+
 }
     
     
-

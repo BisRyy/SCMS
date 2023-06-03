@@ -2,28 +2,23 @@ package com.SCMS.Pages;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
+import com.SCMS.Components.Order;
 import javax.swing.JLabel;
 import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JSeparator;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 
 public class Orders extends JPanel {
-	String[] cid= {"QCf2","Ace2","CA33","W2ER","Qwer","Plo2","rrre"};
-	String[] customers = {"Ararsa","Oliyad","Lalisa","Bisrat","Biruk","Biyaol","Birhanu"};
+
+	String[] cid= {"QCf2","Ace2","CA33","W2ER","Qwer","Plo2","rrre","Plo2","rrre"};
+	String[] customers = {"Ararsa","Oliyad","Lalisa","Bisrat","Biruk","Biyaol","Birhanu","Biyaol","Birhanu"};
 	String[] dayanddate= {"15 may 2023, 3:00"};
 	String[] product = {"Tv"};
 	String[] price = {"200$"};
-	String[] status= {"Deliverd","Delayed","cancelled"};
+	String[] status= {"Delivered","Delayed","cancelled"};
  	private JTextField textField;
- 	private com.SCMS.Components.Order oder;
+
         public Orders() {
 		setBackground(new Color(0, 0, 0));
 		setLayout(null);
@@ -51,7 +46,9 @@ public class Orders extends JPanel {
 		add(panel_10);
 		panel_10.setLayout(new GridLayout(3, 3, 10, 10));
 		for(int i=0; i<customers.length; i++) {
-			panel_10.add(oder = new com.SCMS.Components.Order(cid[i], customers[i], product[0], price[0], status[0], dayanddate[0]));
+
+			panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[0], dayanddate[0]));
+
 		}
 		
 		
