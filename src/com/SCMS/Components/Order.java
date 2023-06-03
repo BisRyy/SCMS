@@ -75,7 +75,7 @@ public class Order extends JPanel {
 
 		lblNewLabel_9.setForeground(new Color(0, 255, 64));
 		}else {
-			lblNewLabel_9.setForeground(new Color(56, 25, 64));
+			lblNewLabel_9.setForeground(Color.LIGHT_GRAY);
 		}
 		lblNewLabel_9.setBounds(216, 125, 79, 13);
 		add(lblNewLabel_9);
