@@ -19,7 +19,7 @@ public class Menu extends JFrame {
     boolean visible = true;
     JButton toggleButton = new SButton("☰", new ImageIcon("/home/bisry/Documents/SCMS/lib/search.png"));
 
-    public Menu() {
+    public Menu(String username, String role) {
         super("Supply Chain Management System");
 
         // Initialize components
@@ -44,7 +44,7 @@ public class Menu extends JFrame {
         
         for (int i = 0; i < menuItems.length; i++) {
             JPanel panel = new JPanel(null);
-            JButton button = new JButton(menuItemsNames[i], new ImageIcon("/home/bisry/Documents/SCMS/lib/search.png"));
+            JButton button = new JButton(menuItemsNames[i], new ImageIcon("/lib/search.png"));
             button.setSize(1000, 100);
             panel.add(button);
             views[i] = panel;

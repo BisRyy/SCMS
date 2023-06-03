@@ -15,7 +15,7 @@ public class Orders extends JPanel {
 	String[] dayanddate= {"15 may 2023, 3:00"};
 	String[] product = {"Tv"};
 	String[] price = {"200$"};
-	String[] status= {"Deliverd","Delayed","cancelled"};
+	String[] status= {"Delivered","Delayed","cancelled"};
  	private JTextField textField;
         public Orders() {
 		setBackground(new Color(0, 0, 0));
