@@ -20,7 +20,7 @@ public class Orders extends JPanel {
 	String[] dayanddate= {"15 may 2023, 3:00"};
 	String[] product = {"Tv"};
 	String[] price = {"200$"};
-	String[] status= {"Delivered","Delayed","cancelled","waiting..."};
+	String[] status= {"Accepted","Delayed","Declined","waiting..."};
 	int page=0;
  	private JTextField textField;
 
@@ -67,39 +67,7 @@ public class Orders extends JPanel {
 		panel_9.add(btnNewButton_1_1);
 		
 		JButton btnNewButton_1_2 = new JButton("Declined");
-		btnNewButton_1_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnNewButton_1_2.setBackground(Color.WHITE);
-				btnNewButton_1_2.setForeground(Color.black);
-				btnNewButton_1_1.setForeground(Color.WHITE);
-				btnNewButton_1_1.setBackground(Color.BLACK);
-				btnNewButton_1.setForeground(Color.WHITE);
-				btnNewButton_1.setBackground(Color.BLACK);
-				
-			}
-		});
-		btnNewButton_1_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnNewButton_1_1.setBackground(Color.WHITE);
-				btnNewButton_1_1.setForeground(Color.black);
-				btnNewButton_1.setForeground(Color.WHITE);
-				btnNewButton_1.setBackground(Color.BLACK);
-				btnNewButton_1_2.setForeground(Color.WHITE);
-				btnNewButton_1_2.setBackground(Color.BLACK);
-				
-			}
-		});
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnNewButton_1.setBackground(Color.WHITE);
-				btnNewButton_1.setForeground(Color.black);
-				btnNewButton_1_1.setForeground(Color.WHITE);
-				btnNewButton_1_1.setBackground(Color.BLACK);
-				btnNewButton_1_2.setForeground(Color.WHITE);
-				btnNewButton_1_2.setBackground(Color.BLACK);
-				
-			}
-		});
+		
 		btnNewButton_1_2.setForeground(Color.WHITE);
 		btnNewButton_1_2.setBackground(Color.BLACK);
 		btnNewButton_1_2.setBounds(200, 54, 85, 21);
@@ -127,6 +95,57 @@ public class Orders extends JPanel {
 	         }
 		}
 			
+		});
+		btnNewButton_1_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panel_10.removeAll();
+			     panel_10.revalidate();
+			        panel_10.repaint();
+				for(int i=page; i<page+9; i++) {
+			          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[2], dayanddate[0]));
+			        }
+				btnNewButton_1_2.setBackground(Color.WHITE);
+				btnNewButton_1_2.setForeground(Color.black);
+				btnNewButton_1_1.setForeground(Color.WHITE);
+				btnNewButton_1_1.setBackground(Color.BLACK);
+				btnNewButton_1.setForeground(Color.WHITE);
+				btnNewButton_1.setBackground(Color.BLACK);
+				
+			}
+		});
+		btnNewButton_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panel_10.removeAll();
+			     panel_10.revalidate();
+			        panel_10.repaint();
+				for(int i=page; i<page+9; i++) {
+			          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[0], dayanddate[0]));
+			        }
+				btnNewButton_1_1.setBackground(Color.WHITE);
+				btnNewButton_1_1.setForeground(Color.black);
+				btnNewButton_1.setForeground(Color.WHITE);
+				btnNewButton_1.setBackground(Color.BLACK);
+				btnNewButton_1_2.setForeground(Color.WHITE);
+				btnNewButton_1_2.setBackground(Color.BLACK);
+				
+			}
+		});
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panel_10.removeAll();
+			     panel_10.revalidate();
+			        panel_10.repaint();
+				for(int i=page; i<page+9; i++) {
+			          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[3], dayanddate[0]));
+			        }
+				btnNewButton_1.setBackground(Color.WHITE);
+				btnNewButton_1.setForeground(Color.black);
+				btnNewButton_1_1.setForeground(Color.WHITE);
+				btnNewButton_1_1.setBackground(Color.BLACK);
+				btnNewButton_1_2.setForeground(Color.WHITE);
+				btnNewButton_1_2.setBackground(Color.BLACK);
+				
+			}
 		});
 	   JPanel panel_11 = new JPanel();
 		panel_11.setBounds(0, 647, 1266, 49);

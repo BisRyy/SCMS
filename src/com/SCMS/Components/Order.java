@@ -71,11 +71,11 @@ public class Order extends JPanel {
 		JLabel lblNewLabel_9 = new JLabel(status);
 		lblNewLabel_9.setForeground(new Color(255, 255, 255));
 
-		if(status=="Delivered") {
+		if(status=="Accepted") {
 
-		lblNewLabel_9.setForeground(new Color(0, 255, 64));
-		}else {
-			lblNewLabel_9.setForeground(Color.LIGHT_GRAY);
+		lblNewLabel_9.setForeground(Color.magenta);
+		}else if (status=="Declined"){
+			lblNewLabel_9.setForeground(Color.red);
 		}
 		lblNewLabel_9.setBounds(216, 125, 79, 13);
 		add(lblNewLabel_9);
