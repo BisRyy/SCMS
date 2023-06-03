@@ -1,7 +1,10 @@
 package com.SCMS.Components;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -10,15 +13,15 @@ import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
 
 public class Order extends JPanel {
-
+        String status;
 	/**
 	 * Create the panel.
 	 */
 	public Order(String id,String customer,String product,String price,String status,String dateandday) {
 //		JPanel panel = new JPanel();
-		setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		setBackground(new Color(255, 255, 255));
-		setLayout(null);
+		this.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.setBackground(new Color(255, 255, 255));
+		this.setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel(id);
 		lblNewLabel_1.setForeground(new Color(112, 128, 144));
@@ -58,7 +61,11 @@ public class Order extends JPanel {
 		add(lblNewLabel_8);
 		
 		JLabel lblNewLabel_9 = new JLabel(status);
+		if(status=="Delivered") {
 		lblNewLabel_9.setForeground(new Color(0, 255, 64));
+		}else {
+			lblNewLabel_9.setForeground(new Color(56, 25, 64));
+		}
 		lblNewLabel_9.setBounds(216, 125, 79, 13);
 		add(lblNewLabel_9);
 		
@@ -67,14 +74,39 @@ public class Order extends JPanel {
 	     add(separator_1);
 		
 		JButton btnNewButton = new JButton("Accept");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 lblNewLabel_9.setText("Accepted");
+				 lblNewLabel_9.setForeground(Color.MAGENTA);
+				 
+			}
+		});
 		btnNewButton.setBounds(20, 143, 85, 21);
 		add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Decline");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 lblNewLabel_9.setText("Declined");
+				 lblNewLabel_9.setForeground(Color.RED);
+				 
+			}
+		});
 		btnNewButton_1.setBounds(120, 143, 85, 21);
 		add(btnNewButton_1);
-		
+		 
+		 JPanel j = this;
 		JButton btnNewButton_2 = new JButton("Remove");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				Container parentContainer = j.getParent();
+				 parentContainer.remove(j);
+				  parentContainer.revalidate();
+			        parentContainer.repaint();
+			}
+		});
+		
 		btnNewButton_2.setBounds(226, 143, 85, 21);
 		add(btnNewButton_2);
 		
