@@ -13,22 +13,25 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 public class Orders extends JPanel {
 
-	String[] cid= {"QCf2","Ace2","CA33","W2ER","Qwer","Plo2","rrre","Plo2","rrre","qwe","asdsd","xcxcv","aewe","asfaew"};
-	String[] customers = {"Ararsa","Oliyad","Lalisa","Bisrat","Biruk","Biyaol","Birhanu","Biyaol","Birhanu","sdsdf","sdfsad","asdfasdfawewe","hello","qweer"};
-	String[] dayanddate= {"15 may 2023, 3:00"};
-	String[] product = {"Tv"};
-	String[] price = {"200$"};
-	String[] status= {"Accepted","Delayed","Declined","waiting..."};
-	int page=0;
+	
+	   int page=0;
  	private JTextField textField;
 
         public Orders() {
-		setBackground(new Color(0, 0, 0));
+        String DB_URL = "jdbc:mysql://localhost/SCMS";
+        String USERNAME = "root";
+        String PASSWORD = "";
+        String QUERY = "SELECT * FROM orders limit "+page+",9";
+        setBackground(new Color(0, 0, 0));
 		setLayout(null);
-		
-		JPanel panel_9 = new JPanel();
+	    JPanel panel_9 = new JPanel();
 		panel_9.setBounds(0, 0, 1266, 75);
 		panel_9.setBackground(new Color(0, 0, 0));
 		add(panel_9);
@@ -40,7 +43,7 @@ public class Orders extends JPanel {
 		panel_9.add(lblNewLabel);
 		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\arars\\Downloads\\search (1).png"));
 		lblNewLabel.setForeground(Color.WHITE);
-		
+	
 		textField = new JTextField();
 		textField.setBounds(909, 13, 172, 19);
 		panel_9.add(textField);
@@ -52,26 +55,32 @@ public class Orders extends JPanel {
 		btnNewButton.setBounds(1091, 12, 85, 21);
 		panel_9.add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("Waiting..");
+		JButton btnNewButton_1 = new JButton("All orders");
 		
 		btnNewButton_1.setBackground(Color.WHITE);
 		btnNewButton_1.setForeground(Color.black);
-		btnNewButton_1.setBounds(10, 54, 85, 21);
+		btnNewButton_1.setBounds(10, 54, 100, 21);
 		panel_9.add(btnNewButton_1);
 		
-		JButton btnNewButton_1_1 = new JButton("Accepted");
+		JButton btnNewButton_1_1 = new JButton("Waiting");
 		
 		btnNewButton_1_1.setForeground(Color.WHITE);
 		btnNewButton_1_1.setBackground(Color.BLACK);
-		btnNewButton_1_1.setBounds(105, 54, 85, 21);
+		btnNewButton_1_1.setBounds(105, 54, 100, 21);
 		panel_9.add(btnNewButton_1_1);
 		
-		JButton btnNewButton_1_2 = new JButton("Declined");
+		JButton btnNewButton_1_2 = new JButton("Accepted");
 		
 		btnNewButton_1_2.setForeground(Color.WHITE);
 		btnNewButton_1_2.setBackground(Color.BLACK);
-		btnNewButton_1_2.setBounds(200, 54, 85, 21);
+		btnNewButton_1_2.setBounds(200, 54, 100, 21);
 		panel_9.add(btnNewButton_1_2);
+	JButton btnNewButton_1_3 = new JButton("Declined");
+		
+		btnNewButton_1_3.setForeground(Color.WHITE);
+		btnNewButton_1_3.setBackground(Color.BLACK);
+		btnNewButton_1_3.setBounds(295, 54, 100, 21);
+		panel_9.add(btnNewButton_1_3);
 		
 		JPanel panel_10 = new JPanel();
 		 
@@ -79,71 +88,147 @@ public class Orders extends JPanel {
 		panel_10.setBackground(Color.black);
 		add(panel_10);
 		panel_10.setLayout(new GridLayout(3, 3, 10, 10));
-		for(int i=page; i<page+9; i++) {
-          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[3], dayanddate[0]));
-        }
+		  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+			  Statement stmt = jdbcConnect.createStatement();
+		        	ResultSet rsData = stmt.executeQuery(QUERY);
+		          while(rsData.next()) {
+		        	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+		          }
+		          rsData.close();
+		            } catch (SQLException e) {
+		        	e.printStackTrace();
+		        	}
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel_10.removeAll();
 		        panel_10.revalidate();
 		        panel_10.repaint();
-		       for(int i=0; i<customers.length; i++) {
-		    	   if(customers[i]==textField.getText()) {
-	                    panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[3], dayanddate[0]));
-		    	   }
-		    	   
-	         }
+		        try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+					  Statement stmt = jdbcConnect.createStatement();
+				        	ResultSet rsData = stmt.executeQuery("Select * from orders where user_name =\""+ textField.getText()+"\"");
+				          while(rsData.next()) {
+				        	  
+				        	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+				        	  
+				        	  }
+				          rsData.close();
+				            } catch (SQLException e1) {
+				        	e1.printStackTrace();
+				        	}
 		}
 			
+		});
+		btnNewButton_1_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panel_10.removeAll();
+			     panel_10.revalidate();
+			        panel_10.repaint();
+			        try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+						  Statement stmt = jdbcConnect.createStatement();
+					        	ResultSet rsData = stmt.executeQuery("Select * from orders where order_status =\"Declined\"");
+					          while(rsData.next()) {
+					        	  
+					        	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+					        	  
+					        	  }
+					          rsData.close();
+					            } catch (SQLException e1) {
+					        	e1.printStackTrace();
+					        	}
+				btnNewButton_1_3.setBackground(Color.WHITE);
+				btnNewButton_1_3.setForeground(Color.black);
+				btnNewButton_1_2.setForeground(Color.WHITE);
+				btnNewButton_1_2.setBackground(Color.BLACK);
+				btnNewButton_1_1.setForeground(Color.WHITE);
+				btnNewButton_1_1.setBackground(Color.BLACK);
+				btnNewButton_1.setForeground(Color.WHITE);
+				btnNewButton_1.setBackground(Color.BLACK);
+				
+			}
 		});
 		btnNewButton_1_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel_10.removeAll();
 			     panel_10.revalidate();
 			        panel_10.repaint();
-				for(int i=page; i<page+9; i++) {
-			          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[2], dayanddate[0]));
-			        }
+				  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+		  Statement stmt = jdbcConnect.createStatement();
+      	ResultSet rsData = stmt.executeQuery("Select * from orders where order_status =\"Accepted\"");
+        while(rsData.next()) {
+      	  
+      	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+      	  
+      	  }
+        rsData.close();
+          } catch (SQLException e1) {
+      	e1.printStackTrace();
+      	}
 				btnNewButton_1_2.setBackground(Color.WHITE);
 				btnNewButton_1_2.setForeground(Color.black);
 				btnNewButton_1_1.setForeground(Color.WHITE);
 				btnNewButton_1_1.setBackground(Color.BLACK);
+				btnNewButton_1_3.setForeground(Color.WHITE);
+				btnNewButton_1_3.setBackground(Color.BLACK);
 				btnNewButton_1.setForeground(Color.WHITE);
 				btnNewButton_1.setBackground(Color.BLACK);
 				
-			}
+	       }
 		});
 		btnNewButton_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel_10.removeAll();
 			     panel_10.revalidate();
 			        panel_10.repaint();
-				for(int i=page; i<page+9; i++) {
-			          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[0], dayanddate[0]));
-			        }
+		  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+			  Statement stmt = jdbcConnect.createStatement();
+		        	ResultSet rsData = stmt.executeQuery("Select * from orders where order_status =\"Waiting\" limit "+page+",9");
+		          while(rsData.next()) {
+		        	  
+		        	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+		        	  
+		        	  }
+		          rsData.close();
+		            } catch (SQLException e1) {
+		        	e1.printStackTrace();
+		        	}
 				btnNewButton_1_1.setBackground(Color.WHITE);
 				btnNewButton_1_1.setForeground(Color.black);
-				btnNewButton_1.setForeground(Color.WHITE);
-				btnNewButton_1.setBackground(Color.BLACK);
 				btnNewButton_1_2.setForeground(Color.WHITE);
 				btnNewButton_1_2.setBackground(Color.BLACK);
+				btnNewButton_1_3.setForeground(Color.WHITE);
+				btnNewButton_1_3.setBackground(Color.BLACK);
+				btnNewButton_1.setForeground(Color.WHITE);
+				btnNewButton_1.setBackground(Color.BLACK);
 				
 			}
 		});
+		
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
 				panel_10.removeAll();
 			     panel_10.revalidate();
 			        panel_10.repaint();
-				for(int i=page; i<page+9; i++) {
-			          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[3], dayanddate[0]));
-			        }
-				btnNewButton_1.setBackground(Color.WHITE);
+		  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+			  Statement stmt = jdbcConnect.createStatement();
+		        	ResultSet rsData = stmt.executeQuery(QUERY);
+		          while(rsData.next()) {
+		        	  
+		        	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+		        	  
+		        	  }
+		          rsData.close();
+		            } catch (SQLException e1) {
+		        	e1.printStackTrace();
+		        	}
+		      btnNewButton_1.setBackground(Color.white);
 				btnNewButton_1.setForeground(Color.black);
-				btnNewButton_1_1.setForeground(Color.WHITE);
-				btnNewButton_1_1.setBackground(Color.BLACK);
 				btnNewButton_1_2.setForeground(Color.WHITE);
 				btnNewButton_1_2.setBackground(Color.BLACK);
+				btnNewButton_1_3.setForeground(Color.WHITE);
+				btnNewButton_1_3.setBackground(Color.BLACK);
+				btnNewButton_1_1.setForeground(Color.WHITE);
+				btnNewButton_1_1.setBackground(Color.BLACK);
 				
 			}
 		});
@@ -163,9 +248,16 @@ public class Orders extends JPanel {
 		     panel_10.removeAll();
 		     panel_10.revalidate();
 		        panel_10.repaint();
-		       for(int i=page; i<9 && i<customers.length; i++) {
-	          panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[3], dayanddate[0]));
-	        }
+		        try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+					  Statement stmt = jdbcConnect.createStatement();
+				        	ResultSet rsData = stmt.executeQuery("SELECT * FROM orders limit "+page+",9");
+				          while(rsData.next()) {
+				        	  panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+				          }
+				          rsData.close();
+				            } catch (SQLException e1) {
+				        	e1.printStackTrace();
+				        	}
 				}
 			}
 		});
@@ -178,17 +270,38 @@ public class Orders extends JPanel {
 		JButton btnNewButton_9 = new JButton("Next page");
 	btnNewButton_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(page+9<customers.length) {
-					page=page+9;
+				
+		        try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+					  Statement stmt = jdbcConnect.createStatement();
+					  Statement stmt1 = jdbcConnect.createStatement();
+					   ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders;");
+						  count.next();
+						  if(page+9<= count.getInt("count")) {
+			              page=page+9;
+						  ResultSet rsData = stmt.executeQuery("SELECT * FROM orders limit "+page+",9");
+						
+						
 			    panel_10.removeAll();
 		        panel_10.revalidate();
 		        panel_10.repaint();
-		        for(int i=page; i<page+9 && i<customers.length; i++) {
-	                 panel_10.add(new Order(cid[i], customers[i], product[0], price[0], status[3], dayanddate[0]));
-	         
-	            }
-				}
-		      
+				   while(rsData.next()) {
+				    panel_10.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
+				          }
+				   rsData.close();
+		        }
+		        }
+//				          
+					  
+				             catch (SQLException e1) {
+				        	e1.printStackTrace();
+				        	}
+					  
+			
+		        
+			
+					  
+		        
+		        
 			}
 			
 		});

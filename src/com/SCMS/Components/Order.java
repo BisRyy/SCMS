@@ -14,12 +14,9 @@ import javax.swing.border.LineBorder;
 
 public class Order extends JPanel {
 
-     
-	/**
-	 * Create the panel.
-	 */
-	public Order(String id,String customer,String product,String price,String status,String dateandday) {
-//		JPanel panel = new JPanel();
+ 
+	public Order(String id,String customer,String product,String price,String status,String date_and_time) {
+
 		this.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.setBackground(new Color(0, 51, 51));
 		this.setLayout(null);
@@ -69,14 +66,15 @@ public class Order extends JPanel {
 		add(lblNewLabel_8);
 		
 		JLabel lblNewLabel_9 = new JLabel(status);
-		lblNewLabel_9.setForeground(new Color(255, 255, 255));
-
-		if(status=="Accepted") {
+		
+       if(status=="Accepted") {
 
 		lblNewLabel_9.setForeground(Color.magenta);
-		}else if (status=="Declined"){
+		}
+		else if (status=="Declined"){
 			lblNewLabel_9.setForeground(Color.red);
 		}
+       lblNewLabel_9.setForeground(new Color(255, 255, 255));
 		lblNewLabel_9.setBounds(216, 125, 79, 13);
 		add(lblNewLabel_9);
 		
@@ -124,7 +122,7 @@ public class Order extends JPanel {
 		btnNewButton_2.setBounds(226, 143, 85, 21);
 		add(btnNewButton_2);
 		
-		JLabel lblNewLabel_10 = new JLabel("15 may 2023, 13:00");
+		JLabel lblNewLabel_10 = new JLabel(date_and_time);
 		lblNewLabel_10.setForeground(new Color(255, 255, 255));
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblNewLabel_10.setBounds(10, 0, 143, 23);
