@@ -17,7 +17,7 @@ public class Menu extends JFrame {
     public JButton current;
     public JPanel[] views = new JPanel[10];
     boolean visible = true;
-    JButton toggleButton = new SButton("☰", new ImageIcon("/home/bisry/Documents/SCMS/lib/search.png"));
+    JButton toggleButton = new SButton("", new ImageIcon("lib/icons/menu.png"));
 
     public Menu(String username, String role) {
         super("Supply Chain Management System");
@@ -44,7 +44,7 @@ public class Menu extends JFrame {
         
         for (int i = 0; i < menuItems.length; i++) {
             JPanel panel = new JPanel(null);
-            JButton button = new JButton(menuItemsNames[i], new ImageIcon("/lib/search.png"));
+            JButton button = new JButton(menuItemsNames[i], new ImageIcon("search.png"));
             button.setSize(1000, 100);
             panel.add(button);
             views[i] = panel;
@@ -54,10 +54,24 @@ public class Menu extends JFrame {
                 workSpace.add(new Orders(), menuItemsNames[i]);
             else if(menuItemsNames[i] == "Dashboard")
                 workSpace.add(new Dashboard(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Suppliers")
+            //     workSpace.add(new Test(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Customers")
+            //     workSpace.add(new Customers(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Employees")
+            //     workSpace.add(new Employees(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Reports")
+            //     workSpace.add(new Reports(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Settings")
+            //     workSpace.add(new Settings(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Help")
+            //     workSpace.add(new Help(), menuItemsNames[i]);
+            // else if(menuItemsNames[i] == "Logout")
+            //     workSpace.add(new Logout(), menuItemsNames[i]);
             else
                 workSpace.add(panel, menuItemsNames[i]);
 
-            menuItems[i] = new SButton(menuItemsNames[i], new ImageIcon("/home/bisry/Documents/SCMS/lib/search.png"));
+            menuItems[i] = new SButton(menuItemsNames[i], new ImageIcon("lib/icons/search.png"));
             // menuItems[i].setBounds(20, 20 + 60 * i, 200, 50);
             menuItems[i].setForeground(Color.DARK_GRAY);
             menuItems[i].setBackground(Color.WHITE);

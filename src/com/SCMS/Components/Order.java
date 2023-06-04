@@ -14,8 +14,12 @@ import javax.swing.border.LineBorder;
 
 public class Order extends JPanel {
 
+
  
 	public Order(String id,String customer,String product,String price,String status,String date_and_time) {
+
+
+     
 
 		this.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.setBackground(new Color(0, 51, 51));
@@ -66,10 +70,13 @@ public class Order extends JPanel {
 		add(lblNewLabel_8);
 		
 		JLabel lblNewLabel_9 = new JLabel(status);
+
 		
        if(status=="Accepted") {
 
 		lblNewLabel_9.setForeground(Color.magenta);
+
+		
 		}
 		else if (status=="Declined"){
 			lblNewLabel_9.setForeground(Color.red);
@@ -122,7 +129,9 @@ public class Order extends JPanel {
 		btnNewButton_2.setBounds(226, 143, 85, 21);
 		add(btnNewButton_2);
 		
+
 		JLabel lblNewLabel_10 = new JLabel(date_and_time);
+
 		lblNewLabel_10.setForeground(new Color(255, 255, 255));
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblNewLabel_10.setBounds(10, 0, 143, 23);
@@ -133,5 +142,3 @@ public class Order extends JPanel {
 
 
 }
-
-

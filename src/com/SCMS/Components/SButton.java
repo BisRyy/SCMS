@@ -20,6 +20,14 @@ public class SButton extends JButton {
 
     private Color shadowColor;
 
+    public SButton() {
+        this(null, null);
+    }
+
+    public SButton(String text) {
+        this(text, null);
+    }
+
     public SButton(String text, Icon icon) {
         super(text, icon);
         setOpaque(false);
