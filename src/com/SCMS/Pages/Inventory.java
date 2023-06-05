@@ -88,12 +88,6 @@ public class Inventory extends JPanel {
     private class AddButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Open add inventory dialog
-            if (selected == -1) {
-                JOptionPane.showMessageDialog(getParent(), "Please select a product", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             AddInventoryDialog addInventoryDialog = new AddInventoryDialog();
             addInventoryDialog.setVisible(true);
 
@@ -104,86 +98,90 @@ public class Inventory extends JPanel {
     }
 
     private class AddInventoryDialog extends JDialog {
-        private JTextField nameField;
-        private JTextField quantityField;
-        private JTextField priceField;
-        private JTextField unitField;
-        private JTextField categoryField;
         private JComboBox<String> productBox;
-        private JTextField supplierField;
+        private JTextField quantityField;
+        private JLabel priceField;
+        private JLabel unitField;
+        private JLabel categoryField;
+        private JLabel supplierField;
         private JTextField expiryDateField;
-        private JTextField descriptionField;
+        private JTextArea descriptionField;
         private JButton addButton;
         private JButton cancelButton;
+        Object[][] productList = null;
+        String[] productNames = null;
+        int selected = 0;
 
         public AddInventoryDialog() {
             setTitle("Add Inventory");
             setModal(true);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             setResizable(false);
-            // move the dialog to the center of the screen
             setLocationRelativeTo(getParent().getParent());
 
-            JPanel panel = new JPanel(new GridLayout(8, 1, 10, 10));
+            JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
             panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             JLabel nameLabel = new JLabel("Product:");
-            nameField = new JTextField(15);
             panel.add(nameLabel);
-            // panel.add(nameField);
-            Object[][] productList = db.getProducts();
-            String[] productNames = new String[productList.length];
+            productList = db.getProducts();
+            productNames = new String[productList.length];
             for(int i=0; i<productList.length;i++){
                 productNames[i] = (String) productList[i][1];
             }
-
             productBox = new JComboBox<String>(productNames);
             panel.add(productBox);
-            
-            JLabel quantityLabel = new JLabel("Quantity:");
-            quantityField = new JTextField(15);
-            panel.add(quantityLabel);
-            panel.add(quantityField);
+            productBox.addActionListener((e) -> {
+                selected = productBox.getSelectedIndex();
+                priceField.setText(productList[selected][2].toString());
+                unitField.setText(productList[selected][3].toString());
+                categoryField.setText(productList[selected][4].toString());
+                supplierField.setText(productList[selected][5].toString());
+                repaint();
+                revalidate();
+            });
+
+            selected = productBox.getSelectedIndex();
 
             JLabel priceLabel = new JLabel("Price:");
-            priceField = new JTextField(15);
             panel.add(priceLabel);
-            // panel.add(priceField);
-            JLabel priceValue = new JLabel((productList[selected][2]) + " Birr");
-            panel.add(priceValue);
+            priceField = new JLabel(inventoryTable.getValueAt(selected, 3).toString());
+            panel.add(priceField);
+
+            JLabel quantityLabel = new JLabel("Quantity:");
+            panel.add(quantityLabel);
+            quantityField = new JTextField();
+            panel.add(quantityField);
+
 
             JLabel unitLabel = new JLabel("Unit:");
-            unitField = new JTextField(15);
             panel.add(unitLabel);
-            // panel.add(unitField);
-            JLabel unitValue = new JLabel((productList[selected][3]) + "");
-            panel.add(unitValue);
+            unitField = new JLabel(inventoryTable.getValueAt(selected, 4).toString());
+            panel.add(unitField);
 
-            JLabel categoryLabel = new JLabel("Category:");
-            categoryField = new JTextField(15);
-            panel.add(categoryLabel);
-            // panel.add(categoryField);
-            JLabel categoryValue = new JLabel((productList[selected][4]) + "");
-            panel.add(categoryValue);
-
-            JLabel supplierLabel = new JLabel("Supplier:");
-            supplierField = new JTextField(15);
-            panel.add(supplierLabel);
-            // panel.add(supplierField);
-            JLabel supplierValue = new JLabel((productList[selected][5]) + "");
-            panel.add(supplierValue);
-                
             JLabel expiryDateLabel = new JLabel("Expiry Date:");
-            expiryDateField = new JTextField(15);
             panel.add(expiryDateLabel);
+            expiryDateField = new JTextField();
             panel.add(expiryDateField);
 
+            JLabel categoryLabel = new JLabel("Category:");
+            panel.add(categoryLabel);
+            categoryField = new JLabel(inventoryTable.getValueAt(selected, 5).toString());
+            panel.add(categoryField);
+
             JLabel descriptionLabel = new JLabel("Description:");
-            descriptionField = new JTextField(15);
             panel.add(descriptionLabel);
-            // panel.add(descriptionField);
-            JLabel descriptionValue = new JLabel((productList[selected][6]) + "");
-            panel.add(descriptionValue);
+            descriptionField = new JTextArea();
+            descriptionField.setLineWrap(true);
+            descriptionField.setWrapStyleWord(true);
+            panel.add(descriptionField);  
+            
+            JLabel supplierLabel = new JLabel("Supplier:");
+            panel.add(supplierLabel);
+            supplierField = new JLabel(inventoryTable.getValueAt(selected, 6).toString());
+            panel.add(supplierField);
+
+      
 
             addButton = new JButton("Add");
             cancelButton = new JButton("Cancel");
