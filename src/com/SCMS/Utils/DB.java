@@ -15,6 +15,8 @@ public class DB {
     }
     public static Connection getConnection() {
         try {
+            if(connection == null)
+                new DB();
             connection = DriverManager.getConnection(CONNECTION_STRING, "root", "");
             return connection;
         } catch (Exception e) {

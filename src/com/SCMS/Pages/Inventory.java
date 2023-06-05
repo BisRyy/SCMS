@@ -10,15 +10,32 @@ import java.awt.event.ActionListener;
 
 public class Inventory extends JPanel {
     private JTable inventoryTable;
+    private Object[][] inventoryList;
     private JScrollPane scrollPane;
     private JButton addButton;
     private JButton editButton;
     private JButton deleteButton;
-    private int selectedRow = -1;
+    private int selected = -1;
+    Database db = new Database();
 
     public Inventory() {
         initializeUI();
         addButton.addActionListener(new AddButtonListener());
+        deleteButton.addActionListener((e) -> {
+            if (selected >= 0){
+                int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete " + inventoryList[selected][1], "Are you sure?", JOptionPane.ERROR_MESSAGE);
+                if (confirm == 0){
+                    db.removeInventory((String) inventoryList[selected][11]);
+                    String[] columnNames = { "Code", "Name", "Quantity", "Price", "Unit", "Category", "Supplier","Date Added", "Expiry Date", "Description" };
+                    inventoryList = db.getInventory();
+                    inventoryTable.setModel(new DefaultTableModel(inventoryList, columnNames));
+                    JOptionPane.showMessageDialog(this, "Inventory Item Deleted Successfully! " + selected , "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Please select a inventory item to delete.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
     private void initializeUI() {
@@ -34,10 +51,8 @@ public class Inventory extends JPanel {
         
         // Add some dummy data to the table
         String[] columnNames = {"Code", "Name", "Quantity", "Price","Unit", "Category", "Supplier", "Date Added", "Expiry Date", "Description"};
-        Database db = new Database();
-
-        DefaultTableModel model = new DefaultTableModel(db.getInventory(), columnNames);
-        inventoryTable.setModel(model);
+        inventoryList = db.getInventory();
+        inventoryTable.setModel(new DefaultTableModel(inventoryList, columnNames));
         
         // make the table cells width fit the contents inside for all columns
         inventoryTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
@@ -49,7 +64,7 @@ public class Inventory extends JPanel {
                 int row = inventoryTable.rowAtPoint(evt.getPoint());
                 int col = inventoryTable.columnAtPoint(evt.getPoint());
                 if (row >= 0 && col >= 0) {
-                    selectedRow = row;
+                    selected = row;
                 }
             }
         });
@@ -74,15 +89,17 @@ public class Inventory extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Open add inventory dialog
+            if (selected == -1) {
+                JOptionPane.showMessageDialog(getParent(), "Please select a product", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             AddInventoryDialog addInventoryDialog = new AddInventoryDialog();
             addInventoryDialog.setVisible(true);
 
             // reload the updated inventory table
             String[] columnNames = {"Code", "Name", "Quantity", "Price","Unit", "Category", "Supplier", "Date Added", "Expiry Date", "Description"};
-            Database db = new Database();
-
-            DefaultTableModel model = new DefaultTableModel(db.getInventory(), columnNames);
-            inventoryTable.setModel(model);
+            inventoryTable.setModel(new DefaultTableModel(inventoryList = db.getInventory(), columnNames));
         }
     }
 
@@ -92,6 +109,7 @@ public class Inventory extends JPanel {
         private JTextField priceField;
         private JTextField unitField;
         private JTextField categoryField;
+        private JComboBox<String> productBox;
         private JTextField supplierField;
         private JTextField expiryDateField;
         private JTextField descriptionField;
@@ -103,17 +121,24 @@ public class Inventory extends JPanel {
             setModal(true);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             setResizable(false);
-
             // move the dialog to the center of the screen
             setLocationRelativeTo(getParent().getParent());
 
-            JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+            JPanel panel = new JPanel(new GridLayout(8, 1, 10, 10));
             panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            JLabel nameLabel = new JLabel("Name:");
+            JLabel nameLabel = new JLabel("Product:");
             nameField = new JTextField(15);
             panel.add(nameLabel);
-            panel.add(nameField);
+            // panel.add(nameField);
+            Object[][] productList = db.getProducts();
+            String[] productNames = new String[productList.length];
+            for(int i=0; i<productList.length;i++){
+                productNames[i] = (String) productList[i][1];
+            }
+
+            productBox = new JComboBox<String>(productNames);
+            panel.add(productBox);
             
             JLabel quantityLabel = new JLabel("Quantity:");
             quantityField = new JTextField(15);
@@ -123,22 +148,30 @@ public class Inventory extends JPanel {
             JLabel priceLabel = new JLabel("Price:");
             priceField = new JTextField(15);
             panel.add(priceLabel);
-            panel.add(priceField);
+            // panel.add(priceField);
+            JLabel priceValue = new JLabel((productList[selected][2]) + " Birr");
+            panel.add(priceValue);
 
             JLabel unitLabel = new JLabel("Unit:");
             unitField = new JTextField(15);
             panel.add(unitLabel);
-            panel.add(unitField);
+            // panel.add(unitField);
+            JLabel unitValue = new JLabel((productList[selected][3]) + "");
+            panel.add(unitValue);
 
             JLabel categoryLabel = new JLabel("Category:");
             categoryField = new JTextField(15);
             panel.add(categoryLabel);
-            panel.add(categoryField);
+            // panel.add(categoryField);
+            JLabel categoryValue = new JLabel((productList[selected][4]) + "");
+            panel.add(categoryValue);
 
             JLabel supplierLabel = new JLabel("Supplier:");
             supplierField = new JTextField(15);
             panel.add(supplierLabel);
-            panel.add(supplierField);
+            // panel.add(supplierField);
+            JLabel supplierValue = new JLabel((productList[selected][5]) + "");
+            panel.add(supplierValue);
                 
             JLabel expiryDateLabel = new JLabel("Expiry Date:");
             expiryDateField = new JTextField(15);
@@ -148,16 +181,18 @@ public class Inventory extends JPanel {
             JLabel descriptionLabel = new JLabel("Description:");
             descriptionField = new JTextField(15);
             panel.add(descriptionLabel);
-            panel.add(descriptionField);
+            // panel.add(descriptionField);
+            JLabel descriptionValue = new JLabel((productList[selected][6]) + "");
+            panel.add(descriptionValue);
 
             addButton = new JButton("Add");
             cancelButton = new JButton("Cancel");
 
             addButton.addActionListener((e) -> {    
-                    String name = nameField.getText();
-
-                    if (name.isEmpty()) {
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a name", "Error", JOptionPane.ERROR_MESSAGE);
+                    int index = productBox.getSelectedIndex();
+                    String id = (String) productList[index][7];
+                    if (index < 0) {
+                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please select a product", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
 
@@ -173,21 +208,8 @@ public class Inventory extends JPanel {
                         return;
                     }
 
-                    try {
-                        Double.parseDouble(priceField.getText());
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a valid price", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    double price = Double.parseDouble(priceField.getText());
-                    if (price <= 0) {
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a valid price", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
                     String category = categoryField.getText();
                     String expiryDate = expiryDateField.getText();
-                    int id = selectedRow;
-                    Database db = new Database();
                     db.addInventory(id, quantity, category, expiryDate);
                     dispose();
                 }
