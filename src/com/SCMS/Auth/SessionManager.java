@@ -7,7 +7,7 @@ public class SessionManager {
     public static boolean isAuthenticated() {
         try (BufferedReader reader = new BufferedReader(new FileReader(SESSION_FILE))) {
             return Boolean.parseBoolean(decrypt(reader.readLine().toCharArray()));
-        } catch (IOException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -16,7 +16,7 @@ public class SessionManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(SESSION_FILE))) {
             reader.readLine(); // Skip the first line (authentication state)
             return decrypt(reader.readLine().toCharArray());
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -26,7 +26,7 @@ public class SessionManager {
             reader.readLine(); // Skip the first line (authentication state)
             reader.readLine(); // Skip the second line (username)
             return decrypt(reader.readLine().toCharArray());
-        } catch (IOException e) {
+        } catch (Exception e) {
             return null;
         }
     }
