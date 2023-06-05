@@ -21,7 +21,8 @@ CREATE TABLE products (
   category VARCHAR(100),
   description VARCHAR(255),
   image VARCHAR(255),
-  supplier_id INT
+  supplier_id INT,
+  user_id INT
 );
 
 CREATE TABLE inventory (
@@ -31,7 +32,9 @@ CREATE TABLE inventory (
   location VARCHAR(100),
   date_added DATE default CURRENT_TIMESTAMP,
   expiry_date DATE,
-  FOREIGN KEY (product_id) REFERENCES products(product_id)
+  user_id INT default 1,
+  FOREIGN KEY (product_id) REFERENCES products(product_id),
+  FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE suppliers(
