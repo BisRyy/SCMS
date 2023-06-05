@@ -5,6 +5,11 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,12 +20,12 @@ import javax.swing.border.LineBorder;
 public class Order extends JPanel {
 
 
- 
+	String DB_URL = "jdbc:mysql://localhost/SCMS";
+    String USERNAME = "root";
+    String PASSWORD = "";
+    JPanel j = this;
 	public Order(String id,String customer,String product,String price,String status,String date_and_time) {
-
-
-     
-
+		
 		this.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.setBackground(new Color(0, 51, 51));
 		this.setLayout(null);
@@ -69,36 +74,47 @@ public class Order extends JPanel {
 		lblNewLabel_8.setBounds(216, 102, 79, 13);
 		add(lblNewLabel_8);
 		
-		JLabel lblNewLabel_9 = new JLabel(status);
-
 		
-       if(status=="Accepted") {
+		JLabel lblNewLabel_9 = new JLabel(status);
+		 
+		
+		lblNewLabel_9.setForeground(new Color(255, 255, 255));
+		lblNewLabel_9.setBounds(216, 125, 79, 13);
+       if(status.equals("Accepted")) {
+    	   
 
 		lblNewLabel_9.setForeground(Color.magenta);
 
 		
 		}
-		else if (status=="Declined"){
+		else if (status.equals("Declined")){
 			lblNewLabel_9.setForeground(Color.red);
 		}
-       lblNewLabel_9.setForeground(new Color(255, 255, 255));
-		lblNewLabel_9.setBounds(216, 125, 79, 13);
+      
 		add(lblNewLabel_9);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(0, 21, 329, 2);
 	     add(separator_1);
+	     if(status.equals("Waiting")) {
 		
 		JButton btnNewButton = new JButton("Accept");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 lblNewLabel_9.setText("Accepted");
-
-
-				 lblNewLabel_9.setForeground(Color.MAGENTA);
-
-				 
-			}
+				
+				  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+					  Statement stmt = jdbcConnect.createStatement();
+				        	stmt.executeUpdate("update orders set order_status=\"Accepted\" where user_id= "+id);
+				         
+				       
+				            } catch (SQLException e1) {
+				        	e1.printStackTrace();
+				        	}
+				  lblNewLabel_9.setText("Accepted");
+                 lblNewLabel_9.setForeground(Color.MAGENTA);
+             	
+                 
+           }
 		});
 		btnNewButton.setBounds(20, 143, 85, 21);
 		add(btnNewButton);
@@ -106,28 +122,36 @@ public class Order extends JPanel {
 		JButton btnNewButton_1 = new JButton("Decline");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+					  Statement stmt = jdbcConnect.createStatement();
+				        	stmt.executeUpdate("update orders set order_status=\"Declined\" where user_id= "+id);
+				         
+				       
+				            } catch (SQLException e1) {
+				        	e1.printStackTrace();
+				        	}
 				 lblNewLabel_9.setText("Declined");
 				 lblNewLabel_9.setForeground(Color.RED);
 				 
 			}
 		});
-		btnNewButton_1.setBounds(120, 143, 85, 21);
+		btnNewButton_1.setBounds(200, 143, 85, 21);
 		add(btnNewButton_1);
-		 
-		 JPanel j = this;
-		JButton btnNewButton_2 = new JButton("Remove");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				Container parentContainer = j.getParent();
-				 parentContainer.remove(j);
-				  parentContainer.revalidate();
-			        parentContainer.repaint();
-			}
-		});
+	     }
 		
-		btnNewButton_2.setBounds(226, 143, 85, 21);
-		add(btnNewButton_2);
+//		JButton btnNewButton_2 = new JButton("Remove");
+//		btnNewButton_2.addActionListener(new ActionListener() {
+//			
+//			public void actionPerformed(ActionEvent e) {
+//				Container parentContainer = j.getParent();
+//				 parentContainer.remove(j);
+//				  parentContainer.revalidate();
+//			        parentContainer.repaint();
+//			}
+//		});
+//		
+//		btnNewButton_2.setBounds(226, 143, 85, 21);
+//		add(btnNewButton_2);
 		
 
 		JLabel lblNewLabel_10 = new JLabel(date_and_time);
