@@ -98,11 +98,15 @@ CREATE TABLE suppliers(
 CREATE TABLE orders(
     order_id int primary key auto_increment,
     user_id int,
+    user_name varchar(20),
     product_id int,
+    product_name varchar(20),
+    product_price int,
     order_quantity int,
     order_status varchar(25),
+    date_and_time varchar(25),
     foreign key(user_id) references users(user_id),
-    foreign key(product_id) references products(product_id)
+    foreign key(product_id) references product(product_id)
 );
 
 ALTER TABLE products ADD FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id);
