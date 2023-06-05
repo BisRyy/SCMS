@@ -23,7 +23,7 @@ import java.sql.Statement;
 public class Orders extends JPanel {
 
 	
-	   int page=0;
+	  public static int page=0;
 
 
  	private JTextField textField;
@@ -397,7 +397,7 @@ public class Orders extends JPanel {
 
 				  try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
 		  Statement stmt = jdbcConnect.createStatement();
-      	ResultSet rsData = stmt.executeQuery("Select * from orders where order_status =\"Accepted\"");
+      	ResultSet rsData = stmt.executeQuery("Select * from orders where order_status =\"Accepted\" limit "+page+",9");
         while(rsData.next()) {
       	  
       	  Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),rsData.getString("user_name"),rsData.getString("product_name"),Integer.toString(rsData.getInt("product_price")),rsData.getString("Order_status"),rsData.getString("date_and_time")));
@@ -444,14 +444,14 @@ public class Orders extends JPanel {
 			    			
 			    			
 			    		});
-			    	JButton previouspage = new JButton("Previous Page");
-			    	nextpage.addActionListener(new ActionListener() {
+			    	JButton AcPreviouspage = new JButton("Previous Page");
+			    	AcPreviouspage.addActionListener(new ActionListener() {
 			    			public void actionPerformed(ActionEvent e) {
 
 			    				
 			    		        try(Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
 			    					  Statement stmt = jdbcConnect.createStatement();
-			    					  
+			    					    
 			    						  if(page!=0) {
 			    			              page=page-9;
 			    						  ResultSet rsData = stmt.executeQuery("Select * from orders where order_status =\"Accepted\" limit "+page+",9");
@@ -476,8 +476,8 @@ public class Orders extends JPanel {
 			    			
 			    			
 			    		});
-			    	previouspage.setBounds(427, 18, 119, 21);
-			        FooterPanel.add(previouspage);
+			    	AcPreviouspage.setBounds(427, 18, 119, 21);
+			        FooterPanel.add(AcPreviouspage);
 			    	nextpage.setBounds(664, 18, 119, 21);
 			    FooterPanel.add(nextpage);
 
@@ -551,7 +551,7 @@ public class Orders extends JPanel {
 	    			
 	    		});
 	    	JButton previouspage = new JButton("Previous Page");
-	    	nextpage.addActionListener(new ActionListener() {
+	    	previouspage.addActionListener(new ActionListener() {
 	    			public void actionPerformed(ActionEvent e) {
 
 	    				
