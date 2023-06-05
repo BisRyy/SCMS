@@ -22,7 +22,7 @@ CREATE TABLE products (
   description VARCHAR(255),
   image VARCHAR(255),
   supplier_id INT,
-  user_id INT,
+  user_id INT
 );
 
 CREATE TABLE inventory (
