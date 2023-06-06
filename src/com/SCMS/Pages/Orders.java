@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import com.SCMS.Components.Order;
 import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -32,7 +34,7 @@ public class Orders extends JPanel {
 		String QUERY = "select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
 				+ page + ",9";
 		setBackground(Color.white);
-		setLayout(null);
+		setLayout(new BorderLayout());
 
 		JPanel Headpanel = new JPanel();
 
@@ -412,7 +414,8 @@ public class Orders extends JPanel {
 				try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 					Statement stmt = jdbcConnect.createStatement();
 					ResultSet rsData = stmt.executeQuery(
-							"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\"");
+							"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\" limit "
+									+ page + ",9");
 					while (rsData.next()) {
 
 						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
@@ -465,7 +468,7 @@ public class Orders extends JPanel {
 
 				});
 				JButton previouspage = new JButton("Previous Page");
-				nextpage.addActionListener(new ActionListener() {
+				previouspage.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 
 						try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {

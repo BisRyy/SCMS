@@ -25,6 +25,7 @@ public class Order extends JPanel {
 	public Order(String id, String customer, String product, String price, String status, String order_date) {
 
 		this.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		this.setBackground(Color.LIGHT_GRAY);
 		this.setLayout(null);
 
 		JLabel lblNewLabel_1 = new JLabel(id);
