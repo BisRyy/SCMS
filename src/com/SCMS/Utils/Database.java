@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.SCMS.Auth.SessionManager;
+
 public class Database {
     public final String CONNECTION_STRING = "jdbc:mysql://localhost:3306/SCMS";
     private Connection connection;
@@ -56,7 +57,7 @@ public class Database {
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id where user_id = " + usernameId +";");
+                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id where i.user_id = " + usernameId +";");
             int rowCount = getRowCount(resultSet);
             int columnCount = 12;
             inventory = new Object[rowCount][columnCount];
@@ -176,6 +177,21 @@ public class Database {
 
     public boolean removeProduct(String id) {
         String query = "DELETE FROM products WHERE product_id='" + id + "';";
+        try {
+            connect();
+            System.out.println(executeUpdate(query));
+            disconnect();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean orderProduct(String u_id, String prod_id, int quantity, String status) {
+        String query = "INSERT INTO orders(user_id, product_id, order_quantity, order_status) VALUES('" + u_id + "', '"
+                + prod_id + "', '" + quantity + "', '" + status + "')";
+
         try {
             connect();
             System.out.println(executeUpdate(query));

@@ -7,6 +7,7 @@ import com.SCMS.Utils.Database;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Pattern;
 
 public class Inventory extends JPanel {
     private JTable inventoryTable;
@@ -21,6 +22,18 @@ public class Inventory extends JPanel {
     public Inventory() {
         initializeUI();
         addButton.addActionListener(new AddButtonListener());
+        editButton.addActionListener((e) -> {
+            if (selected >= 0){
+                EditInventoryDialog editInventoryDialog = new EditInventoryDialog(selected);
+                editInventoryDialog.setVisible(true);
+                String[] columnNames = { "Code", "Name", "Quantity", "Price", "Unit", "Category", "Supplier","Date Added", "Expiry Date", "Description" };
+                inventoryList = db.getInventory();
+                inventoryTable.setModel(new DefaultTableModel(inventoryList, columnNames));
+            }else{
+                JOptionPane.showMessageDialog(this, "Please select a inventory item to edit.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
         deleteButton.addActionListener((e) -> {
             if (selected >= 0){
                 int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete " + inventoryList[selected][1], "Are you sure?", JOptionPane.ERROR_MESSAGE);
@@ -206,6 +219,14 @@ public class Inventory extends JPanel {
                         return;
                     }
 
+                    // verify expiry date format 2023-04-05
+                    String expirydate = expiryDateField.getText();
+                    if (!Pattern.matches("\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", expirydate)){
+                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Invalid Expiry date format. Use YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+
                     String category = categoryField.getText();
                     String expiryDate = expiryDateField.getText();
                     db.addInventory(id, quantity, category, expiryDate);
@@ -228,6 +249,91 @@ public class Inventory extends JPanel {
             getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
             pack();
+        }
+    }
+
+    // edit inventory dialog
+    // edit all inventory item features
+    private class EditInventoryDialog extends JDialog {
+        private JComboBox<String> productBox;
+        private JTextField quantityField;
+        private JLabel priceField;
+        private JLabel unitField;
+        private JLabel categoryField;
+        private JLabel supplierField;
+        private JTextField expiryDateField;
+        private JTextArea descriptionField;
+        private JButton editButton;
+        private JButton cancelButton;
+        Object[][] productList = null;
+        String[] productNames = null;
+
+        public EditInventoryDialog(int selected){
+            setTitle("Edit Inventory");
+            setModal(true);
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            setResizable(false);
+            setLocationRelativeTo(getParent().getParent());
+            add(new EditInventoryPanel(selected));
+            pack();
+        }
+    }  
+    
+    // edit inventory panel
+    private class EditInventoryPanel extends JPanel{
+        private JComboBox<String> productBox;
+        private JTextField quantityField;
+        private JLabel priceField;
+        private JLabel unitField;
+        private JLabel categoryField;
+        private JLabel supplierField;
+        private JTextField expiryDateField;
+        private JTextArea descriptionField;
+        private JButton editButton;
+        private JButton cancelButton;
+        Object[][] productList = null;
+        String[] productNames = null;
+        int selected = 0;
+        
+        public EditInventoryPanel(int index){
+            this.selected = index;
+            setLayout(new BorderLayout());
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            
+            JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+            panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JLabel nameLabel = new JLabel("Product:");
+            panel.add(nameLabel);
+            productList = db.getProducts();
+            productNames = new String[productList.length];
+            for(int i=0; i<productList.length;i++){
+                productNames[i] = (String) productList[i][1];
+            }
+            productBox = new JComboBox<String>(productNames);
+            productBox.setSelectedIndex(selected);
+            panel.add(productBox);
+            productBox.addActionListener((e) -> {
+                selected = productBox.getSelectedIndex();
+                priceField.setText(productList[selected][2].toString());
+                unitField.setText(productList[selected][3].toString());
+                categoryField.setText(productList[selected][4].toString());
+                supplierField.setText(productList[selected][5].toString());
+                repaint();
+                revalidate();
+            });
+
+            selected = productBox.getSelectedIndex();
+
+            JLabel priceLabel = new JLabel("Price:");
+            panel.add(priceLabel);
+            priceField = new JLabel(inventoryTable.getValueAt(selected, 3).toString());
+            panel.add(priceField);
+
+            JLabel quantityLabel = new JLabel("Quantity:");
+            panel.add(quantityLabel);
+            quantityField = new JTextField();
+            panel.add(quantityField);
         }
     }
 }

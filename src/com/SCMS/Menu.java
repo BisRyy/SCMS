@@ -42,7 +42,7 @@ public class Menu extends JFrame {
         workSpace = new JPanel(cardLayout);
         workSpace.setBackground(Color.CYAN);
 
-        String[] menuItemsNames = { "Dashboard", "Inventory", "Products", "Orders", "Shipment", "Suppliers",
+        String[] menuItemsNames = { "Dashboard", "Purchase","Inventory", "Products", "Orders", "Shipment", "Suppliers",
                 "Employees", "Reports", "Settings", "Logout" };
 
         for (int i = 0; i < menuItems.length; i++) {
@@ -62,6 +62,8 @@ public class Menu extends JFrame {
             else if (menuItemsNames[i] == "Shipment") {
                 workSpace.add(new Shipment(), menuItemsNames[i]);
             }
+            else if (menuItemsNames[i] == "Purchase")
+            workSpace.add(new Purchase(), menuItemsNames[i]);
             // else if (menuItemsNames[i] == "Suppliers")
             // workSpace.add(new Suppliers(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Customers")
