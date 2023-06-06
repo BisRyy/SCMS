@@ -1,10 +1,12 @@
 package com.SCMS;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import com.SCMS.Auth.SessionManager;
 import com.SCMS.Components.SButton;
 import com.SCMS.Pages.*;
 
@@ -26,73 +28,80 @@ public class Menu extends JFrame {
         menuBar = new MenuBar();
         navBar = createSidebar();
         navBar.add(toggleButton);
-        toggleButton.addActionListener(e -> { 
-            if(visible){
-               animateSidebarClosing();
-            }else
+        toggleButton.addActionListener(e -> {
+            if (visible) {
+                animateSidebarClosing();
+            } else
                 animateSidebarOpening();
             visible = !visible;
 
         });
-        
+
         setJMenuBar(menuBar);
         cardLayout = new CardLayout();
         workSpace = new JPanel(cardLayout);
         workSpace.setBackground(Color.CYAN);
-        
-        String[] menuItemsNames = {"Dashboard", "Inventory", "Products","Orders", "Shipment", "Suppliers", "Customers", "Employees", "Reports", "Settings", "Help", "Logout"};
-        
+
+        String[] menuItemsNames = { "Dashboard", "Inventory", "Products", "Orders", "Shipment", "Suppliers",
+                "Employees", "Reports", "Settings", "Logout" };
+
         for (int i = 0; i < menuItems.length; i++) {
             JPanel panel = new JPanel(null);
-            JButton button = new JButton(menuItemsNames[i], new ImageIcon("search.png"));
+            JButton button = new JButton(menuItemsNames[i], new ImageIcon("lib/icons/menu.png"));
             button.setSize(1000, 100);
             panel.add(button);
             views[i] = panel;
-            if(menuItemsNames[i] == "Inventory")
+            if (menuItemsNames[i] == "Inventory")
                 workSpace.add(new Inventory(), menuItemsNames[i]);
-            else if(menuItemsNames[i] == "Orders")
+            else if (menuItemsNames[i] == "Orders")
                 workSpace.add(new Orders(), menuItemsNames[i]);
-            else if(menuItemsNames[i] == "Dashboard")
+            else if (menuItemsNames[i] == "Dashboard")
                 workSpace.add(new Dashboard(), menuItemsNames[i]);
-            else if(menuItemsNames[i] == "Products")
+            else if (menuItemsNames[i] == "Products")
                 workSpace.add(new Products(), menuItemsNames[i]);
-                else if (menuItemsNames[i] == "Shipment") {
+            else if (menuItemsNames[i] == "Shipment") {
                 workSpace.add(new Shipment(), menuItemsNames[i]);
             }
             // else if (menuItemsNames[i] == "Suppliers")
-            //     workSpace.add(new Suppliers(), menuItemsNames[i]);
+            // workSpace.add(new Suppliers(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Customers")
-            //     workSpace.add(new Customers(), menuItemsNames[i]);
+            // workSpace.add(new Customers(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Employees")
-            //     workSpace.add(new Employees(), menuItemsNames[i]);
+            // workSpace.add(new Employees(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Reports")
-            //     workSpace.add(new Reports(), menuItemsNames[i]);
+            // workSpace.add(new Reports(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Settings")
-            //     workSpace.add(new Settings(), menuItemsNames[i]);
+            // workSpace.add(new Settings(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Help")
-            //     workSpace.add(new Help(), menuItemsNames[i]);
-            // else if(menuItemsNames[i] == "Logout")
-            //     workSpace.add(new Logout(), menuItemsNames[i]);
+            // workSpace.add(new Help(), menuItemsNames[i]);
             else
                 workSpace.add(panel, menuItemsNames[i]);
 
-            menuItems[i] = new SButton(menuItemsNames[i], new ImageIcon("lib/icons/search.png"));
+            menuItems[i] = new SButton(menuItemsNames[i], new ImageIcon("lib/icons/" + menuItemsNames[i].toLowerCase() + ".png"));
             // menuItems[i].setBounds(20, 20 + 60 * i, 200, 50);
             menuItems[i].setForeground(Color.DARK_GRAY);
             menuItems[i].setBackground(Color.WHITE);
             menuItems[i].setBorder(BorderFactory.createEmptyBorder());
             menuItems[i].setFocusPainted(false);
             navBar.add(menuItems[i]);
-            menuItems[i].addActionListener(e -> {
-                current = (JButton) e.getSource();
-                cardLayout.show(workSpace, current.getText());
-                current.setBackground(Color.LIGHT_GRAY);
-                for (int j = 0; j < menuItems.length; j++) {
-                    if (current != menuItems[j]) {
-                        menuItems[j].setBackground(Color.WHITE);
+            if (menuItemsNames[i] == "Logout") {
+                menuItems[i].addActionListener((e) -> {
+                    dispose();
+                    SessionManager.logout();
+                    new Auth();
+                });
+            } else {
+                menuItems[i].addActionListener(e -> {
+                    current = (JButton) e.getSource();
+                    cardLayout.show(workSpace, current.getText());
+                    current.setBackground(Color.LIGHT_GRAY);
+                    for (int j = 0; j < menuItems.length; j++) {
+                        if (current != menuItems[j]) {
+                            menuItems[j].setBackground(Color.WHITE);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         menuItems[0].setBackground(Color.LIGHT_GRAY);
         Container contentPane = getContentPane();
@@ -104,7 +113,8 @@ public class Menu extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-     private JPanel createSidebar() {
+
+    private JPanel createSidebar() {
         JPanel sidebar = new JPanel();
         sidebar.setBounds(10, 10, WIDTH, HEIGHT);
         sidebar.setPreferredSize(new Dimension(200, getHeight()));
@@ -112,7 +122,7 @@ public class Menu extends JFrame {
         sidebar.setBackground(Color.DARK_GRAY);
         return sidebar;
     }
-    
+
     private void animateSidebarOpening() {
         navBar.setVisible(true);
         int navBarWidth = navBar.getWidth();
@@ -152,7 +162,7 @@ public class Menu extends JFrame {
                     ((Timer) e.getSource()).stop();
                 } else {
                     currentX -= 10;
-                    navBar.setPreferredSize(new Dimension(navBar.getWidth()-10, getHeight()));
+                    navBar.setPreferredSize(new Dimension(navBar.getWidth() - 10, getHeight()));
                     navBar.repaint();
                     navBar.revalidate();
                 }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.SCMS.Auth.SessionManager;
 public class Database {
     public final String CONNECTION_STRING = "jdbc:mysql://localhost:3306/SCMS";
     private Connection connection;
@@ -40,7 +41,7 @@ public class Database {
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
-        Statement statement =  connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
         return statement.executeQuery(query);
     }
 
@@ -51,9 +52,11 @@ public class Database {
 
     public Object[][] getInventory() {
         Object[][] inventory = null;
+        int usernameId = getUsernameId();
         try {
             connect();
-            ResultSet resultSet = executeQuery("select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id;");
+            ResultSet resultSet = executeQuery(
+                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id where user_id = " + usernameId +";");
             int rowCount = getRowCount(resultSet);
             int columnCount = 12;
             inventory = new Object[rowCount][columnCount];
@@ -95,8 +98,8 @@ public class Database {
     }
 
     public boolean addInventory(String product_id, int quantity, String location, String expiry_date) {
-        String query = "insert into inventory(product_id, quantity, location, expiry_date) values(" + product_id + ", " + quantity + ", '" + location + "', '" + expiry_date + "');";
-        try{
+        try {
+            String query = "insert into inventory(product_id, quantity, location, expiry_date, user_id) values(" + product_id + ", " + quantity + ", '" + location + "', '" + expiry_date + "','" + getUsernameId() + "');";
             connect();
             executeUpdate(query);
             disconnect();
@@ -108,7 +111,7 @@ public class Database {
     }
 
     public boolean removeInventory(String id) {
-        System.out.println("id: "+ id);
+        System.out.println("id: " + id);
         String query = "DELETE FROM inventory WHERE inventory_id='" + id + "';";
         try {
             connect();
@@ -153,9 +156,12 @@ public class Database {
         return products;
     }
 
-    public boolean addProduct(String name, String code, double price, String unit, String category, String description, String image, String supplier_id) {
-        String query = "INSERT INTO products (name, code, price, unit, category, description, image, supplier_id) VALUES('" + name + "', '"
-                + code + "', '" + price + "', '" + unit + "', '" + category + "', '" + description + "', '" + image + "', '"
+    public boolean addProduct(String name, String code, double price, String unit, String category, String description,
+            String image, String supplier_id) {
+        String query = "INSERT INTO products (name, code, price, unit, category, description, image, supplier_id) VALUES('"
+                + name + "', '"
+                + code + "', '" + price + "', '" + unit + "', '" + category + "', '" + description + "', '" + image
+                + "', '"
                 + supplier_id + "');";
         try {
             connect();
@@ -207,5 +213,25 @@ public class Database {
         }
 
         return suppliers;
+    }
+
+    // get user id from username
+
+    public int getUsernameId() {
+        return getUsernameId(SessionManager.getAuthenticatedUser());
+    }
+    
+    public int getUsernameId(String username) {
+        try {
+            connect();
+            ResultSet resultSet = executeQuery("select user_id from users where username = '" + username + "';");
+            resultSet.next();
+            int id = resultSet.getInt("user_id");
+            disconnect();
+            return id;
+        } catch (SQLException e) {
+
+        }
+        return 0;
     }
 }

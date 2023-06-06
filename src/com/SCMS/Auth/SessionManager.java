@@ -61,4 +61,12 @@ public class SessionManager {
         }
         return new String(decrypted);
     }
+
+    public static void logout(){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SESSION_FILE))) {
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
