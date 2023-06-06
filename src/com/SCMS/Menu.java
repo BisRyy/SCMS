@@ -23,7 +23,7 @@ public class Menu extends JFrame {
 
     public Menu(String username, String role) {
         super("Supply Chain Management System");
-
+          setResizable(false);
         // Initialize components
         menuBar = new MenuBar();
         navBar = createSidebar();
