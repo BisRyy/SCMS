@@ -4,14 +4,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import com.SCMS.Components.Order;
 import javax.swing.JLabel;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import javax.swing.JButton;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
-
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,13 +33,13 @@ public class Orders extends JPanel {
 		String PASSWORD = "";
 		String QUERY = "select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
 				+ page + ",9";
-		setBackground(Color.white);
-		setLayout(new BorderLayout());
+		setBackground(new Color(0, 0, 0));
+		setLayout(null);
 
 		JPanel Headpanel = new JPanel();
 
 		Headpanel.setBounds(0, 0, 1266, 75);
-		Headpanel.setBackground(Color.white);
+		Headpanel.setBackground(new Color(0, 0, 0));
 		add(Headpanel);
 		Headpanel.setLayout(null);
 
@@ -49,7 +49,7 @@ public class Orders extends JPanel {
 		Headpanel.add(SearchLabel);
 		SearchLabel.setIcon(new ImageIcon("lib/icons/search.png"));
 
-		
+		SearchLabel.setForeground(Color.WHITE);
 
 		textField = new JTextField();
 		textField.setBounds(909, 13, 172, 19);
@@ -64,34 +64,34 @@ public class Orders extends JPanel {
 		JButton AllOrders = new JButton("All orders");
 
 		AllOrders.setBackground(Color.WHITE);
-	    AllOrders.setBounds(0, 54, 100, 21);
+		AllOrders.setForeground(Color.black);
+		AllOrders.setBounds(10, 54, 100, 21);
 		Headpanel.add(AllOrders);
 
-		JButton Waiting = new JButton("Pending");
+		JButton Waiting = new JButton("Waiting");
 
 		Waiting.setForeground(Color.WHITE);
-		Waiting.setBackground(Color.gray);
-		Waiting.setBounds(95, 54, 100, 21);
+		Waiting.setBackground(Color.BLACK);
+		Waiting.setBounds(105, 54, 100, 21);
 		Headpanel.add(Waiting);
 
 		JButton AcceptedButton = new JButton("Accepted");
 
 		AcceptedButton.setForeground(Color.WHITE);
-		AcceptedButton.setBackground(Color.gray);
-		AcceptedButton.setBounds(195, 54, 100, 21);
+		AcceptedButton.setBackground(Color.BLACK);
+		AcceptedButton.setBounds(200, 54, 100, 21);
 		Headpanel.add(AcceptedButton);
 		JButton DeclinedButton = new JButton("Declined");
 
 		DeclinedButton.setForeground(Color.WHITE);
-		DeclinedButton.setBackground(Color.gray);
-		DeclinedButton.setBounds(285, 54, 100, 21);
+		DeclinedButton.setBackground(Color.BLACK);
+		DeclinedButton.setBounds(295, 54, 100, 21);
 		Headpanel.add(DeclinedButton);
-	
 
 		JPanel Mainpanel = new JPanel();
 
 		Mainpanel.setBounds(0, 75, 1266, 570);
-		Mainpanel.setBackground(Color.white);
+		Mainpanel.setBackground(Color.black);
 		add(Mainpanel);
 		Mainpanel.setLayout(new GridLayout(3, 3, 10, 10));
 
@@ -110,8 +110,8 @@ public class Orders extends JPanel {
 		}
 
 		JPanel FooterPanel = new JPanel();
-		FooterPanel.setBounds(0, 647, 1266, 75);
-		FooterPanel.setBackground(Color.white);
+		FooterPanel.setBounds(0, 647, 1266, 49);
+		FooterPanel.setBackground(new Color(0, 0, 0));
 		add(FooterPanel);
 		FooterPanel.setLayout(null);
 
@@ -287,14 +287,13 @@ public class Orders extends JPanel {
 				previouspage.setBounds(427, 18, 119, 21);
 				FooterPanel.add(previouspage);
 				DeclinedButton.setBackground(Color.WHITE);
-				DeclinedButton.setForeground(Color.gray);
-				
+				DeclinedButton.setForeground(Color.black);
 				AcceptedButton.setForeground(Color.WHITE);
-				AcceptedButton.setBackground(Color.gray);
+				AcceptedButton.setBackground(Color.BLACK);
 				Waiting.setForeground(Color.WHITE);
-				Waiting.setBackground(Color.gray);
+				Waiting.setBackground(Color.BLACK);
 				AllOrders.setForeground(Color.WHITE);
-				AllOrders.setBackground(Color.gray);
+				AllOrders.setBackground(Color.BLACK);
 
 			}
 		});
@@ -393,14 +392,13 @@ public class Orders extends JPanel {
 				Anextpage.setBounds(664, 18, 119, 21);
 				FooterPanel.add(Anextpage);
 				AllOrders.setBackground(Color.white);
-				AllOrders.setForeground(Color.gray);
-				
+				AllOrders.setForeground(Color.black);
 				AcceptedButton.setForeground(Color.WHITE);
-				AcceptedButton.setBackground(Color.gray);
+				AcceptedButton.setBackground(Color.BLACK);
 				DeclinedButton.setForeground(Color.WHITE);
-				DeclinedButton.setBackground(Color.gray);
+				DeclinedButton.setBackground(Color.BLACK);
 				Waiting.setForeground(Color.WHITE);
-				Waiting.setBackground(Color.gray);
+				Waiting.setBackground(Color.BLACK);
 
 			}
 		});
@@ -414,8 +412,7 @@ public class Orders extends JPanel {
 				try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 					Statement stmt = jdbcConnect.createStatement();
 					ResultSet rsData = stmt.executeQuery(
-							"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\" limit "
-									+ page + ",9");
+							"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\"");
 					while (rsData.next()) {
 
 						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
@@ -468,7 +465,7 @@ public class Orders extends JPanel {
 
 				});
 				JButton previouspage = new JButton("Previous Page");
-				previouspage.addActionListener(new ActionListener() {
+				nextpage.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 
 						try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
@@ -506,15 +503,14 @@ public class Orders extends JPanel {
 				FooterPanel.add(nextpage);
 
 				AcceptedButton.setBackground(Color.WHITE);
-				AcceptedButton.setForeground(Color.gray);
-				
+				AcceptedButton.setForeground(Color.black);
 				Waiting.setForeground(Color.WHITE);
-				Waiting.setBackground(Color.gray);
+				Waiting.setBackground(Color.BLACK);
 
 				DeclinedButton.setForeground(Color.WHITE);
-				DeclinedButton.setBackground(Color.gray);
+				DeclinedButton.setBackground(Color.BLACK);
 				AllOrders.setForeground(Color.WHITE);
-				AllOrders.setBackground(Color.gray);
+				AllOrders.setBackground(Color.BLACK);
 
 			}
 
@@ -621,13 +617,13 @@ public class Orders extends JPanel {
 				nextpage.setBounds(664, 18, 119, 21);
 				FooterPanel.add(nextpage);
 				Waiting.setBackground(Color.WHITE);
-				Waiting.setForeground(Color.gray);
-	     		AcceptedButton.setForeground(Color.WHITE);
-				AcceptedButton.setBackground(Color.gray);
+				Waiting.setForeground(Color.black);
+				AcceptedButton.setForeground(Color.WHITE);
+				AcceptedButton.setBackground(Color.BLACK);
 				DeclinedButton.setForeground(Color.WHITE);
-				DeclinedButton.setBackground(Color.gray);
+				DeclinedButton.setBackground(Color.BLACK);
 				AllOrders.setForeground(Color.WHITE);
-				AllOrders.setBackground(Color.gray);
+				AllOrders.setBackground(Color.BLACK);
 
 			}
 		});
@@ -661,6 +657,5 @@ public class Orders extends JPanel {
 			}
 
 		});
-		
 	}
 }
