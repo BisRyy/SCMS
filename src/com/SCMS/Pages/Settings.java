@@ -5,31 +5,26 @@ import java.io.File;
 
 import javax.swing.*;
 
-public class Settings extends JPanel{
+public class Settings extends JPanel {
     private JLabel profilePictureLabel;
-    private JTextField firstNameTextField;
-    private JTextField lastNameTextField;
-    private JTextField emailTextField;
-    private JTextField phoneTextField;
-    private JTextField addressTextField;
     private JComboBox<String> languageComboBox;
     private JCheckBox emailCheckBox;
     private JCheckBox smsCheckBox;
-    
+
     // Account Settings management
-    public Settings(){
+    public Settings() {
         setLayout(new BorderLayout());
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         sidebar.setPreferredSize(new Dimension(200, 0));
         sidebar.add(ProfilePicture());
-        sidebar.add(Account());
+        // sidebar.add(Account());
         add(sidebar, BorderLayout.WEST);
         add(Language(), BorderLayout.CENTER);
         add(Notification(), BorderLayout.CENTER);
-        add(Theme(), BorderLayout.EAST);
+        // add(Theme(), BorderLayout.EAST);
     }
-    
+
     private void uploadProfilePicture() {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
@@ -43,7 +38,7 @@ public class Settings extends JPanel{
         }
     }
 
-    private JPanel ProfilePicture(){
+    private JPanel ProfilePicture() {
         JPanel profilePicturePanel = new JPanel();
         profilePicturePanel.setLayout(new BorderLayout());
         profilePicturePanel.setBorder(BorderFactory.createTitledBorder("Profile Picture"));
@@ -55,7 +50,7 @@ public class Settings extends JPanel{
         profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         JButton uploadButton = new JButton("Upload");
-        uploadButton.addActionListener((e)-> {
+        uploadButton.addActionListener((e) -> {
             uploadProfilePicture();
         });
 
@@ -65,45 +60,17 @@ public class Settings extends JPanel{
         return profilePicturePanel;
     }
 
-    private JPanel Account(){
-        JPanel accountDetailsPanel = new JPanel();
-        accountDetailsPanel.setLayout(new GridLayout(5, 2, 10, 10));
+    // private void saveAccountSettings() {
+    // String firstName = firstNameTextField.getText();
+    // String lastName = lastNameTextField.getText();
+    // String email = emailTextField.getText();
+    //
+    // // Perform save operation here
+    //
+    // JOptionPane.showMessageDialog(this, "Account settings saved successfully!");
+    // }
 
-        JLabel firstNameLabel = new JLabel("First Name:");
-        firstNameTextField = new JTextField();
-        JLabel lastNameLabel = new JLabel("Last Name:");
-        lastNameTextField = new JTextField();
-        JLabel emailLabel = new JLabel("Email:");
-        emailTextField = new JTextField();
-        JLabel phoneLabel = new JLabel("Phone:");
-        phoneTextField = new JPasswordField();
-        JLabel addressLabel = new JLabel("Address:");
-        addressTextField = new JPasswordField();
-
-        accountDetailsPanel.add(firstNameLabel);
-        accountDetailsPanel.add(firstNameTextField);
-        accountDetailsPanel.add(lastNameLabel);
-        accountDetailsPanel.add(lastNameTextField);
-        accountDetailsPanel.add(emailLabel);
-        accountDetailsPanel.add(emailTextField);
-        accountDetailsPanel.add(phoneLabel);
-        accountDetailsPanel.add(phoneTextField);
-        accountDetailsPanel.add(addressLabel);
-        accountDetailsPanel.add(addressTextField);
-        return accountDetailsPanel;
-    }
-
-    private void saveAccountSettings() {
-        String firstName = firstNameTextField.getText();
-        String lastName = lastNameTextField.getText();
-        String email = emailTextField.getText();
-
-        // Perform save operation here
-
-        JOptionPane.showMessageDialog(this, "Account settings saved successfully!");
-    }
-
-    private JPanel Language(){
+    private JPanel Language() {
         JPanel languagePanel = new JPanel();
         languagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         languagePanel.setBorder(BorderFactory.createTitledBorder("Language Selection"));
@@ -115,7 +82,14 @@ public class Settings extends JPanel{
         return languagePanel;
     }
 
-    private JPanel Notification(){
+    private JPanel Notification() {
+        JTextArea idText;
+        JTextArea nameText;
+        JTextField priceField;
+        JTextField quantityField;
+        JTextField categoryCombo;
+        JTextField shortDescriptionField;
+
         JPanel notificationPanel = new JPanel();
         notificationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         notificationPanel.setBorder(BorderFactory.createTitledBorder("Notification Settings"));
@@ -123,24 +97,39 @@ public class Settings extends JPanel{
         emailCheckBox = new JCheckBox("Email Notifications");
         smsCheckBox = new JCheckBox("SMS Notifications");
 
-        notificationPanel.add(emailCheckBox);
-        notificationPanel.add(smsCheckBox);
+        JLabel shortDescriptionLabel = new JLabel("Username");
+        shortDescriptionField = new JTextField();
+        JLabel idLabel = new JLabel("First Name");
+        JLabel nameLabel = new JLabel("Last Name");
+        idText = new JTextArea();
+        nameText = new JTextArea();
+        JLabel priceLabel = new JLabel("Email");
+        JLabel quantity = new JLabel("Phone");
+        priceField = new JTextField();
+        quantityField = new JTextField();
+        JLabel categoryLabel = new JLabel("Address");
+        categoryCombo = new JTextField();
+        JButton submitButton = new JButton("Update");
+
+        notificationPanel.setLayout(new GridLayout(7, 2, 20, 20));
+        notificationPanel.add(shortDescriptionLabel);
+        notificationPanel.add(idLabel);
+        notificationPanel.add(shortDescriptionField);
+        notificationPanel.add(idText);
+        notificationPanel.add(nameLabel);
+        notificationPanel.add(priceLabel);
+        notificationPanel.add(nameText);
+        notificationPanel.add(priceField);
+        notificationPanel.add(quantity);
+        notificationPanel.add(categoryLabel);
+        notificationPanel.add(quantityField);
+        notificationPanel.add(categoryCombo);
+        notificationPanel.add(submitButton);
+
         return notificationPanel;
     }
 
-    private JPanel Theme(){
-        JPanel themePanel = new JPanel();
-        themePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        themePanel.setBorder(BorderFactory.createTitledBorder("Theme Selection"));
-
-        String[] themes = { "Light", "Dark" };
-        JComboBox<String> themeComboBox = new JComboBox<>(themes);
-
-        themePanel.add(themeComboBox);
-        return themePanel;
-    }
-
-    private JPanel Security(){
+    private JPanel Security() {
         JPanel securityPanel = new JPanel();
         securityPanel.setLayout(new GridLayout(2, 2, 10, 10));
         securityPanel.setBorder(BorderFactory.createTitledBorder("Security Settings"));

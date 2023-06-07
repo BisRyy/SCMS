@@ -27,7 +27,8 @@ CREATE TABLE users(
 
 create TABLE categories(
     category_id int primary key auto_increment,
-    category_name varchar(25) unique
+    category_name varchar(25) unique,
+    deleted boolean default false
 );
 
 CREATE TABLE products (
@@ -40,6 +41,7 @@ CREATE TABLE products (
   description VARCHAR(255),
   image VARCHAR(255),
   supplier_id INT,
+  deleted boolean default false,
   FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id),
   FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
@@ -57,6 +59,14 @@ CREATE TABLE inventory (
   FOREIGN KEY (owner_id) REFERENCES suppliers(supplier_id)
 );
 
+create table shipments(
+    shipment_id int primary key auto_increment,
+    order_id int,
+    shipment_date date default CURRENT_TIMESTAMP,
+    shipment_status varchar(25),
+    starting_point varchar(25),
+    destination varchar(25)   
+);
 
 CREATE TABLE orders(
     order_id int primary key auto_increment,
@@ -67,9 +77,11 @@ CREATE TABLE orders(
     order_status varchar(25),
     order_date date default CURRENT_TIMESTAMP,
     note varchar(255),
+    shipment_id int,
     foreign key(product_id) references products(product_id),
     foreign key(company_id) references suppliers(supplier_id),
-    foreign key(user_id) references users(user_id)
+    foreign key(user_id) references users(user_id),
+    foreign key(shipment_id) references shipments(shipment_id)
 );
 
 
@@ -95,7 +107,15 @@ INSERT INTO products (name, code, price, unit, category_id, description, image, 
 ('Product 5', 'P5', 50, 'Unit', 1, 'Description 5', 'lib/product.png', 2),
 ('Product 6', 'P6', 60, 'Unit', 2, 'Description 6', 'lib/product.png', 2),
 ('Product 7', 'P7', 70, 'Unit', 3, 'Description 7', 'lib/product.png', 2),
-('Product 8', 'P8', 80, 'Unit', 4, 'Description 8', 'lib/product.png', 2);
+('Product 8', 'P8', 80, 'Unit', 4, 'Description 8', 'lib/product.png', 2),
+('Product 9', 'P9', 90, 'Unit', 1, 'Description 9', 'lib/product.png', 1),
+('Product 10', 'P10', 100, 'Unit', 2, 'Description 10', 'lib/product.png', 1),
+('Product 11', 'P11', 110, 'Unit', 3, 'Description 11', 'lib/product.png', 1),
+('Product 12', 'P12', 120, 'Unit', 4, 'Description 12', 'lib/product.png', 1),
+('Product 13', 'P13', 130, 'Unit', 1, 'Description 13', 'lib/product.png', 2),
+('Product 14', 'P14', 140, 'Unit', 2, 'Description 14', 'lib/product.png', 2),
+('Product 15', 'P15', 150, 'Unit', 3, 'Description 15', 'lib/product.png', 2),
+('Product 16', 'P16', 160, 'Unit', 4, 'Description 16', 'lib/product.png', 2);
 
 INSERT INTO inventory (product_id, quantity, location, expiry_date, owner_id, info) VALUES
 (1, 10, 'Location 1', '2021-01-01', 1, 'Info 1'),

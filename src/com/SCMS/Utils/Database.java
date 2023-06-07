@@ -161,7 +161,7 @@ public class Database {
         Object[][] categories = null;
         try {
             connect();
-            ResultSet resultSet = executeQuery("select * from categories;");
+            ResultSet resultSet = executeQuery("select * from categories where deleted = 0;");
             int rowCount = getRowCount(resultSet);
             int columnCount = 2;
             categories = new Object[rowCount][columnCount];
@@ -184,7 +184,7 @@ public class Database {
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from products p join suppliers s on p.supplier_id = s.supplier_id where p.supplier_id = " + supplier_id +";");
+                    "select * from products p join suppliers s on p.supplier_id = s.supplier_id where p.supplier_id = " + supplier_id +" AND p.deleted = 0;");
             int rowCount = getRowCount(resultSet);
             int columnCount = 9;
             products = new Object[rowCount][columnCount];
@@ -245,7 +245,7 @@ public class Database {
 
     // remove category from database
     public boolean removeCategory(String id) {
-        String query = "DELETE FROM categories WHERE category_id='" + id + "';";
+        String query = "UPDATE categories SET deleted = 1 WHERE category_id='" + id + "';";
         try {
             connect();
             executeUpdate(query);
@@ -258,7 +258,7 @@ public class Database {
     }
 
     public boolean removeProduct(String id) {
-        String query = "DELETE FROM products WHERE product_id='" + id + "';";
+        String query = "UPDATE products SET deleted = 1 WHERE product_id='" + id + "';";
         try {
             connect();
             executeUpdate(query);
