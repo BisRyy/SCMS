@@ -86,8 +86,7 @@ public class Suppliers extends JPanel {
         cardPanel.add(nameLabel);
 
         // Product description
-        JLabel descLabel = new JLabel("<html><body style='width: 150px; text-align: center;'>"
-                + product.getDescription() + "</body></html>");
+        JLabel descLabel = new JLabel(product.getDescription());
         descLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
         descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.add(descLabel);

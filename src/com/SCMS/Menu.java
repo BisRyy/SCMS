@@ -73,8 +73,8 @@ public class Menu extends JFrame {
             workSpace.add(new Employees(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Reports")
             // workSpace.add(new Reports(), menuItemsNames[i]);
-            // else if(menuItemsNames[i] == "Settings")
-            // workSpace.add(new Settings(), menuItemsNames[i]);
+            else if(menuItemsNames[i] == "Settings")
+            workSpace.add(new Settings(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Help")
             // workSpace.add(new Help(), menuItemsNames[i]);
             else

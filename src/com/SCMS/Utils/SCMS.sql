@@ -15,6 +15,8 @@ CREATE TABLE users(
     user_id int primary key auto_increment,
     username varchar(25) unique,
     password varchar(25),
+    fname varchar(25),
+    lname varchar(25),
     email varchar(25),
     phone varchar(25),
     address varchar(25),
@@ -107,13 +109,13 @@ INSERT INTO inventory (product_id, quantity, location, expiry_date, owner_id, in
 
 
 INSERT INTO orders(user_id, company_id, product_id, order_quantity, order_status, note) VALUES
-(2, 1, 1, 10, 'Pending', 'Note 1'),
-(2, 1, 2, 20, 'Pending', 'Note 2'),
-(2, 1, 3, 30, 'Pending', 'Note 3'),
-(2, 1, 4, 40, 'Pending', 'Note 4'),
-(2, 2, 5, 50, 'Pending', 'Note 5'),
-(2, 2, 6, 60, 'Pending', 'Note 6'),
-(2, 2, 7, 70, 'Pending', 'Note 7'),
-(2, 2, 8, 80, 'Pending', 'Note 8');
+(2, 1, 1, 10, 'Waiting', 'Note 1'),
+(2, 1, 2, 20, 'Accepted', 'Note 2'),
+(2, 1, 3, 30, 'Declined', 'Note 3'),
+(2, 1, 4, 40, 'Waiting', 'Note 4'),
+(2, 2, 5, 50, 'Accepted', 'Note 5'),
+(2, 2, 6, 60, 'Accepted', 'Note 6'),
+(2, 2, 7, 70, 'Waiting', 'Note 7'),
+(2, 2, 8, 80, 'Declined', 'Note 8');
 
 

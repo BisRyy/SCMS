@@ -159,6 +159,10 @@ public class Auth extends JFrame {
                 String role = roleComboBox.getSelectedItem().toString();
                 String companyId = (String) suppliers[supplierField.getSelectedIndex()][5];
                 // Perform login authentication
+                if(username.length() == 0 || password.length == 0){
+                    JOptionPane.showMessageDialog(getParent(), "Please enter username and password.");
+                    return;
+                }
                 authenticateLogin(username, password, role, companyId);
             }
         });
@@ -171,6 +175,11 @@ public class Auth extends JFrame {
                 char[] password = newPasswordField.getPassword();
                 String role = newRoleComboBox.getSelectedItem().toString();
                 String companyId = (String) suppliers[newSupplierField.getSelectedIndex()][5];
+                if(username.length() == 0 || email.length() == 0 || password.length == 0){
+                    JOptionPane.showMessageDialog(getParent(), "Please enter username, email and password.");
+                    return;
+                }
+
                 if(role == "Manager" && !suppliers[newSupplierField.getSelectedIndex()][6].equals(username)){
                     JOptionPane.showMessageDialog(getParent(), "You are not Manager of this company.");
                     return;
@@ -203,6 +212,11 @@ public class Auth extends JFrame {
                 String companyEmail = companyEmailField.getText();
                 String companyPhone = companyPhoneField.getText();
                 String companyManager = companyManagerField.getText();
+                if(companyName.length() == 0 || companyAddress.length() == 0 || companyEmail.length() == 0 || companyPhone.length() == 0 || companyManager.length() == 0){
+                    JOptionPane.showMessageDialog(getParent(), "Please enter all fields.");
+                    return;
+                }
+
                 createCompany(companyName, companyAddress, companyEmail, companyPhone, companyManager);
                 suppliers = db.getSuppliers();
                 newUsernameField.setText(companyManager);
