@@ -73,9 +73,10 @@ public class Ship extends JPanel {
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Container parentContainer = s.getParent().getParent().getParent();
+				 Ship_Details sh = new Ship_Details(shipID,from,To,status);
+			    //  parentContainer.remove(new Ship_Details(shipID,from,To,status));
+				 parentContainer.add(sh);
 				 
-			     parentContainer.remove(new Ship_Details(shipID,status,from,To));
-				 parentContainer.add(new Ship_Details(shipID,status,from,from));
 				 parentContainer.revalidate();
 			     parentContainer.repaint();
 				 

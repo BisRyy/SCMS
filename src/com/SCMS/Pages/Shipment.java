@@ -37,11 +37,13 @@ public class Shipment extends JPanel {
 	   String DB_URL = "jdbc:mysql://localhost/SCMS";
 		String USERNAME = "root";
 		String PASSWORD = "";
-	String QUERY="select * from shipments";
+	String QUERY="select * from shipments limit "+page+",3";
 
-	
+
+	public Ship_Details[] shiping;
     public Shipment() {
 
+		 shiping = new Ship_Details[100]; 
 		setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -111,23 +113,44 @@ public class Shipment extends JPanel {
 					panel_2.removeAll();
 					panel_2.revalidate();
 					panel_2.repaint();
-					for(int i=0; i<page; i++) {
-						panel_2.add(new Ship("1232","In transit","kality","megenagna","5555"));
+					try {
+						Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+						Statement stmt = jdbcConnect.createStatement();
+						ResultSet rsData = stmt.executeQuery("select * from shipments limit "+page+",3");
+						while (rsData.next()) {
+							panel_2.add(new Ship(Integer.toString(rsData.getInt("shipment_id")),rsData.getString("starting_point"),rsData.getString("destination"),rsData.getString("shipment_status"),Integer.toString(track_number*rsData.getInt("shipment_id"))));
+						}
+						rsData.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
 				}
 			}
 		});
 		btnNewButton_4_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(page+3<6) {
-					page=page+3;
-					panel_2.removeAll();
+				try {
+					Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+					Statement stmt = jdbcConnect.createStatement();
+					Statement stmt1 = jdbcConnect.createStatement();
+					ResultSet count = stmt1.executeQuery("SELECT count(*) as count from shipments;");
+					count.next();
+					if (page + 3 < count.getInt("count")) {
+						page = page + 3;
+						panel_2.removeAll();
 					panel_2.revalidate();
 					panel_2.repaint();
-					for(int i=0; i<page; i++) {
-						panel_2.add(new Ship("1232","In transit","kality","megenagna","5555"));
+					ResultSet rsData = stmt.executeQuery("select * from shipments limit "+page+",3");
+					while (rsData.next()) {
+						panel_2.add(new Ship(Integer.toString(rsData.getInt("shipment_id")),rsData.getString("starting_point"),rsData.getString("destination"),rsData.getString("shipment_status"),Integer.toString(track_number*rsData.getInt("shipment_id"))));
 					}
+					rsData.close();
 				}
+				} 
+				catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 		JButton btnNewButton_6 = new JButton("Add New Shipment");
