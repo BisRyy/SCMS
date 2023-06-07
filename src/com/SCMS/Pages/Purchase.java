@@ -1,58 +1,33 @@
 package com.SCMS.Pages;
 
-// import com.SCMS.Components.Product;
-// import com.SCMS.Pages.Order;
+
 import com.SCMS.Utils.*;
-
-import java.sql.*;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 public class Purchase extends JPanel {
     private Object[][] productList;
-    // private List<Order> orderList;
-    private JTable orderTable;
     Database db = new Database();
 
-    public Purchase() {
+    public Purchase(String companyId) {
         setLayout(new BorderLayout());
 
-        // this.productList = productList;
-        // this.orderList = new ArrayList<>();
-        productList = db.getInventory();
+        productList = db.getInventory(companyId);
 
-        // productList.add(new Product("Product 1", "Company A", 10.0, 5, "Location
-        // 1"));
-        // productList.add(new Product("Product 2", "Company B", 15.0, 10, "Location
-        // 2"));
-        // productList.add(new Product("Product 3", "Company C", 20.0, 3, "Location
-        // 3"));
-
-        // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
-        // setLocationRelativeTo(null);
-
-        JPanel panel = new JPanel(new BorderLayout());
 
         // Create the product table
         JTable productTable = createProductTable();
         // productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(productTable);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
 
         // Create the add to cart section
         JPanel addToCartPanel = createAddToCartPanel(productTable);
-        panel.add(addToCartPanel, BorderLayout.SOUTH);
-
-        add(panel);
-
+        add(addToCartPanel, BorderLayout.SOUTH);
         setVisible(true);
 
     }

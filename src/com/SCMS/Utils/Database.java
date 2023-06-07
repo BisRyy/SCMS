@@ -51,13 +51,12 @@ public class Database {
         return statement.executeUpdate(query);
     }
 
-    public Object[][] getInventory() {
+    public Object[][] getInventory(String supplier_id) {
         Object[][] inventory = null;
-        int usernameId = getUsernameId();
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id where i.user_id = " + usernameId +";");
+                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id = " + supplier_id +";");
             int rowCount = getRowCount(resultSet);
             int columnCount = 12;
             inventory = new Object[rowCount][columnCount];
@@ -65,16 +64,16 @@ public class Database {
             int i = 0;
             while (resultSet.next()) {
 
-                inventory[i][0] = resultSet.getString("code");
+                inventory[i][0] = resultSet.getString("inventory_id");
                 inventory[i][1] = resultSet.getString("name");
                 inventory[i][2] = resultSet.getInt("quantity");
                 inventory[i][3] = resultSet.getDouble("price");
                 inventory[i][4] = resultSet.getString("unit");
-                inventory[i][5] = resultSet.getString("category");
+                inventory[i][5] = resultSet.getString("category_name");
                 inventory[i][6] = resultSet.getString("supplier_name");
                 inventory[i][7] = resultSet.getString("date_added");
                 inventory[i][8] = resultSet.getString("expiry_date");
-                inventory[i][9] = resultSet.getString("description");
+                inventory[i][9] = resultSet.getString("info");
                 inventory[i][10] = resultSet.getString("product_id");
                 inventory[i][11] = resultSet.getString("inventory_id");
                 i++;
@@ -98,9 +97,9 @@ public class Database {
         return 0;
     }
 
-    public boolean addInventory(String product_id, int quantity, String location, String expiry_date) {
+    public boolean addInventory(String product_id, int quantity, String location, String expiry_date, String owner_id, String description) {
         try {
-            String query = "insert into inventory(product_id, quantity, location, expiry_date, user_id) values(" + product_id + ", " + quantity + ", '" + location + "', '" + expiry_date + "','" + getUsernameId() + "');";
+            String query = "insert into inventory(product_id, quantity, location, expiry_date, owner_id, info) values(" + product_id + ", " + quantity + ", '" + location + "', '" + expiry_date + "','" + owner_id + "','"+ description +"');";
             connect();
             executeUpdate(query);
             disconnect();
@@ -112,11 +111,10 @@ public class Database {
     }
 
     public boolean removeInventory(String id) {
-        System.out.println("id: " + id);
         String query = "DELETE FROM inventory WHERE inventory_id='" + id + "';";
         try {
             connect();
-            System.out.println(executeUpdate(query));
+            executeUpdate(query);
             disconnect();
             return true;
         } catch (SQLException e) {
@@ -125,12 +123,34 @@ public class Database {
         return false;
     }
 
-    public Object[][] getProducts() {
+    public Object[][] getCategories(){
+        Object[][] categories = null;
+        try {
+            connect();
+            ResultSet resultSet = executeQuery("select * from categories;");
+            int rowCount = getRowCount(resultSet);
+            int columnCount = 2;
+            categories = new Object[rowCount][columnCount];
+            resultSet.beforeFirst();
+            int i = 0;
+            while (resultSet.next()) {
+                categories[i][0] = resultSet.getString("category_id");
+                categories[i][1] = resultSet.getString("category_name");
+                i++;
+            }
+            disconnect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+
+    public Object[][] getProducts(String supplier_id) {
         Object[][] products = null;
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from products p join suppliers s on p.supplier_id = s.supplier_id;");
+                    "select * from products p join suppliers s on p.supplier_id = s.supplier_id where p.supplier_id = " + supplier_id +";");
             int rowCount = getRowCount(resultSet);
             int columnCount = 9;
             products = new Object[rowCount][columnCount];
@@ -142,7 +162,7 @@ public class Database {
                 products[i][1] = resultSet.getString("name");
                 products[i][2] = resultSet.getDouble("price");
                 products[i][3] = resultSet.getString("unit");
-                products[i][4] = resultSet.getString("category");
+                products[i][4] = resultSet.getString("category_id");
                 products[i][5] = resultSet.getString("supplier_name");
                 products[i][6] = resultSet.getString("description");
                 products[i][7] = resultSet.getString("product_id");
@@ -159,7 +179,7 @@ public class Database {
 
     public boolean addProduct(String name, String code, double price, String unit, String category, String description,
             String image, String supplier_id) {
-        String query = "INSERT INTO products (name, code, price, unit, category, description, image, supplier_id) VALUES('"
+        String query = "INSERT INTO products (name, code, price, unit, category_id, description, image, supplier_id) VALUES('"
                 + name + "', '"
                 + code + "', '" + price + "', '" + unit + "', '" + category + "', '" + description + "', '" + image
                 + "', '"
@@ -175,11 +195,39 @@ public class Database {
         return false;
     }
 
+    // add category to database
+    public boolean addCategory(String name) {
+        String query = "INSERT INTO categories (category_name) VALUES('" + name + "');";
+        try {
+            connect();
+            executeUpdate(query);
+            disconnect();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // remove category from database
+    public boolean removeCategory(String id) {
+        String query = "DELETE FROM categories WHERE category_id='" + id + "';";
+        try {
+            connect();
+            executeUpdate(query);
+            disconnect();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean removeProduct(String id) {
         String query = "DELETE FROM products WHERE product_id='" + id + "';";
         try {
             connect();
-            System.out.println(executeUpdate(query));
+            executeUpdate(query);
             disconnect();
             return true;
         } catch (SQLException e) {
@@ -194,7 +242,7 @@ public class Database {
 
         try {
             connect();
-            System.out.println(executeUpdate(query));
+            executeUpdate(query);
             disconnect();
             return true;
         } catch (SQLException e) {
@@ -221,6 +269,7 @@ public class Database {
                 suppliers[i][3] = resultSet.getString("supplier_name");
                 suppliers[i][4] = resultSet.getString("supplier_email");
                 suppliers[i][5] = resultSet.getString("supplier_id");
+                suppliers[i][6] = resultSet.getString("manager_name");
                 i++;
             }
             disconnect();

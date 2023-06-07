@@ -31,13 +31,25 @@ public class SessionManager {
         }
     }
 
-    public static void saveAuthenticationState(boolean isAuthenticated, String username, String role) {
+    public static String getAuthenticatedUserCompanyId() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(SESSION_FILE))) {
+            reader.readLine(); // Skip the first line (authentication state)
+            reader.readLine(); // Skip the second line (username)
+            reader.readLine(); // Skip the second line (role)
+            return decrypt(reader.readLine().toCharArray());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public static void saveAuthenticationState(boolean isAuthenticated, String username, String role, String companyId) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(SESSION_FILE))) {
             writer.write(encrypt(String.valueOf(isAuthenticated)));
             writer.newLine();
             writer.write(encrypt(username));
             writer.newLine();
             writer.write(encrypt(role));
+            writer.newLine();
+            writer.write(encrypt(companyId));
                         
         } catch (IOException e) {
             e.printStackTrace();

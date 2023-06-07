@@ -21,9 +21,8 @@ public class Menu extends JFrame {
     boolean visible = true;
     JButton toggleButton = new SButton("", new ImageIcon("lib/icons/menu.png"));
 
-    public Menu(String username, String role) {
+    public Menu(String username, String role, String companyId) {
         super("Supply Chain Management System");
-
         // Initialize components
         menuBar = new MenuBar();
         navBar = createSidebar();
@@ -42,8 +41,8 @@ public class Menu extends JFrame {
         workSpace = new JPanel(cardLayout);
         workSpace.setBackground(Color.CYAN);
 
-        String[] menuItemsNames = { "Dashboard", "Purchase","Inventory", "Products", "Orders", "Shipment", "Suppliers",
-                "Employees", "Reports", "Settings", "Logout" };
+        String[] menuItemsNames = { "Dashboard", "Purchase", "Inventory", "Products", "Orders", "Shipment", "Suppliers",
+                "Employees", "Settings", "Logout" };
 
         for (int i = 0; i < menuItems.length; i++) {
             JPanel panel = new JPanel(null);
@@ -52,20 +51,22 @@ public class Menu extends JFrame {
             panel.add(button);
             views[i] = panel;
             if (menuItemsNames[i] == "Inventory")
-                workSpace.add(new Inventory(), menuItemsNames[i]);
+                workSpace.add(new Inventory(companyId), menuItemsNames[i]);
             else if (menuItemsNames[i] == "Orders")
                 workSpace.add(new Orders(), menuItemsNames[i]);
             else if (menuItemsNames[i] == "Dashboard")
                 workSpace.add(new Dashboard(), menuItemsNames[i]);
-            else if (menuItemsNames[i] == "Products")
-                workSpace.add(new Products(), menuItemsNames[i]);
-            else if (menuItemsNames[i] == "Shipment") {
+            else if (menuItemsNames[i] == "Products") {
+                JPanel panel1 = new JPanel(new BorderLayout());
+                panel1.add(new Products("1"), BorderLayout.CENTER);
+                panel1.add(new Categories(), BorderLayout.EAST);
+                workSpace.add(panel1, menuItemsNames[i]);
+            } else if (menuItemsNames[i] == "Shipment") {
                 workSpace.add(new Shipment(), menuItemsNames[i]);
-            }
-            else if (menuItemsNames[i] == "Purchase")
-            workSpace.add(new Purchase(), menuItemsNames[i]);
-            // else if (menuItemsNames[i] == "Suppliers")
-            // workSpace.add(new Suppliers(), menuItemsNames[i]);
+            } else if (menuItemsNames[i] == "Purchase")
+                workSpace.add(new Purchase(companyId), menuItemsNames[i]);
+            else if (menuItemsNames[i] == "Suppliers")
+            workSpace.add(new Suppliers(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Customers")
             // workSpace.add(new Customers(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Employees")
@@ -79,7 +80,8 @@ public class Menu extends JFrame {
             else
                 workSpace.add(panel, menuItemsNames[i]);
 
-            menuItems[i] = new SButton(menuItemsNames[i], new ImageIcon("lib/icons/" + menuItemsNames[i].toLowerCase() + ".png"));
+            menuItems[i] = new SButton(menuItemsNames[i],
+                    new ImageIcon("lib/icons/" + menuItemsNames[i].toLowerCase() + ".png"));
             // menuItems[i].setBounds(20, 20 + 60 * i, 200, 50);
             menuItems[i].setForeground(Color.DARK_GRAY);
             menuItems[i].setBackground(Color.WHITE);

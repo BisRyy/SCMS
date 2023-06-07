@@ -1,4 +1,5 @@
 package com.SCMS.Pages;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -10,48 +11,53 @@ import java.awt.event.ActionListener;
 import java.util.regex.Pattern;
 
 public class Inventory extends JPanel {
+    String[] columnNames = { "Inv Code", "Name", "Quantity", "Price", "Unit", "Category", "Supplier", "Date Added", "Expiry Date", "Description" };
     private JTable inventoryTable;
     private Object[][] inventoryList;
+    Object[][] productList = null;
+    String[] productNames = null;
     private JScrollPane scrollPane;
     private JButton addButton;
     private JButton editButton;
     private JButton deleteButton;
     private int selected = -1;
     Database db = new Database();
+    String companyId;
 
-    public Inventory() {
-        initializeUI();
+    public Inventory(String companyId) {
+        this.companyId = companyId;
+        initializeUI(companyId);
         addButton.addActionListener(new AddButtonListener());
         editButton.addActionListener((e) -> {
-            if (selected >= 0){
+            if (selected >= 0) {
                 EditInventoryDialog editInventoryDialog = new EditInventoryDialog(selected);
                 editInventoryDialog.setVisible(true);
-                String[] columnNames = { "Code", "Name", "Quantity", "Price", "Unit", "Category", "Supplier","Date Added", "Expiry Date", "Description" };
-                inventoryList = db.getInventory();
+                inventoryList = db.getInventory(companyId);
                 inventoryTable.setModel(new DefaultTableModel(inventoryList, columnNames));
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Please select a inventory item to edit.", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         });
         deleteButton.addActionListener((e) -> {
-            if (selected >= 0){
-                int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete " + inventoryList[selected][1], "Are you sure?", JOptionPane.ERROR_MESSAGE);
-                if (confirm == 0){
+            if (selected >= 0) {
+                int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete " + inventoryList[selected][1],
+                        "Are you sure?", JOptionPane.ERROR_MESSAGE);
+                if (confirm == 0) {
                     db.removeInventory((String) inventoryList[selected][11]);
-                    String[] columnNames = { "Code", "Name", "Quantity", "Price", "Unit", "Category", "Supplier","Date Added", "Expiry Date", "Description" };
-                    inventoryList = db.getInventory();
+                    inventoryList = db.getInventory(companyId);
                     inventoryTable.setModel(new DefaultTableModel(inventoryList, columnNames));
-                    JOptionPane.showMessageDialog(this, "Inventory Item Deleted Successfully! " + selected , "Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Inventory Item Deleted Successfully! " + selected, "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(this, "Please select a inventory item to delete.", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         });
     }
 
-    private void initializeUI() {
+    private void initializeUI(String companyId) {
         setLayout(new BorderLayout());
 
         // Inventory Table
@@ -61,12 +67,12 @@ public class Inventory extends JPanel {
 
         inventoryTable.setFillsViewportHeight(true);
         inventoryTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
+
         // Add some dummy data to the table
-        String[] columnNames = {"Code", "Name", "Quantity", "Price","Unit", "Category", "Supplier", "Date Added", "Expiry Date", "Description"};
-        inventoryList = db.getInventory();
+        inventoryList = db.getInventory(companyId);
+        productList = db.getProducts(companyId);
         inventoryTable.setModel(new DefaultTableModel(inventoryList, columnNames));
-        
+
         // make the table cells width fit the contents inside for all columns
         inventoryTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
@@ -81,7 +87,6 @@ public class Inventory extends JPanel {
                 }
             }
         });
-
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -101,12 +106,16 @@ public class Inventory extends JPanel {
     private class AddButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (productList == null || productList.length == 0) {
+                JOptionPane.showMessageDialog(getParent(), "Please add products.", "No Products Found.",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             AddInventoryDialog addInventoryDialog = new AddInventoryDialog();
             addInventoryDialog.setVisible(true);
 
             // reload the updated inventory table
-            String[] columnNames = {"Code", "Name", "Quantity", "Price","Unit", "Category", "Supplier", "Date Added", "Expiry Date", "Description"};
-            inventoryTable.setModel(new DefaultTableModel(inventoryList = db.getInventory(), columnNames));
+            inventoryTable.setModel(new DefaultTableModel(inventoryList = db.getInventory(companyId), columnNames));
         }
     }
 
@@ -121,8 +130,6 @@ public class Inventory extends JPanel {
         private JTextArea descriptionField;
         private JButton addButton;
         private JButton cancelButton;
-        Object[][] productList = null;
-        String[] productNames = null;
         int selected = 0;
 
         public AddInventoryDialog() {
@@ -137,9 +144,9 @@ public class Inventory extends JPanel {
 
             JLabel nameLabel = new JLabel("Product:");
             panel.add(nameLabel);
-            productList = db.getProducts();
+            productList = db.getProducts(companyId);
             productNames = new String[productList.length];
-            for(int i=0; i<productList.length;i++){
+            for (int i = 0; i < productList.length; i++) {
                 productNames[i] = (String) productList[i][1];
             }
             productBox = new JComboBox<String>(productNames);
@@ -158,7 +165,7 @@ public class Inventory extends JPanel {
 
             JLabel priceLabel = new JLabel("Price:");
             panel.add(priceLabel);
-            priceField = new JLabel(inventoryTable.getValueAt(selected, 3).toString());
+            priceField = new JLabel(productList[selected][2].toString());
             panel.add(priceField);
 
             JLabel quantityLabel = new JLabel("Quantity:");
@@ -166,10 +173,9 @@ public class Inventory extends JPanel {
             quantityField = new JTextField();
             panel.add(quantityField);
 
-
             JLabel unitLabel = new JLabel("Unit:");
             panel.add(unitLabel);
-            unitField = new JLabel(inventoryTable.getValueAt(selected, 4).toString());
+            unitField = new JLabel((String) productList[selected][3]);
             panel.add(unitField);
 
             JLabel expiryDateLabel = new JLabel("Expiry Date:");
@@ -179,7 +185,7 @@ public class Inventory extends JPanel {
 
             JLabel categoryLabel = new JLabel("Category:");
             panel.add(categoryLabel);
-            categoryField = new JLabel(inventoryTable.getValueAt(selected, 5).toString());
+            categoryField = new JLabel((String) productList[selected][4]);
             panel.add(categoryField);
 
             JLabel descriptionLabel = new JLabel("Description:");
@@ -187,52 +193,53 @@ public class Inventory extends JPanel {
             descriptionField = new JTextArea();
             descriptionField.setLineWrap(true);
             descriptionField.setWrapStyleWord(true);
-            panel.add(descriptionField);  
-            
+            panel.add(descriptionField);
+
             JLabel supplierLabel = new JLabel("Supplier:");
             panel.add(supplierLabel);
-            supplierField = new JLabel(inventoryTable.getValueAt(selected, 6).toString());
+            supplierField = new JLabel((String) productList[selected][5]);
             panel.add(supplierField);
-
-      
 
             addButton = new JButton("Add");
             cancelButton = new JButton("Cancel");
 
-            addButton.addActionListener((e) -> {    
-                    int index = productBox.getSelectedIndex();
-                    String id = (String) productList[index][7];
-                    if (index < 0) {
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please select a product", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    try {
-                        Integer.parseInt(quantityField.getText());
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a valid quantity", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    
-                    int quantity = Integer.parseInt(quantityField.getText());
-                    if (quantity <= 0) {
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a valid quantity", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    // verify expiry date format 2023-04-05
-                    String expirydate = expiryDateField.getText();
-                    if (!Pattern.matches("\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", expirydate)){
-                        JOptionPane.showMessageDialog(AddInventoryDialog.this, "Invalid Expiry date format. Use YYYY-MM-DD", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-
-                    String category = categoryField.getText();
-                    String expiryDate = expiryDateField.getText();
-                    db.addInventory(id, quantity, category, expiryDate);
-                    dispose();
+            addButton.addActionListener((e) -> {
+                int index = productBox.getSelectedIndex();
+                String id = (String) productList[index][7];
+                if (index < 0) {
+                    JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please select a product", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            );
+
+                try {
+                    Integer.parseInt(quantityField.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a valid quantity", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+                int quantity = Integer.parseInt(quantityField.getText());
+                if (quantity <= 0) {
+                    JOptionPane.showMessageDialog(AddInventoryDialog.this, "Please enter a valid quantity", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // verify expiry date format 2023-04-05
+                String expirydate = expiryDateField.getText();
+                if (!Pattern.matches("\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])", expirydate)) {
+                    JOptionPane.showMessageDialog(AddInventoryDialog.this, "Invalid Expiry date format. Use YYYY-MM-DD",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                String category = categoryField.getText();
+                String expiryDate = expiryDateField.getText();
+                String description = descriptionField.getText();
+                db.addInventory(id, quantity, category, expiryDate, companyId, description);
+                dispose();
+            });
 
             cancelButton.addActionListener(new ActionListener() {
                 @Override
@@ -268,7 +275,7 @@ public class Inventory extends JPanel {
         Object[][] productList = null;
         String[] productNames = null;
 
-        public EditInventoryDialog(int selected){
+        public EditInventoryDialog(int selected) {
             setTitle("Edit Inventory");
             setModal(true);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -277,10 +284,10 @@ public class Inventory extends JPanel {
             add(new EditInventoryPanel(selected));
             pack();
         }
-    }  
-    
+    }
+
     // edit inventory panel
-    private class EditInventoryPanel extends JPanel{
+    private class EditInventoryPanel extends JPanel {
         private JComboBox<String> productBox;
         private JTextField quantityField;
         private JLabel priceField;
@@ -294,20 +301,20 @@ public class Inventory extends JPanel {
         Object[][] productList = null;
         String[] productNames = null;
         int selected = 0;
-        
-        public EditInventoryPanel(int index){
+
+        public EditInventoryPanel(int index) {
             this.selected = index;
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            
+
             JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
             panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
             JLabel nameLabel = new JLabel("Product:");
             panel.add(nameLabel);
-            productList = db.getProducts();
+            productList = db.getProducts(companyId);
             productNames = new String[productList.length];
-            for(int i=0; i<productList.length;i++){
+            for (int i = 0; i < productList.length; i++) {
                 productNames[i] = (String) productList[i][1];
             }
             productBox = new JComboBox<String>(productNames);

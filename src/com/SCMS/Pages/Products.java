@@ -8,28 +8,39 @@ import com.SCMS.Utils.Database;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class Products extends JPanel {
+    String[] columnNames = { "Code", "Name", "Price", "Unit", "Category", "Supplier", "Description" };
     private JTable productsTable;
     private Object[][] productList;
+    Database db = new Database();
+    Object[][] categories = db.getCategories();
+    String[] categoryName = new String[categories.length];
     private JScrollPane scrollPane;
     private JButton addButton;
     private JButton editButton;
     private JButton deleteButton;
     private int selected = -1;
-    Database db = new Database();
+    String companyId;
 
-    public Products() {
-        initializeUI();
-        addButton.addActionListener(new AddButtonListener());
+    public Products(String companyId) {
+        initializeUI(companyId);
+        this.companyId = companyId;
+        addButton.addActionListener(e -> {
+            AddProductDialog addProductDialog = new AddProductDialog();
+            addProductDialog.setVisible(true);
+
+            // reload the updated products table
+            DefaultTableModel model = new DefaultTableModel(productList = db.getProducts(companyId), columnNames);
+            productsTable.setModel(model);
+        });
         deleteButton.addActionListener((e)->{
-            System.out.println(productList.toString());
             if (selected != -1) {
                 int confirm = JOptionPane.showConfirmDialog(this, "Do you want to delete " + productList[selected][0], "Are you sure?", JOptionPane.ERROR_MESSAGE);
                 if (confirm == 0) {
                     db.removeProduct((String) productList[selected][7]);
-                    String[] columnNames = { "Code", "Name", "Price", "Unit", "Category", "Supplier", "Description" };
-                    productList = db.getProducts();
+                    productList = db.getProducts(companyId);
                     productsTable.setModel(new DefaultTableModel(productList, columnNames));
                     JOptionPane.showMessageDialog(this, "Product Deleted Successfully! " + selected, "Success",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -41,7 +52,7 @@ public class Products extends JPanel {
         });
     }
 
-    private void initializeUI() {
+    private void initializeUI(String companyId) {
         setLayout(new BorderLayout());
 
         // Product Table
@@ -53,9 +64,7 @@ public class Products extends JPanel {
         productsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Add some dummy data to the table
-        String[] columnNames = { "Code", "Name", "Price", "Unit", "Category", "Supplier", "Description" };
-        
-        productList = db.getProducts();
+        productList = db.getProducts(companyId);
         productsTable.setModel(new DefaultTableModel(productList, columnNames));
 
         // make the table cells width fit the contents inside for all columns
@@ -69,7 +78,6 @@ public class Products extends JPanel {
                 int col = productsTable.columnAtPoint(evt.getPoint());
                 if (row >= 0 && col >= 0) {
                     selected = row;
-                    System.out.println(selected);
                 }
             }
         });
@@ -88,28 +96,12 @@ public class Products extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private class AddButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Open add products dialog
-            AddProductDialog addProductDialog = new AddProductDialog();
-            addProductDialog.setVisible(true);
-
-            // reload the updated products table
-            String[] columnNames = { "Code", "Name", "Price", "Unit", "Category", "Supplier", "Description" };
-            Database db = new Database();
-
-            DefaultTableModel model = new DefaultTableModel(productList= db.getProducts(), columnNames);
-            productsTable.setModel(model);
-        }
-    }
-
     private class AddProductDialog extends JDialog {
         private JTextField nameField;
         private JTextField priceField;
         private JTextField unitField;
-        private JTextField categoryField;
-        private JComboBox<String> supplierField;
+        private JComboBox<String> categoryField;
+        // private JComboBox<String> supplierField;
         private JTextField descriptionField;
         private JButton addButton;
         private JButton cancelButton;
@@ -142,7 +134,12 @@ public class Products extends JPanel {
             panel.add(unitField);
 
             JLabel categoryLabel = new JLabel("Category:");
-            categoryField = new JTextField(15);
+            categoryName = new String[categories.length];
+            for (int i = 0; i < categoryName.length; i++) {
+                categoryName[i] = (String) categories[i][1];
+            }
+
+            categoryField = new JComboBox<>(categoryName);
             panel.add(categoryLabel);
             panel.add(categoryField);
 
@@ -152,10 +149,10 @@ public class Products extends JPanel {
                 supplierName[i] = (String) suppliers[i][0];
             }
 
-            JLabel supplierLabel = new JLabel("Supplier:");
-            supplierField = new JComboBox<>(supplierName);
-            panel.add(supplierLabel);
-            panel.add(supplierField);
+            // JLabel supplierLabel = new JLabel("Supplier:");
+            // supplierField = new JComboBox<>(supplierName);
+            // panel.add(supplierLabel);
+            // panel.add(supplierField);
 
             JLabel descriptionLabel = new JLabel("Description:");
             descriptionField = new JTextField(15);
@@ -187,13 +184,11 @@ public class Products extends JPanel {
                 }
 
                 String unit = unitField.getText();
-                String category = categoryField.getText();
-                int supplierIndex = supplierField.getSelectedIndex();
-                String supplier_id = (String) suppliers[supplierIndex][5];
+                String categoryId = (String) categories[categoryField.getSelectedIndex()][0];
+                // int supplierIndex = supplierField.getSelectedIndex();
                 String description = descriptionField.getText();
-
-                Database db = new Database();
-                db.addProduct(name, "code", price, unit, category, description, "image", supplier_id);
+                String code = "code" + new Random().nextInt(100);
+                db.addProduct(name, code, price, unit, categoryId, description, "image", companyId);
 
                 JOptionPane.showMessageDialog(AddProductDialog.this, "Product Added Successfully.", "Success",
                         JOptionPane.INFORMATION_MESSAGE);

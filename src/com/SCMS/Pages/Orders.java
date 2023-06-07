@@ -5,16 +5,12 @@ import javax.swing.JTextField;
 import com.SCMS.Components.Order;
 import javax.swing.JLabel;
 import java.awt.Color;
-import java.awt.Container;
 import javax.swing.JButton;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

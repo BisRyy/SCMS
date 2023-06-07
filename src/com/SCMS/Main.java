@@ -9,9 +9,10 @@ public class Main{
         if (SessionManager.isAuthenticated()) {
             String username = SessionManager.getAuthenticatedUser();
             String role = SessionManager.getAuthenticatedUserRole();
+            String cId = SessionManager.getAuthenticatedUserCompanyId();
              SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    new Menu(username, role);
+                    new Menu(username, role, cId);
                 }
             });
         } else {
