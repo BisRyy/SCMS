@@ -125,7 +125,15 @@ INSERT INTO inventory (product_id, quantity, location, expiry_date, owner_id, in
 (5, 50, 'Location 5', '2021-05-05', 2, 'Info 5'),
 (6, 60, 'Location 6', '2021-06-06', 2, 'Info 6'),
 (7, 70, 'Location 7', '2021-07-07', 2, 'Info 7'),
-(8, 80, 'Location 8', '2021-08-08', 2, 'Info 8');
+(8, 80, 'Location 8', '2021-08-08', 2, 'Info 8'),
+(9, 90, 'Location 9', '2021-09-09', 1, 'Info 9'),
+(10, 100, 'Location 10', '2021-10-10', 1, 'Info 10'),
+(11, 110, 'Location 11', '2021-11-11', 1, 'Info 11'),
+(12, 120, 'Location 12', '2021-12-12', 1, 'Info 12'),
+(13, 130, 'Location 13', '2021-01-01', 2, 'Info 13'),
+(14, 140, 'Location 14', '2021-02-02', 2, 'Info 14'),
+(15, 150, 'Location 15', '2021-03-03', 2, 'Info 15'),
+(16, 160, 'Location 16', '2021-04-04', 2, 'Info 16');
 
 
 INSERT INTO orders(user_id, company_id, product_id, order_quantity, order_status, note) VALUES
@@ -136,6 +144,14 @@ INSERT INTO orders(user_id, company_id, product_id, order_quantity, order_status
 (2, 2, 5, 50, 'Accepted', 'Note 5'),
 (2, 2, 6, 60, 'Accepted', 'Note 6'),
 (2, 2, 7, 70, 'Waiting', 'Note 7'),
-(2, 2, 8, 80, 'Declined', 'Note 8');
+(2, 2, 8, 80, 'Declined', 'Note 8'),
+(2, 1, 9, 90, 'Waiting', 'Note 9'),
+(2, 1, 10, 100, 'Accepted', 'Note 10'),
+(2, 1, 11, 110, 'Accepted', 'Note 11'),
+(2, 1, 12, 120, 'Waiting', 'Note 12'),
+(2, 2, 13, 130, 'Declined', 'Note 13'),
+(2, 2, 14, 140, 'Waiting', 'Note 14'),
+(2, 2, 15, 150, 'Accepted', 'Note 15'),
+(2, 2, 16, 160, 'Accepted', 'Note 16');
 
 

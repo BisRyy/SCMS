@@ -89,7 +89,7 @@ public class Database {
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id " + (flag == 1 ? "!" : "") + "=" + supplier_id +";");
+                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id " + (flag == 1 ? "!=" : "=")+ supplier_id +";");
             int rowCount = getRowCount(resultSet);
             int columnCount = 13;
             inventory = new Object[rowCount][columnCount];
