@@ -55,10 +55,10 @@ public class Menu extends JFrame {
             else if (menuItemsNames[i] == "Orders")
                 workSpace.add(new Orders(), menuItemsNames[i]);
             else if (menuItemsNames[i] == "Dashboard")
-                workSpace.add(new Dashboard(), menuItemsNames[i]);
+                workSpace.add(new Dashboard(companyId), menuItemsNames[i]);
             else if (menuItemsNames[i] == "Products") {
                 JPanel panel1 = new JPanel(new BorderLayout());
-                panel1.add(new Products("1"), BorderLayout.CENTER);
+                panel1.add(new Products(companyId), BorderLayout.CENTER);
                 panel1.add(new Categories(), BorderLayout.EAST);
                 workSpace.add(panel1, menuItemsNames[i]);
             } else if (menuItemsNames[i] == "Shipment") {
@@ -69,8 +69,8 @@ public class Menu extends JFrame {
             workSpace.add(new Suppliers(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Customers")
             // workSpace.add(new Customers(), menuItemsNames[i]);
-            // else if(menuItemsNames[i] == "Employees")
-            // workSpace.add(new Employees(), menuItemsNames[i]);
+            else if(menuItemsNames[i] == "Employees")
+            workSpace.add(new Employees(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Reports")
             // workSpace.add(new Reports(), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Settings")

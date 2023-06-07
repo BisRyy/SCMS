@@ -51,6 +51,36 @@ public class Database {
         return statement.executeUpdate(query);
     }
 
+    public Object[][] getOrders(){
+        Object[][] orders = null;
+        try {
+            connect();
+            ResultSet resultSet = executeQuery("select * from orders o join products p on o.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c2 on p.category_id = c2.category_id;");
+            int rowCount = getRowCount(resultSet);
+            int columnCount = 12;
+            orders = new Object[rowCount][columnCount];
+            resultSet.beforeFirst();
+            int i = 0;
+            while (resultSet.next()) {
+                orders[i][0] = resultSet.getString("order_id");
+                orders[i][1] = resultSet.getString("name");
+                orders[i][2] = resultSet.getInt("order_quantity");
+                orders[i][3] = resultSet.getDouble("price");
+                orders[i][4] = resultSet.getString("unit");
+                orders[i][5] = resultSet.getString("description");
+                orders[i][6] = resultSet.getString("supplier_name");
+                orders[i][7] = resultSet.getString("category_name");
+                orders[i][8] = resultSet.getString("order_status");
+                orders[i][9] = resultSet.getString("order_date");
+                i++;
+            }
+            disconnect();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
     public Object[][] getInventory(String supplier_id) {
         Object[][] inventory = null;
         try {

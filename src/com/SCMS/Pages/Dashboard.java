@@ -8,12 +8,17 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
+import com.SCMS.Utils.Database;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Dashboard extends JPanel {
+    Database db = new Database();
+    String companyId;
 
-    public Dashboard() {
+    public Dashboard(String companyId) {
+        this.companyId = companyId;
         setSize(1200, 800);
         setLayout(new BorderLayout());
         setBackground(Color.LIGHT_GRAY);
@@ -57,8 +62,11 @@ public class Dashboard extends JPanel {
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inventoryPanel.setLayout(new BorderLayout());
         JLabel inventoryLabel = new JLabel("Inventory");
+        JFreeChart inventoryChart = createInventoryChart();
+        ChartPanel inventoryChartPanel = new ChartPanel(inventoryChart);
         inventoryLabel.setHorizontalAlignment(JLabel.CENTER);
         inventoryPanel.add(inventoryLabel, BorderLayout.NORTH);
+        inventoryPanel.add(inventoryChartPanel, BorderLayout.CENTER);
         // Add dummy data or graph for inventory
 
         contentPanel.add(inventoryPanel);
@@ -94,13 +102,11 @@ public class Dashboard extends JPanel {
     }
 
     private JFreeChart createBarChart() {
+        Object[][] orders = db.getOrders();
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.setValue(50, "Completed", "Jan");
-        dataset.setValue(70, "Completed", "Feb");
-        dataset.setValue(60, "Completed", "Mar");
-        dataset.setValue(80, "Completed", "Apr");
-        dataset.setValue(90, "Completed", "May");
-        dataset.setValue(120, "Completed", "Jun");
+        for (int i = 0; i < orders.length; i++) {
+            dataset.setValue((int) orders[i][2], "Orders", (String) orders[i][1]);
+        }
 
         JFreeChart chart = ChartFactory.createBarChart(
                 "",
@@ -116,12 +122,12 @@ public class Dashboard extends JPanel {
     }
 
     private JFreeChart createPieChart() {
+        Object[][] orders = db.getOrders();
         DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Category 1", 40);
-        dataset.setValue("Category 2", 20);
-        dataset.setValue("Category 3", 30);
-        dataset.setValue("Category 4", 10);
-
+        for (int i = 0; i < orders.length; i++) {
+            dataset.setValue((String) orders[i][8], (int) orders[i][2]);
+            System.out.println((String) orders[i][8]);
+        }
         JFreeChart chart = ChartFactory.createPieChart(
                 "",
                 dataset,
@@ -132,6 +138,18 @@ public class Dashboard extends JPanel {
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setLabelGenerator(null); // Disable labels on pie slices
 
+        return chart;
+    }
+
+    // Create a pie chart
+    private JFreeChart createInventoryChart() {
+        Object[][] inventory = db.getInventory(companyId);
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        for (int i = 0; i < inventory.length; i++) {
+            dataset.setValue((String) inventory[i][1], (int) inventory[i][2]);
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart("Inventory", dataset);
         return chart;
     }
 }

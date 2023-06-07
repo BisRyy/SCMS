@@ -1,7 +1,8 @@
 {
   "cph.general.saveLocation": "",
-  "java.project.referencedLibraries": [
-    "lib/**/*.jar",
-    "/home/bisry/Downloads/mysql-connector-j-8.0.33/mysql-connector-j-8.0.33.jar"
-  ]
+  "java.project.referencedLibraries": {
+    "include": [
+      "lib/**/*.jar"
+    ]
+  }
 }
