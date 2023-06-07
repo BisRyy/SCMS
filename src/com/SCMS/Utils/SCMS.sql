@@ -88,14 +88,14 @@ INSERT INTO categories (category_name) VALUES
 ('Category 4');
 
 INSERT INTO products (name, code, price, unit, category_id, description, image, supplier_id) VALUES 
-('Product 1', 'P1', 10, 'Unit', 1, 'Description 1', 'Image 1', 1),
-('Product 2', 'P2', 20, 'Unit', 2, 'Description 2', 'Image 2', 1),
-('Product 3', 'P3', 30, 'Unit', 3, 'Description 3', 'Image 3', 1),
-('Product 4', 'P4', 40, 'Unit', 4, 'Description 4', 'Image 4', 1),
-('Product 5', 'P5', 50, 'Unit', 1, 'Description 5', 'Image 5', 2),
-('Product 6', 'P6', 60, 'Unit', 2, 'Description 6', 'Image 6', 2),
-('Product 7', 'P7', 70, 'Unit', 3, 'Description 7', 'Image 7', 2),
-('Product 8', 'P8', 80, 'Unit', 4, 'Description 8', 'Image 8', 2);
+('Product 1', 'P1', 10, 'Unit', 1, 'Description 1', 'lib/product.png', 1),
+('Product 2', 'P2', 20, 'Unit', 2, 'Description 2', 'lib/product.png', 1),
+('Product 3', 'P3', 30, 'Unit', 3, 'Description 3', 'lib/product.png', 1),
+('Product 4', 'P4', 40, 'Unit', 4, 'Description 4', 'lib/product.png', 1),
+('Product 5', 'P5', 50, 'Unit', 1, 'Description 5', 'lib/product.png', 2),
+('Product 6', 'P6', 60, 'Unit', 2, 'Description 6', 'lib/product.png', 2),
+('Product 7', 'P7', 70, 'Unit', 3, 'Description 7', 'lib/product.png', 2),
+('Product 8', 'P8', 80, 'Unit', 4, 'Description 8', 'lib/product.png', 2);
 
 INSERT INTO inventory (product_id, quantity, location, expiry_date, owner_id, info) VALUES
 (1, 10, 'Location 1', '2021-01-01', 1, 'Info 1'),

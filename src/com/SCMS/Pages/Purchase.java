@@ -1,123 +1,104 @@
 package com.SCMS.Pages;
 
-
-import com.SCMS.Utils.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import com.SCMS.Utils.Database;
 import java.awt.*;
 
-
 public class Purchase extends JPanel {
-    private Object[][] productList;
-    Database db = new Database();
+    private JPanel productPanel;
+    private Object[][] products;
+    private Database db = new Database();
+    private int selectedProductId = -1;
+    private String companyId;
 
     public Purchase(String companyId) {
+        this.companyId = companyId;
+        setSize(1200, 800);
         setLayout(new BorderLayout());
 
-        productList = db.getInventory(companyId);
-
-        setSize(800, 600);
-
-        // Create the product table
-        JTable productTable = createProductTable();
-        // productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        JScrollPane scrollPane = new JScrollPane(productTable);
+        // Product panel
+        
+        // Initialize sample products
+        products = db.getInventory(companyId, 1);
+        
+        // Add products to the panel
+        productPanel = new JPanel(new GridBagLayout());
+        JScrollPane scrollPane = new JScrollPane(productPanel);
         add(scrollPane, BorderLayout.CENTER);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.insets = new Insets(10, 10, 10, 10);
 
-        // Create the add to cart section
-        JPanel addToCartPanel = createAddToCartPanel(productTable);
-        add(addToCartPanel, BorderLayout.SOUTH);
-        setVisible(true);
+        int columnCount = 0;
+        int rowCount = 0;
 
-    }
+        for (Object[] product : products) {
+            JPanel cardPanel = createProductCard(product);
+            cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectedProductId = Integer.parseInt(product[0].toString());
+                    openCheckoutPage(product);
+                }
+            });
 
-    private JTable createProductTable() {
-        String[] columnNames = { "Product Name", "Company", "Price", "Qty. Available", "Category" };
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+            constraints.gridx = columnCount;
+            constraints.gridy = rowCount;
+            productPanel.add(cardPanel, constraints);
 
-        for (int i = 0; i < productList.length; i++) {
-            Object[] rowData = { productList[i][1], productList[i][6], productList[i][3], productList[i][2],
-                    productList[i][5] };
-
-            model.addRow(rowData);
+            columnCount++;
+            if (columnCount == 4) {
+                columnCount = 0;
+                rowCount++;
+            }
         }
 
-        return new JTable(model);
+        setVisible(true);
     }
 
-    private JPanel createAddToCartPanel(JTable productTable) {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    private JPanel createProductCard(Object[] product) {
+        JPanel cardPanel = new JPanel();
+        cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
+        cardPanel.setPreferredSize(new Dimension(200, 250));
+        cardPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        cardPanel.setBackground(Color.WHITE);
 
-        JLabel label = new JLabel("Add Product: ");
-        panel.add(label);
+        // Product image
+        ImageIcon imageIcon = new ImageIcon(product[12].toString());
+        Image image = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        JLabel imageLabel = new JLabel(new ImageIcon(image));
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cardPanel.add(imageLabel);
 
-        // Create a number field for selecting the product index
-        int maxProductIndex = productList.length;
-        SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, maxProductIndex, 1);
-        JSpinner spinner = new JSpinner(spinnerModel);
+        // Product name
+        JLabel nameLabel = new JLabel(product[1].toString());
+        nameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+        nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cardPanel.add(nameLabel);
 
-        panel.add(spinner);
+        // Product description
+        JLabel descLabel = new JLabel(product[9].toString());
+        descLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
+        descLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cardPanel.add(descLabel);
 
-        // Create the add to cart button
-        JButton addToCartButton = new JButton("Add to Cart");
-        panel.add(addToCartButton);
+        // Product price
+        JLabel priceLabel = new JLabel(product[3].toString());
+        priceLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+        priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cardPanel.add(priceLabel);
 
-        addToCartButton.addActionListener(e -> {
-            int selectedProductIndex = Integer.parseInt(spinner.getValue().toString()) - 1;
-            Object[] selectedProduct = productList[selectedProductIndex];
-
-            // Open the checkout page for the selected product
-            openCheckoutPage(selectedProduct);
-        });
-
-        return panel;
+        return cardPanel;
     }
-
-    // private JTable createOrderTable() {
-    // String[] columnNames = { "Product Name", "Company", "Contact Person",
-    // "Quantity", "Status" };
-    // DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-    // for (Order order : orderList) {
-    // Object[] rowData = { order.getProduct(), order.getCompanyName(),
-    // order.getContactPerson(),
-    // order.getQuantity(), order.getStatus() };
-    // model.addRow(rowData);
-    // }
-
-    // return new JTable(model);
-    // }
-
-    // private JPanel createOrderSummaryPanel() {
-    // JPanel panel = new JPanel(new GridLayout(2, 1));
-
-    // JPanel successfulOrdersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    // JLabel successfulLabel = new JLabel("Successful Orders: ");
-    // successfulOrdersLabel = new JLabel("0");
-    // successfulOrdersPanel.add(successfulLabel);
-    // successfulOrdersPanel.add(successfulOrdersLabel);
-
-    // JPanel unsuccessfulOrdersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    // JLabel unsuccessfulLabel = new JLabel("Unsuccessful Orders: ");
-    // unsuccessfulOrdersLabel = new JLabel("0");
-    // unsuccessfulOrdersPanel.add(unsuccessfulLabel);
-    // unsuccessfulOrdersPanel.add(unsuccessfulOrdersLabel);
-
-    // panel.add(successfulOrdersPanel);
-    // panel.add(unsuccessfulOrdersPanel);
-
-    // return panel;
-    // }
-
-    private void openCheckoutPage(Object[] product) {
+    
+    public void openCheckoutPage(Object[] product) {
         JFrame checkoutFrame = new JFrame("Checkout Page");
         checkoutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         checkoutFrame.setSize(600, 600);
-        // checkoutFrame.setLocationRelativeTo(null);
-        checkoutFrame.setLocation(200, 200);
+        checkoutFrame.setLocationRelativeTo(null);
 
-        JPanel formPanel = new JPanel(new GridLayout(11, 2));
+        JPanel formPanel = new JPanel(new GridLayout(11, 2, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
 
         JLabel companyNameLabel = new JLabel("Company Name:");
@@ -130,7 +111,6 @@ public class Purchase extends JPanel {
         formPanel.add(SupplierLable);
         formPanel.add(SupplierCompany);
 
-        // JPanel row2 = new JPanel();
         JLabel contactPersonLabel = new JLabel("Contact Person:");
         JTextField contactPersonField = new JTextField("Bisrat", 10);
         formPanel.add(contactPersonLabel);
@@ -182,6 +162,14 @@ public class Purchase extends JPanel {
         formPanel.add(orderButton);
         formPanel.add(cancelButton);
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.add(orderButton);
+        buttonPanel.add(cancelButton);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
         orderButton.addActionListener(e -> {
             // Order button action handling
             String companyName = companyNameField.getText();
@@ -192,47 +180,22 @@ public class Purchase extends JPanel {
             String deliveryDate = deliveryDateField.getText();
             int quantity = (int) quantitySpinner.getValue();
             String paymentOption = (String) paymentOptionComboBox.getSelectedItem();
-            String additionalNotes = additionalNotesField.getText();
+            String note = additionalNotesField.getText();
 
             if (companyName.isEmpty() || SupplierComp.isEmpty() || contactPerson.isEmpty() || contactNumber.isEmpty() ||
                     email.isEmpty() || deliveryDate.isEmpty() || quantity == 0 || paymentOption.isEmpty() ||
-                    additionalNotes.isEmpty()) {
+                    note.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please fill in all the fields.");
             } else {
-                // Create the order
-                // Order order = new Order(product, companyName, address, contactPerson,
-                // contactNumber, email,
-                // deliveryDate, quantity, paymentOption, additionalNotes);
-
-                // // Add the order to the order list
-                // orderList.add(order);
-
-                // // Update the order table
-                // updateOrderTable();
-
-                // Close the checkout page
                 formPanel.removeAll();
                 formPanel.setLayout(new BorderLayout());
-                // Display "Ordered successfully" message
 
-                if (db.orderProduct("1", product[10].toString(), quantity, "pending")) {
+                // Display "Ordered successfully" message
+                if (db.orderProduct("1", product[10].toString(), quantity, "Waiting",companyId, note)) {
                     JOptionPane.showMessageDialog(null, "Order Placed Successfully");
                 } else {
                     JOptionPane.showMessageDialog(null, "500 : SERVER ERROR");
                 }
-
-                // // Show "Go to Order Page" button
-                // JButton goToOrderPageButton = new JButton("Go to Order Page");
-                // formPanel.add(goToOrderPageButton, BorderLayout.SOUTH);
-
-                // goToOrderPageButton.addActionListener(e1 -> {
-                // // Go to order page button action handling
-                // checkoutFrame.dispose();
-                // // openOrderListPage();
-                // });
-
-                // formPanel.revalidate();
-                // formPanel.repaint();
                 checkoutFrame.dispose();
             }
         });
@@ -242,42 +205,7 @@ public class Purchase extends JPanel {
             checkoutFrame.dispose();
         });
 
-        checkoutFrame.add(formPanel);
+        checkoutFrame.add(mainPanel);
         checkoutFrame.setVisible(true);
     }
-
-    // private void openOrderListPage() {
-    // JFrame orderListFrame = new JFrame("Order List Page");
-    // orderListFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    // orderListFrame.setSize(800, 600);
-    // orderListFrame.setLocationRelativeTo(null);
-
-    // JPanel panel = new JPanel(new GridLayout(1, 2));
-    // panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-
-    // JPanel tablePanel = new JPanel(new BorderLayout());
-
-    // // Create the order table
-    // orderTable = createOrderTable();
-    // JScrollPane scrollPane = new JScrollPane(orderTable);
-    // tablePanel.add(scrollPane);
-
-    // orderListFrame.add(tablePanel);
-    // orderListFrame.setVisible(true);
-    // }
-
-    // private void updateOrderTable() {
-    // String[] columnNames = { "Product Name", "Company", "Contact Person",
-    // "Quantity", "Status" };
-    // DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-    // orderTable = new JTable(model);
-    // orderTable.setModel(model);
-
-    // for (Order order : orderList) {
-    // Object[] rowData = { order.getProduct().getName(), order.getCompanyName(),
-    // order.getContactPerson(),
-    // order.getQuantity(), order.getStatus() };
-    // model.addRow(rowData);
-    // }
-    // }
 }

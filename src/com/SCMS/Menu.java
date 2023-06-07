@@ -66,7 +66,7 @@ public class Menu extends JFrame {
             } else if (menuItemsNames[i] == "Purchase")
                 workSpace.add(new Purchase(companyId), menuItemsNames[i]);
             else if (menuItemsNames[i] == "Suppliers")
-            workSpace.add(new Suppliers(), menuItemsNames[i]);
+            workSpace.add(new Suppliers(companyId), menuItemsNames[i]);
             // else if(menuItemsNames[i] == "Customers")
             // workSpace.add(new Customers(), menuItemsNames[i]);
             else if(menuItemsNames[i] == "Employees")

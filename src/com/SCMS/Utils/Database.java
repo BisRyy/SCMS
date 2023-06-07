@@ -82,13 +82,16 @@ public class Database {
     }
 
     public Object[][] getInventory(String supplier_id) {
+        return getInventory(supplier_id, 0);
+    }
+    public Object[][] getInventory(String supplier_id, int flag) {
         Object[][] inventory = null;
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id = " + supplier_id +";");
+                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id " + (flag == 1 ? "!" : "") + "=" + supplier_id +";");
             int rowCount = getRowCount(resultSet);
-            int columnCount = 12;
+            int columnCount = 13;
             inventory = new Object[rowCount][columnCount];
             resultSet.beforeFirst();
             int i = 0;
@@ -106,6 +109,7 @@ public class Database {
                 inventory[i][9] = resultSet.getString("info");
                 inventory[i][10] = resultSet.getString("product_id");
                 inventory[i][11] = resultSet.getString("inventory_id");
+                inventory[i][12] = resultSet.getString("image");
                 i++;
             }
             disconnect();
@@ -266,9 +270,9 @@ public class Database {
         return false;
     }
 
-    public boolean orderProduct(String u_id, String prod_id, int quantity, String status) {
-        String query = "INSERT INTO orders(user_id, product_id, order_quantity, order_status) VALUES('" + u_id + "', '"
-                + prod_id + "', '" + quantity + "', '" + status + "')";
+    public boolean orderProduct(String u_id, String prod_id, int quantity, String status, String company_id, String note) {
+        String query = "INSERT INTO orders(user_id,company_id, product_id, order_quantity, order_status, note) VALUES('" + u_id +"','" + company_id +"', '"
+                + prod_id + "', '" + quantity + "', '" + status +"', '" + note + "')";
 
         try {
             connect();

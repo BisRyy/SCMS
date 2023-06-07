@@ -8,6 +8,7 @@ import com.SCMS.Utils.Database;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Random;
 
 public class Products extends JPanel {
@@ -23,6 +24,8 @@ public class Products extends JPanel {
     private JButton deleteButton;
     private int selected = -1;
     String companyId;
+    private JLabel profilePictureLabel;
+    String image = "lib/product.png";
 
     public Products(String companyId) {
         initializeUI(companyId);
@@ -188,7 +191,8 @@ public class Products extends JPanel {
                 // int supplierIndex = supplierField.getSelectedIndex();
                 String description = descriptionField.getText();
                 String code = "code" + new Random().nextInt(100);
-                db.addProduct(name, code, price, unit, categoryId, description, "image", companyId);
+                System.out.println("image" + image);
+                db.addProduct(name, code, price, unit, categoryId, description, image, companyId);
 
                 JOptionPane.showMessageDialog(AddProductDialog.this, "Product Added Successfully.", "Success",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -205,11 +209,51 @@ public class Products extends JPanel {
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             buttonPanel.add(addButton);
             buttonPanel.add(cancelButton);
-
+            // JPanel mainPanel = new JPanel(new BorderLayout());
+            // mainPanel.add(panel, BorderLayout.CENTER);
+            
+            getContentPane().add(ProfilePicture(), BorderLayout.NORTH);
             getContentPane().add(panel, BorderLayout.CENTER);
             getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
             pack();
+        }
+    }
+
+    private JPanel ProfilePicture() {
+        JPanel profilePicturePanel = new JPanel();
+        profilePicturePanel.setLayout(new BorderLayout());
+        profilePicturePanel.setBorder(BorderFactory.createTitledBorder("Profile Picture"));
+
+        profilePictureLabel = new JLabel();
+        profilePictureLabel.setPreferredSize(new Dimension(150, 150));
+        profilePicturePanel.setPreferredSize(new Dimension(150, 150));
+        profilePictureLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        profilePictureLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        JButton uploadButton = new JButton("Upload");
+        uploadButton.addActionListener((e) -> {
+            uploadProfilePicture();
+        });
+
+        profilePicturePanel.add(profilePictureLabel, BorderLayout.CENTER);
+        profilePicturePanel.add(uploadButton, BorderLayout.SOUTH);
+
+        return profilePicturePanel;
+    }
+
+
+    private void uploadProfilePicture() {
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            // Perform image upload and update the profile picture label
+            image = selectedFile.getPath();
+            ImageIcon imageIcon = new ImageIcon(selectedFile.getPath());
+            // scale image
+            Image image = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            profilePictureLabel.setIcon(new ImageIcon(image));
         }
     }
 }
