@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 public class Orders extends JPanel {
 
@@ -639,6 +640,10 @@ public class Orders extends JPanel {
 		});
 		SearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(textField.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Please Enter a Username");
+				}
+				else{
 				Mainpanel.removeAll();
 				Mainpanel.revalidate();
 				Mainpanel.repaint();
@@ -664,6 +669,7 @@ public class Orders extends JPanel {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+			}
 			}
 
 		});
