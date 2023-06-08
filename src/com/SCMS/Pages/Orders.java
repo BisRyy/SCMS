@@ -100,7 +100,7 @@ public class Orders extends JPanel {
 			ResultSet rsData = stmt.executeQuery(QUERY);
 			while (rsData.next()) {
 				Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
-						rsData.getString("name"), Integer.toString(rsData.getInt("price")),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
 						rsData.getString("order_status"), rsData.getString("order_date")));
 			}
 			rsData.close();
@@ -130,10 +130,9 @@ public class Orders extends JPanel {
 								"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where o.company_id = "
 										+ companyId + " limit " + page + ",9");
 						while (rsData.next()) {
-							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-									rsData.getString("username"), rsData.getString("name"),
-									Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-									rsData.getString("order_date")));
+							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 						}
 						rsData.close();
 					} catch (Exception e1) {
@@ -167,10 +166,9 @@ public class Orders extends JPanel {
 						Mainpanel.revalidate();
 						Mainpanel.repaint();
 						while (rsData.next()) {
-							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-									rsData.getString("username"), rsData.getString("name"),
-									Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-									rsData.getString("order_date")));
+							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 						}
 						rsData.close();
 					}
@@ -200,10 +198,9 @@ public class Orders extends JPanel {
 											+ companyId + " limit " + page + ",9");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();
@@ -235,10 +232,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -271,10 +267,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -312,10 +307,9 @@ public class Orders extends JPanel {
 					ResultSet rsData = stmt.executeQuery(QUERY);
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();
@@ -346,10 +340,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -379,10 +372,9 @@ public class Orders extends JPanel {
 												+ companyId + " limit "
 												+ page + ",9");
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+									rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+									rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							} catch (Exception e1) {
@@ -422,10 +414,9 @@ public class Orders extends JPanel {
 									+ companyId + ";");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();
@@ -457,10 +448,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -491,10 +481,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+									rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+									rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -540,12 +529,9 @@ public class Orders extends JPanel {
 											+ companyId + " limit "
 											+ page + ",9");
 					while (rsData.next()) {
-
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
-
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 					}
 					rsData.close();
 				} catch (Exception e1) {
@@ -576,10 +562,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -610,10 +595,9 @@ public class Orders extends JPanel {
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
-											Integer.toString(rsData.getInt("price")),
-											rsData.getString("order_status"), rsData.getString("order_date")));
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+									rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+									rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
 							}
@@ -662,10 +646,9 @@ public class Orders extends JPanel {
 											+ textField.getText() + "\" and o.company_id = " + companyId + ";");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+						rsData.getString("name"),Integer.toString(rsData.getInt("order_quantity")), Integer.toString(rsData.getInt("price")),
+						rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();

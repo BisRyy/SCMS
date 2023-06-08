@@ -24,7 +24,7 @@ public class Order extends JPanel {
 	String PASSWORD = "";
 	JPanel j = this;
 
-	public Order(String id, String customer, String product, String price, String status, String order_date) {
+	public Order(String id, String customer, String product,String order_quantity, String price, String status, String order_date) {
 
 		this.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		this.setBackground(new Color(0, 51, 51));
@@ -48,12 +48,12 @@ public class Order extends JPanel {
 
 		JLabel lblNewLabel_4 = new JLabel("Price");
 		lblNewLabel_4.setForeground(new Color(255, 255, 255));
-		lblNewLabel_4.setBounds(10, 102, 79, 13);
+		lblNewLabel_4.setBounds(10, 121, 79, 13);
 		add(lblNewLabel_4);
 
 		JLabel lblNewLabel_5 = new JLabel("Delivery Status");
 		lblNewLabel_5.setForeground(new Color(255, 255, 255));
-		lblNewLabel_5.setBounds(10, 125, 117, 13);
+		lblNewLabel_5.setBounds(10, 144, 117, 13);
 		add(lblNewLabel_5);
 
 		JLabel lblNewLabel_6 = new JLabel(customer);
@@ -71,13 +71,13 @@ public class Order extends JPanel {
 		JLabel lblNewLabel_8 = new JLabel(price);
 		lblNewLabel_8.setForeground(new Color(255, 255, 255));
 		lblNewLabel_8.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblNewLabel_8.setBounds(216, 102, 79, 13);
+		lblNewLabel_8.setBounds(226, 121, 79, 13);
 		add(lblNewLabel_8);
 
 		JLabel lblNewLabel_9 = new JLabel(status);
 
 		lblNewLabel_9.setForeground(new Color(255, 255, 255));
-		lblNewLabel_9.setBounds(216, 125, 79, 13);
+		lblNewLabel_9.setBounds(216, 144, 79, 13);
 		if (status.equals("Accepted")) {
 
 			lblNewLabel_9.setForeground(Color.magenta);
@@ -109,7 +109,7 @@ public class Order extends JPanel {
 
 				}
 			});
-			btnNewButton.setBounds(20, 143, 85, 21);
+			btnNewButton.setBounds(20, 160, 85, 21);
 			add(btnNewButton);
 
 			JButton btnNewButton_1 = new JButton("Decline");
@@ -127,7 +127,7 @@ public class Order extends JPanel {
 
 				}
 			});
-			btnNewButton_1.setBounds(200, 143, 85, 21);
+			btnNewButton_1.setBounds(210, 160, 85, 21);
 			add(btnNewButton_1);
 		}
 
@@ -151,6 +151,15 @@ public class Order extends JPanel {
 		lblNewLabel_10.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblNewLabel_10.setBounds(10, 0, 143, 23);
 		add(lblNewLabel_10);
+		JLabel lblNewLabel = new JLabel("Order_quantity");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setBounds(10, 102, 90, 13);
+		add(lblNewLabel);
+		
+		JLabel lblNewLabel_11 = new JLabel(order_quantity);
+		lblNewLabel_11.setForeground(new Color(255, 255, 255));
+		lblNewLabel_11.setBounds(226, 102, 45, 13);
+		add(lblNewLabel_11);
 
 	}
 
