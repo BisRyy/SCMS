@@ -61,7 +61,7 @@ CREATE TABLE inventory (
 );
 
 create table shipments(
-    shipment_id int primary key auto_increment,
+    shipment_id int primary key auto_increment not null,
     order_id int,
     shipment_date date default CURRENT_TIMESTAMP,
     shipment_status varchar(25),

@@ -186,8 +186,8 @@ public class Purchase extends JPanel {
                     note.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please fill in all the fields.");
             } else {
-                formPanel.removeAll();
-                formPanel.setLayout(new BorderLayout());
+                // formPanel.removeAll();
+                // formPanel.setLayout(new BorderLayout());
 
                 // Display "Ordered successfully" message
                 if (db.orderProduct("1", product[10].toString(), quantity, "Waiting",companyId, note)) {
