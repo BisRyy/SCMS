@@ -357,7 +357,6 @@ public class Auth extends JFrame {
     }
 
     private boolean isValidEmail(String email) {
-        // Simple email validation using regular expression
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         return email.matches(emailRegex);
     }
