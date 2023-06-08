@@ -5,7 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Panel;
-
+import java.sql.*;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,6 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Ship_Details extends JPanel {
+	String DB_URL = "jdbc:mysql://localhost/SCMS";
+	String USERNAME = "root";
+	String PASSWORD = "";
 	int page=0;
     public Ship_Details(String shipID,String starting_point,String destination,String status) {
     	
@@ -115,20 +118,40 @@ public class Ship_Details extends JPanel {
 		panel_9.setBounds(0, 91, 923, 193);
 		panel_8.add(panel_9);
 		panel_9.setLayout(new GridLayout(4, 1, 0, 0));
-		for(int i=0; i<4 ;i++) {
-			panel_9.add(new order_list("1","123","Tv","200","12","2400","Ararsa"));
+		try {
+			Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+			Statement stmt = jdbcConnect.createStatement();
+
+			ResultSet rsData = stmt.executeQuery("select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where shipment_id="+shipID +" limit " + page + ",4");
+			while (rsData.next()) {
+				panel_9.add(new order_list(shipID,Integer.toString(rsData.getInt("order_id")),rsData.getString("name"),Integer.toString(rsData.getInt("price")),Integer.toString(rsData.getInt("order_quantity")),Integer.toString(rsData.getInt("order_quantity")*rsData.getInt("price")),rsData.getString("username")));
+
+			}
+			rsData.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 		
 		JButton btnNewButton_4_2 = new JButton("<");
 		btnNewButton_4_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(page!=0) {
-					page=page-4;
-					panel_9.removeAll();
-					panel_9.revalidate();
-					panel_9.repaint();
-					for(int i=page; i<page+4 ;i++) {
-						panel_9.add(new order_list("1","123","Tv","200","12","2400","Ararsa"));
+				if (page != 0) {
+					page = page - 4;
+				 panel_9.removeAll();
+				 panel_9.revalidate();
+				 panel_9.repaint();
+					try {
+						Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+						Statement stmt = jdbcConnect.createStatement();
+
+						ResultSet rsData = stmt.executeQuery("select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where shipment_id="+shipID +" limit " + page + ",4");
+						while (rsData.next()) {
+							panel_9.add(new order_list(shipID,Integer.toString(rsData.getInt("order_id")),rsData.getString("name"),Integer.toString(rsData.getInt("price")),Integer.toString(rsData.getInt("order_quantity")),Integer.toString(rsData.getInt("order_quantity")*rsData.getInt("price")),rsData.getString("username")));
+
+						}
+						rsData.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
 				}
 			}
@@ -139,15 +162,29 @@ public class Ship_Details extends JPanel {
 		JButton btnNewButton_4_1_1 = new JButton(">");
 		btnNewButton_4_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(page+4<9) {
-					page=page+4;
-					panel_9.removeAll();
-					panel_9.revalidate();
-					panel_9.repaint();
-					for(int i=page; i<page+4 ;i++) {
-						panel_9.add(new order_list("2","123","Tv","200","12","2400","Ararsa"));
+				try {
+
+				Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+				Statement stmt = jdbcConnect.createStatement();
+				Statement stmt1 = jdbcConnect.createStatement();
+				ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders where shipment_id="+shipID);
+				count.next();
+					if (page + 4 < count.getInt("count")) {
+						page = page + 4;
+						panel_9.removeAll();
+							panel_9.revalidate();
+							panel_9.repaint();
+							ResultSet rsData = stmt.executeQuery("select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where shipment_id="+shipID +" limit " + page + ",4");
+							while (rsData.next()) {
+								panel_9.add(new order_list(shipID,Integer.toString(rsData.getInt("order_id")),rsData.getString("name"),Integer.toString(rsData.getInt("price")),Integer.toString(rsData.getInt("order_quantity")),Integer.toString(rsData.getInt("order_quantity")*rsData.getInt("price")),rsData.getString("username")));
+	
+							}
+						rsData.close();
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
 					}
-				}
+						
 			}
 		});
 		btnNewButton_4_1_1.setBounds(654, 61, 42, 21);

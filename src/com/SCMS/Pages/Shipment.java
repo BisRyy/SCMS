@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.FlowLayout;
-
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.SCMS.Components.Add_shipment;
@@ -88,6 +88,10 @@ public class Shipment extends JPanel {
 		JButton btnNewButton_4_1 = new JButton(">");
 		btnNewButton_4_1.setBounds(412, 74, 42, 21);
 		panel_1.add(btnNewButton_4_1);
+		JButton btnNewButton = new JButton("Search");
+		
+		btnNewButton.setBounds(317, 53, 85, 21);
+		panel_1.add(btnNewButton);
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 93, 462, 549);
@@ -104,7 +108,7 @@ public class Shipment extends JPanel {
 						Integer.toString(track_number * rsData.getInt("shipment_id"))));
 			}
 			rsData.close();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
@@ -128,7 +132,7 @@ public class Shipment extends JPanel {
 
 						}
 						rsData.close();
-					} catch (Exception e1) {
+					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
 				}
@@ -157,10 +161,36 @@ public class Shipment extends JPanel {
 						}
 						rsData.close();
 					}
-				} catch (Exception e1) {
+				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 
+			}
+		});
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(textField.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, "Please Enter a shipment ID");
+				}
+				else{
+					try {
+						Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+						Statement stmt = jdbcConnect.createStatement();
+						ResultSet rsData = stmt.executeQuery("select * from shipments where shipment_id="+textField.getText()+" limit " + page + ",3");
+						panel_2.removeAll();
+
+						panel_2.revalidate();
+						panel_2.repaint();
+						while (rsData.next()) {
+							panel_2.add(new Ship(Integer.toString(rsData.getInt("shipment_id")), rsData.getString("starting_point"),
+									rsData.getString("destination"), rsData.getString("shipment_status"),
+									Integer.toString(track_number * rsData.getInt("shipment_id"))));
+						}
+						rsData.close();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 		JButton btnNewButton_6 = new JButton("Add New Shipment");
