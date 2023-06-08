@@ -34,33 +34,21 @@ public class Add_shipment extends JFrame {
     private DefaultTableModel tableModel;
     private List<Integer> selectedRows;
     private JButton showSelectedButton;
-    String DB_URL = "jdbc:mysql://localhost:3306/SCMS";
+    String DB_URL = "jdbc:mysql://localhost/SCMS";
     String USERNAME = "root";
     String PASSWORD = "";
-    int ship = 1;
-    private TableColumn checkboxColumn;
 
     private JPanel contentPane;
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Add_shipment frame = new Add_shipment();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     public Add_shipment() {
         setTitle("Table Selection Example");
 
-        setPreferredSize(new Dimension(600, 300));
+        setPreferredSize(new Dimension(700, 300));
+        setResizable(false);
+        
+        // to center
+        
 
-        // Create table model with sample data
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Select");
         tableModel.addColumn("order_id");
@@ -70,7 +58,6 @@ public class Add_shipment extends JFrame {
         tableModel.addColumn("Order_quantity");
         tableModel.addColumn("order_date");
 
-        // Add sample data rows
         try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
             Statement stmt = jdbcConnect.createStatement();
 
@@ -86,7 +73,7 @@ public class Add_shipment extends JFrame {
             rsData.close();
         }
 
-        catch (SQLException e1) {
+        catch (Exception e1) {
             e1.printStackTrace();
         }
         //
@@ -106,10 +93,8 @@ public class Add_shipment extends JFrame {
                 if (!e.getValueIsAdjusting()) {
                     int selectedRow = table.getSelectedRow();
 
-                    // Clear the previous selection
                     selectedRows.clear();
 
-                    // Check if a row is selected
                     if (selectedRow != -1) {
                         selectedRows.add(selectedRow);
                     }
@@ -117,13 +102,11 @@ public class Add_shipment extends JFrame {
             }
         });
 
-        // Create checkbox column
         TableColumn checkboxColumn = table.getColumnModel().getColumn(0);
         checkboxColumn.setCellEditor(table.getDefaultEditor(Boolean.class));
         checkboxColumn.setCellRenderer(table.getDefaultRenderer(Boolean.class));
         JPanel buttonPanel = new JPanel();
 
-        // Add the table and button panel to the frame
         getContentPane().setLayout(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(table);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -141,42 +124,48 @@ public class Add_shipment extends JFrame {
         buttonPanel.add(destin);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        // Create button to show selected items
         showSelectedButton = new JButton("Add To shipments");
         showSelectedButton.addActionListener((e) -> {
             int rowCount = table.getRowCount();
             int colCount = table.getColumnCount();
             int x = 0;
 
+            //
             try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 
                 Statement stmt1 = jdbcConnect.createStatement();
                 Statement stmt2 = jdbcConnect.createStatement();
                 Statement stmt3 = jdbcConnect.createStatement();
+                Statement stmt4 = jdbcConnect.createStatement();
 
                 stmt3.executeUpdate("insert into shipments (starting_point,destination,shipment_status) values ('"
                         + startP.getSelectedItem().toString() + "','" + destin.getSelectedItem().toString() + "',"
                         + "'In Transit')");
+                ResultSet r = stmt4.executeQuery("SELECT * FROM shipments ORDER BY shipment_id DESC LIMIT 1");
+                r.next();
                 for (int i = 0; i < rowCount; i++) {
                     Object value1 = true;
                     Object value = table.getValueAt(i, 0);
                     if (value == value1) {
-                        x++;
                         for (int j = 1; j < 2; j++) {
 
                             Object value2 = table.getValueAt(i, j);
-                            stmt1.executeUpdate("update orders set  shipment_id=" + ship + " where order_id=" + value2);
+
+                            stmt1.executeUpdate("update orders set shipment_id="
+                                    + Integer.toString(r.getInt("shipment_id")) + " where order_id=" + value2);
                             stmt2.executeUpdate("update orders set order_status=\"Shipped\" where order_id=" + value2);
+
                         }
                     }
+
                 }
+
             }
 
-            catch (SQLException e1) {
-                e1.printStackTrace();
+            catch (Exception e2) {
+                e2.printStackTrace();
             }
 
-            ship++;
             if (x == 0) {
                 JOptionPane.showMessageDialog(null, "Please Select Order");
             } else {
@@ -185,9 +174,11 @@ public class Add_shipment extends JFrame {
             dispose();
 
         });
-        // Create a panel to hold the button
+
         buttonPanel.add(showSelectedButton);
         pack();
         setVisible(true);
+        //
+
     }
 }

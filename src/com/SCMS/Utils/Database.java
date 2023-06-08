@@ -54,12 +54,11 @@ public class Database {
         return statement.executeUpdate(query);
     }
 
-    public Object[][] getOrders() {
+    public Object[][] getOrders(){
         Object[][] orders = null;
         try {
             connect();
-            ResultSet resultSet = executeQuery(
-                    "select * from orders o join products p on o.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c2 on p.category_id = c2.category_id;");
+            ResultSet resultSet = executeQuery("select * from orders o join products p on o.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c2 on p.category_id = c2.category_id;");
             int rowCount = getRowCount(resultSet);
             int columnCount = 12;
             orders = new Object[rowCount][columnCount];
@@ -88,14 +87,12 @@ public class Database {
     public Object[][] getInventory(String supplier_id) {
         return getInventory(supplier_id, 0);
     }
-
     public Object[][] getInventory(String supplier_id, int flag) {
         Object[][] inventory = null;
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id "
-                            + (flag == 1 ? "!=" : "=") + supplier_id + ";");
+                    "select * from inventory i join products p on i.product_id = p.product_id join suppliers s on p.supplier_id = s.supplier_id join categories c on p.category_id = c.category_id where i.owner_id " + (flag == 1 ? "!=" : "=")+ supplier_id +";");
             int rowCount = getRowCount(resultSet);
             int columnCount = 13;
             inventory = new Object[rowCount][columnCount];
@@ -137,12 +134,9 @@ public class Database {
         return 0;
     }
 
-    public boolean addInventory(String product_id, int quantity, String location, String expiry_date, String owner_id,
-            String description) {
+    public boolean addInventory(String product_id, int quantity, String location, String expiry_date, String owner_id, String description) {
         try {
-            String query = "insert into inventory(product_id, quantity, location, expiry_date, owner_id, info) values("
-                    + product_id + ", " + quantity + ", '" + location + "', '" + expiry_date + "','" + owner_id + "','"
-                    + description + "');";
+            String query = "insert into inventory(product_id, quantity, location, expiry_date, owner_id, info) values(" + product_id + ", " + quantity + ", '" + location + "', '" + expiry_date + "','" + owner_id + "','"+ description +"');";
             connect();
             executeUpdate(query);
             disconnect();
@@ -166,7 +160,7 @@ public class Database {
         return false;
     }
 
-    public Object[][] getCategories() {
+    public Object[][] getCategories(){
         Object[][] categories = null;
         try {
             connect();
@@ -193,8 +187,7 @@ public class Database {
         try {
             connect();
             ResultSet resultSet = executeQuery(
-                    "select * from products p join suppliers s on p.supplier_id = s.supplier_id where p.supplier_id = "
-                            + supplier_id + " AND p.deleted = 0;");
+                    "select * from products p join suppliers s on p.supplier_id = s.supplier_id where p.supplier_id = " + supplier_id +" AND p.deleted = 0;");
             int rowCount = getRowCount(resultSet);
             int columnCount = 9;
             products = new Object[rowCount][columnCount];
@@ -253,6 +246,8 @@ public class Database {
         return false;
     }
 
+
+
     // remove category from database
     public boolean removeCategory(String id) {
         String query = "UPDATE categories SET deleted = 1 WHERE category_id='" + id + "';";
@@ -280,11 +275,9 @@ public class Database {
         return false;
     }
 
-    public boolean orderProduct(String u_id, String prod_id, int quantity, String status, String company_id,
-            String note) {
-        String query = "INSERT INTO orders(user_id,company_id, product_id, order_quantity, order_status, note) VALUES('"
-                + u_id + "','" + company_id + "', '"
-                + prod_id + "', '" + quantity + "', '" + status + "', '" + note + "')";
+    public boolean orderProduct(String u_id, String prod_id, int quantity, String status, String company_id, String note) {
+        String query = "INSERT INTO orders(user_id,company_id, product_id, order_quantity, order_status, note) VALUES('" + u_id +"','" + company_id +"', '"
+                + prod_id + "', '" + quantity + "', '" + status +"', '" + note + "')";
 
         try {
             connect();
@@ -331,7 +324,7 @@ public class Database {
     public int getUsernameId() {
         return getUsernameId(SessionManager.getAuthenticatedUser());
     }
-
+    
     public int getUsernameId(String username) {
         try {
             connect();
@@ -345,7 +338,7 @@ public class Database {
         }
         return 0;
     }
-
+    
     public Map<String, String> userInfo(String info) {
         String sql = "SELECT * FROM users WHERE username = ?";
 
@@ -357,14 +350,15 @@ public class Database {
 
             Map<String, String> userInfo = new HashMap<>();
 
-            if (resultSet.next()) {
+            if(resultSet.next())
+            {
                 // Get the info from the database
                 String fname = resultSet.getString("fname");
                 String lname = resultSet.getString("lname");
                 String email = resultSet.getString("email");
                 String phone = resultSet.getString("phone");
                 String address = resultSet.getString("address");
-
+        
                 // Put the info in the map
                 userInfo.put("fname", fname);
                 userInfo.put("lname", lname);
@@ -372,39 +366,59 @@ public class Database {
                 userInfo.put("phone", phone);
                 userInfo.put("address", address);
             }
-
+    
             disconnect();
             return userInfo;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+    
         return null;
-    }
+    }   
+    
+    public boolean saveUserInfo(String username, String fname, String lname, String email, String phone, String address, String image)
+    {
+        String sql = "UPDATE users SET fname = ?, lname = ?, email = ?,  phone = ?, address = ?, image_data = ? WHERE username = ?";
 
-    public boolean saveUserInfo(String username, String fname, String lname, String password, String email,
-            String phone, String address, String image) {
-        String sql = "UPDATE users SET fname = ?, lname = ?, password = ?, email = ?,  phone = ?, address = ?, image_data = ? WHERE username = ?";
-
-        try {
+        try{
             connect();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, fname);
             statement.setString(2, lname);
-            statement.setString(3, password);
-            statement.setString(4, email);
-            statement.setString(5, phone);
-            statement.setString(6, address);
-            statement.setString(7, image);
-            statement.setString(8, username);
+            statement.setString(3, email);
+            statement.setString(4, phone);
+            statement.setString(5, address);
+            statement.setString(6, image);
+            statement.setString(7, username);
             statement.executeUpdate();
             disconnect();
             return true;
         }
-
-        catch (SQLException e) {
+        catch(SQLException e)
+        {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    public boolean deleteUser(String username)
+    {
+        String sql = "DELETE FROM users WHERE username = ?";
+
+        try
+        {
+            connect();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.executeUpdate();
+            disconnect();
+            return true;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    
         return false;
     }
 }
