@@ -158,12 +158,14 @@ public class Auth extends JFrame {
                 char[] password = passwordField.getPassword();
                 String role = roleComboBox.getSelectedItem().toString();
                 String companyId = (String) suppliers[supplierField.getSelectedIndex()][5];
-                // Perform login authentication
-                if(username.length() == 0 || password.length == 0){
-                    JOptionPane.showMessageDialog(getParent(), "Please enter username and password.");
-                    return;
+                if (username.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please fill in all the required fields.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Perform login authentication
+                    authenticateLogin(username, password, role, companyId);
                 }
-                authenticateLogin(username, password, role, companyId);
             }
         });
 
@@ -175,18 +177,23 @@ public class Auth extends JFrame {
                 char[] password = newPasswordField.getPassword();
                 String role = newRoleComboBox.getSelectedItem().toString();
                 String companyId = (String) suppliers[newSupplierField.getSelectedIndex()][5];
-                if(username.length() == 0 || email.length() == 0 || password.length == 0){
-                    JOptionPane.showMessageDialog(getParent(), "Please enter username, email and password.");
+                if (username.trim().isEmpty() || email.trim().isEmpty() || password.length ==0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please fill in all the required fields.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }else if (!isValidEmail(email)) {
+                    JOptionPane.showMessageDialog(null, "Invalid email format");
                     return;
                 }
+                else {
+                    if (role == "Manager" && !suppliers[newSupplierField.getSelectedIndex()][6].equals(username)) {
+                        JOptionPane.showMessageDialog(getParent(), "You are not Manager of this company.");
+                        return;
+                    }
 
-                if(role == "Manager" && !suppliers[newSupplierField.getSelectedIndex()][6].equals(username)){
-                    JOptionPane.showMessageDialog(getParent(), "You are not Manager of this company.");
-                    return;
+                    // Perform registration
+                    registerUser(username, email, password, role, companyId);
                 }
-
-                // Perform registration
-                registerUser(username, email, password, role, companyId);
             }
         });
 
@@ -212,16 +219,20 @@ public class Auth extends JFrame {
                 String companyEmail = companyEmailField.getText();
                 String companyPhone = companyPhoneField.getText();
                 String companyManager = companyManagerField.getText();
-                if(companyName.length() == 0 || companyAddress.length() == 0 || companyEmail.length() == 0 || companyPhone.length() == 0 || companyManager.length() == 0){
-                    JOptionPane.showMessageDialog(getParent(), "Please enter all fields.");
+                if (companyName.trim().isEmpty() || companyAddress.trim().isEmpty() || companyEmail.isEmpty() || companyManager.trim().isEmpty() || companyPhone.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null,
+                            "Please fill in all the required fields.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!isValidEmail(companyEmail)) {
+                    JOptionPane.showMessageDialog(null, "Invalid email format");
                     return;
+                } else {
+                    createCompany(companyName, companyAddress, companyEmail, companyPhone, companyManager);
+                    suppliers = db.getSuppliers();
+                    newUsernameField.setText(companyManager);
+                    dispose();
+                    new Auth();
                 }
-
-                createCompany(companyName, companyAddress, companyEmail, companyPhone, companyManager);
-                suppliers = db.getSuppliers();
-                newUsernameField.setText(companyManager);
-                dispose();
-                new Auth();
             }
         });
 
@@ -343,5 +354,10 @@ public class Auth extends JFrame {
                 JOptionPane.showMessageDialog(this, exception.getMessage());
             }
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email.matches(emailRegex);
     }
 }
