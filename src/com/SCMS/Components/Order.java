@@ -99,9 +99,9 @@ public class Order extends JPanel {
 
 					try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 						Statement stmt = jdbcConnect.createStatement();
-						stmt.executeUpdate("update orders set order_status=\"Accepted\" where user_id= " + id);
+						stmt.executeUpdate("update orders set order_status=\"Accepted\" where order_id= " + id);
 
-					} catch (SQLException e1) {
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 					lblNewLabel_9.setText("Accepted");
@@ -117,9 +117,9 @@ public class Order extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 						Statement stmt = jdbcConnect.createStatement();
-						stmt.executeUpdate("update orders set order_status=\"Declined\" where user_id= " + id);
+						stmt.executeUpdate("update orders set order_status=\"Declined\" where order_id= " + id);
 
-					} catch (SQLException e1) {
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 					lblNewLabel_9.setText("Declined");

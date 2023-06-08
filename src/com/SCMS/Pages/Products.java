@@ -191,7 +191,6 @@ public class Products extends JPanel {
                 // int supplierIndex = supplierField.getSelectedIndex();
                 String description = descriptionField.getText();
                 String code = "code" + new Random().nextInt(100);
-                System.out.println("image" + image);
                 db.addProduct(name, code, price, unit, categoryId, description, image, companyId);
 
                 JOptionPane.showMessageDialog(AddProductDialog.this, "Product Added Successfully.", "Success",

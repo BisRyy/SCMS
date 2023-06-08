@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Orders extends JPanel {
@@ -22,12 +21,15 @@ public class Orders extends JPanel {
 	int page = 0;
 
 	private JTextField textField;
+	private String companyId;
 
-	public Orders() {
+	public Orders(String companyId) {
+		this.companyId = companyId;
 		String DB_URL = "jdbc:mysql://localhost/SCMS";
 		String USERNAME = "root";
 		String PASSWORD = "";
-		String QUERY = "select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
+		String QUERY = "select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where o.company_id = "
+				+ companyId + " limit "
 				+ page + ",9";
 		setBackground(new Color(0, 0, 0));
 		setLayout(null);
@@ -96,12 +98,12 @@ public class Orders extends JPanel {
 			Statement stmt = jdbcConnect.createStatement();
 			ResultSet rsData = stmt.executeQuery(QUERY);
 			while (rsData.next()) {
-				Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")), rsData.getString("username"),
+				Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
 						rsData.getString("name"), Integer.toString(rsData.getInt("price")),
 						rsData.getString("order_status"), rsData.getString("order_date")));
 			}
 			rsData.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -124,16 +126,16 @@ public class Orders extends JPanel {
 					try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 						Statement stmt = jdbcConnect.createStatement();
 						ResultSet rsData = stmt.executeQuery(
-								"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
-										+ page + ",9");
+								"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where o.company_id = "
+										+ companyId + " limit " + page + ",9");
 						while (rsData.next()) {
-							Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 									rsData.getString("username"), rsData.getString("name"),
 									Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 									rsData.getString("order_date")));
 						}
 						rsData.close();
-					} catch (SQLException e1) {
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 
@@ -156,14 +158,14 @@ public class Orders extends JPanel {
 					if (page + 9 < count.getInt("count")) {
 						page = page + 9;
 						ResultSet rsData = stmt.executeQuery(
-								"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
-										+ page + ",9");
+								"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id  where o.company_id = "
+										+ companyId + " limit " + page + ",9");
 
 						Mainpanel.removeAll();
 						Mainpanel.revalidate();
 						Mainpanel.repaint();
 						while (rsData.next()) {
-							Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 									rsData.getString("username"), rsData.getString("name"),
 									Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 									rsData.getString("order_date")));
@@ -172,7 +174,7 @@ public class Orders extends JPanel {
 					}
 				}
 
-				catch (SQLException e1) {
+				catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -192,18 +194,18 @@ public class Orders extends JPanel {
 					Statement stmt = jdbcConnect.createStatement();
 					ResultSet rsData = stmt
 							.executeQuery(
-									"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Declined\" limit "
-											+ page + ",9");
+									"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Declined\"  and o.company_id = "
+											+ companyId + " limit " + page + ",9");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 								rsData.getString("username"), rsData.getString("name"),
 								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 								rsData.getString("order_date")));
 
 					}
 					rsData.close();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				FooterPanel.removeAll();
@@ -217,19 +219,21 @@ public class Orders extends JPanel {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
 							ResultSet count = stmt1.executeQuery(
-									"SELECT count(*) as count from orders where order_status =\"Declined\";");
+									"SELECT count(*) as count from orders where order_status =\"Declined\" and o.company_id = "
+											+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Declined\" limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Declined\"  where o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -238,7 +242,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -257,14 +261,15 @@ public class Orders extends JPanel {
 							if (page != 0) {
 								page = page - 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Declined\" limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Declined\"  where o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -273,7 +278,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -305,14 +310,14 @@ public class Orders extends JPanel {
 					ResultSet rsData = stmt.executeQuery(QUERY);
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 								rsData.getString("username"), rsData.getString("name"),
 								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 								rsData.getString("order_date")));
 
 					}
 					rsData.close();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				FooterPanel.removeAll();
@@ -330,14 +335,15 @@ public class Orders extends JPanel {
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id  where o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -346,7 +352,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -366,16 +372,17 @@ public class Orders extends JPanel {
 							try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 								Statement stmt = jdbcConnect.createStatement();
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id  where o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
 								rsData.close();
-							} catch (SQLException e1) {
+							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
 
@@ -408,17 +415,18 @@ public class Orders extends JPanel {
 				try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 					Statement stmt = jdbcConnect.createStatement();
 					ResultSet rsData = stmt.executeQuery(
-							"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\"");
+							"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\" and o.company_id = "
+									+ companyId + ";");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 								rsData.getString("username"), rsData.getString("name"),
 								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 								rsData.getString("order_date")));
 
 					}
 					rsData.close();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				FooterPanel.removeAll();
@@ -432,19 +440,21 @@ public class Orders extends JPanel {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
 							ResultSet count = stmt1.executeQuery(
-									"SELECT count(*) as count from orders where order_status =\"Accepted\";");
+									"SELECT count(*) as count from orders where order_status =\"Accepted\" and o.company_id = "
+											+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\" limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\" and o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -453,7 +463,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -470,14 +480,15 @@ public class Orders extends JPanel {
 							if (page != 0) {
 								page = page - 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\" limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Accepted\"  and o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -486,7 +497,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -522,18 +533,19 @@ public class Orders extends JPanel {
 					Statement stmt = jdbcConnect.createStatement();
 					ResultSet rsData = stmt
 							.executeQuery(
-									"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Waiting\" limit "
+									"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Waiting\"  and o.company_id = "
+											+ companyId + " limit "
 											+ page + ",9");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 								rsData.getString("username"), rsData.getString("name"),
 								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 								rsData.getString("order_date")));
 
 					}
 					rsData.close();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				FooterPanel.removeAll();
@@ -552,14 +564,15 @@ public class Orders extends JPanel {
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Waiting\" limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Waiting\"  and o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -568,7 +581,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -585,14 +598,15 @@ public class Orders extends JPanel {
 							if (page != 0) {
 								page = page - 9;
 								ResultSet rsData = stmt.executeQuery(
-										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Waiting\" limit "
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where order_status =\"Waiting\" and o.company_id = "
+												+ companyId + " limit "
 												+ page + ",9");
 
 								Mainpanel.removeAll();
 								Mainpanel.revalidate();
 								Mainpanel.repaint();
 								while (rsData.next()) {
-									Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 											rsData.getString("username"), rsData.getString("name"),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
@@ -601,7 +615,7 @@ public class Orders extends JPanel {
 							}
 						}
 
-						catch (SQLException e1) {
+						catch (Exception e1) {
 							e1.printStackTrace();
 						}
 
@@ -637,17 +651,17 @@ public class Orders extends JPanel {
 					ResultSet rsData = stmt
 							.executeQuery(
 									"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where username =\""
-											+ textField.getText() + "\"");
+											+ textField.getText() + "\" and o.company_id = " + companyId + ";");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("user_id")),
+						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
 								rsData.getString("username"), rsData.getString("name"),
 								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
 								rsData.getString("order_date")));
 
 					}
 					rsData.close();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
