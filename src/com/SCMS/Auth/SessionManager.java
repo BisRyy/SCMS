@@ -1,6 +1,7 @@
 package com.SCMS.Auth;
 
 import java.io.*;
+
 public class SessionManager {
     private static final String SESSION_FILE = "session.txt";
 
@@ -18,6 +19,14 @@ public class SessionManager {
             return decrypt(reader.readLine().toCharArray());
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public static void clearSession() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SESSION_FILE))) {
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -41,7 +50,9 @@ public class SessionManager {
             return null;
         }
     }
-    public static void saveAuthenticationState(boolean isAuthenticated, String username, String role, String companyId) {
+
+    public static void saveAuthenticationState(boolean isAuthenticated, String username, String role,
+            String companyId) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(SESSION_FILE))) {
             writer.write(encrypt(String.valueOf(isAuthenticated)));
             writer.newLine();
@@ -50,7 +61,7 @@ public class SessionManager {
             writer.write(encrypt(role));
             writer.newLine();
             writer.write(encrypt(companyId));
-                        
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,7 +85,7 @@ public class SessionManager {
         return new String(decrypted);
     }
 
-    public static void logout(){
+    public static void logout() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(SESSION_FILE))) {
             writer.newLine();
         } catch (IOException e) {

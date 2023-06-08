@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
+import java.util.HashMap;
+import java.sql.PreparedStatement;
 
 import com.SCMS.Auth.SessionManager;
 
@@ -243,6 +246,8 @@ public class Database {
         return false;
     }
 
+
+
     // remove category from database
     public boolean removeCategory(String id) {
         String query = "UPDATE categories SET deleted = 1 WHERE category_id='" + id + "';";
@@ -332,5 +337,88 @@ public class Database {
 
         }
         return 0;
+    }
+    
+    public Map<String, String> userInfo(String info) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+
+        try {
+            connect();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, info);
+            ResultSet resultSet = statement.executeQuery();
+
+            Map<String, String> userInfo = new HashMap<>();
+
+            if(resultSet.next())
+            {
+                // Get the info from the database
+                String fname = resultSet.getString("fname");
+                String lname = resultSet.getString("lname");
+                String email = resultSet.getString("email");
+                String phone = resultSet.getString("phone");
+                String address = resultSet.getString("address");
+        
+                // Put the info in the map
+                userInfo.put("fname", fname);
+                userInfo.put("lname", lname);
+                userInfo.put("email", email);
+                userInfo.put("phone", phone);
+                userInfo.put("address", address);
+            }
+    
+            disconnect();
+            return userInfo;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return null;
+    }   
+    
+    public boolean saveUserInfo(String username, String fname, String lname, String email, String phone, String address, String image)
+    {
+        String sql = "UPDATE users SET fname = ?, lname = ?, email = ?,  phone = ?, address = ?, image_data = ? WHERE username = ?";
+
+        try{
+            connect();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, fname);
+            statement.setString(2, lname);
+            statement.setString(3, email);
+            statement.setString(4, phone);
+            statement.setString(5, address);
+            statement.setString(6, image);
+            statement.setString(7, username);
+            statement.executeUpdate();
+            disconnect();
+            return true;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteUser(String username)
+    {
+        String sql = "DELETE FROM users WHERE username = ?";
+
+        try
+        {
+            connect();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.executeUpdate();
+            disconnect();
+            return true;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    
+        return false;
     }
 }

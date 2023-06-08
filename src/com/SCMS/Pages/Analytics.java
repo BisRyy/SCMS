@@ -8,10 +8,13 @@ import org.jfree.chart.*;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
-public class Employees extends JPanel {
-    // create a page to manage employees
+import com.SCMS.Utils.Database;
 
-    public Employees() {
+public class Analytics extends JPanel {
+    Database db = new Database();
+    String companyId;
+
+    public Analytics(String companyId) {
         setSize(1200, 800);
         setLayout(new BorderLayout());
         setBackground(Color.LIGHT_GRAY);
@@ -124,19 +127,11 @@ public class Employees extends JPanel {
 
     // Create a pie chart
     private JFreeChart createPieChart() {
+        Object[][] inventory = db.getInventory(companyId);
         DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("Bread", 100);
-        dataset.setValue("Milk", 200);
-        dataset.setValue("Eggs", 300);
-        dataset.setValue("Cheese", 400);
-        dataset.setValue("Butter", 500);
-        dataset.setValue("Yogurt", 600);
-        dataset.setValue("Juice", 700);
-        dataset.setValue("Water", 800);
-        dataset.setValue("Soda", 900);
-        dataset.setValue("Beer", 1000);
-        dataset.setValue("Wine", 1100);
-        dataset.setValue("Liquor", 1200);
+        for (int i = 0; i < inventory.length; i++) {
+            dataset.setValue((String) inventory[i][1], (int) inventory[i][2]);
+        }
 
         JFreeChart chart = ChartFactory.createPieChart("Inventory", dataset);
         return chart;

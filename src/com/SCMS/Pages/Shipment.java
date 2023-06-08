@@ -34,7 +34,7 @@ public class Shipment extends JPanel {
 	private Ship_Details shipD;
 	int page = 0;
 	int track_number = 234;
-	String DB_URL = "jdbc:mysql://localhost/SCMS";
+	String DB_URL = "jdbc:mysql://localhost:3306/SCMS";
 	String USERNAME = "root";
 	String PASSWORD = "";
 	String QUERY = "select * from shipments limit " + page + ",3";

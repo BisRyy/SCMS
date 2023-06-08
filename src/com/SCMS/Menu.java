@@ -54,11 +54,11 @@ public class Menu extends JFrame {
         panelMap.put("Shipment", new Shipment());
         panelMap.put("Purchase", new Purchase(companyId));
         panelMap.put("Suppliers", new Suppliers(companyId));
-        panelMap.put("Employees", new Employees());
+        panelMap.put("Analytics", new Analytics(companyId));
         panelMap.put("Settings", new Settings());
 
         String[] menuItemsNames = { "Dashboard", "Purchase", "Inventory", "Products", "Orders", "Shipment", "Suppliers",
-                "Employees", "Settings", "Logout" };
+                "Analytics", "Settings", "Logout" };
 
         for (int i = 0; i < menuItems.length; i++) {
             JPanel panel = panelMap.get(menuItemsNames[i]);

@@ -1,6 +1,8 @@
 package com.SCMS.Pages;
 
 import javax.swing.*;
+
+import com.SCMS.Auth.SessionManager;
 import com.SCMS.Utils.Database;
 import java.awt.*;
 
@@ -15,8 +17,6 @@ public class Purchase extends JPanel {
         this.companyId = companyId;
         setSize(1200, 800);
         setLayout(new BorderLayout());
-
-        // Product panel
         
         // Initialize sample products
         products = db.getInventory(companyId, 1);
@@ -98,53 +98,55 @@ public class Purchase extends JPanel {
         checkoutFrame.setSize(600, 600);
         checkoutFrame.setLocationRelativeTo(null);
 
-        JPanel formPanel = new JPanel(new GridLayout(11, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        JPanel formPanel = new JPanel(new GridLayout(11, 2, 10, 5));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 0, 50));
 
         JLabel companyNameLabel = new JLabel("Company Name:");
-        JTextField companyNameField = new JTextField((String) product[6], 10);
+        JLabel companyName = new JLabel((String) product[6]);
         formPanel.add(companyNameLabel);
-        formPanel.add(companyNameField);
+        formPanel.add(companyName);
 
-        JLabel SupplierLable = new JLabel("Address:");
-        JTextField SupplierCompany = new JTextField((String) product[1], 10);
-        formPanel.add(SupplierLable);
-        formPanel.add(SupplierCompany);
+        JLabel productLabel = new JLabel("Product:");
+        JLabel ProductName = new JLabel((String) product[1]);
+        formPanel.add(productLabel);   
+        formPanel.add(ProductName);
 
         JLabel contactPersonLabel = new JLabel("Contact Person:");
-        JTextField contactPersonField = new JTextField("Bisrat", 10);
+        JTextField contactPersonField = new JTextField(SessionManager.getAuthenticatedUser(), 10);
         formPanel.add(contactPersonLabel);
         formPanel.add(contactPersonField);
 
         JLabel contactNumberLabel = new JLabel("Contact Number:");
-        JTextField contactNumberField = new JTextField("0912345678", 10);
+        JTextField contactNumberField = new JTextField("", 10);
         formPanel.add(contactNumberLabel);
         formPanel.add(contactNumberField);
 
         JLabel emailLabel = new JLabel("Email:");
-        JTextField emailField = new JTextField("bisry@proton.me", 20);
+        JTextField emailField = new JTextField("", 20);
         formPanel.add(emailLabel);
         formPanel.add(emailField);
 
-        JLabel deliveryDateLabel = new JLabel("Delivery Date:");
-        JTextField deliveryDateField = new JTextField("2023-07-01", 10);
-        formPanel.add(deliveryDateLabel);
-        formPanel.add(deliveryDateField);
-
         JLabel quantityLabel = new JLabel("Quantity:");
         int qty = (int) product[2];
-        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(1, 0, qty, 1);
+        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0, 0, qty, 10);
         JSpinner quantitySpinner = new JSpinner(spinnerModel);
 
         JLabel feeLabel = new JLabel("Fee:");
-        JLabel feeField = new JLabel(product[3] + " Birr");
+        JLabel feeField = new JLabel();
+
+        quantitySpinner.addChangeListener(e -> {
+            int quantity = (int) quantitySpinner.getValue();
+            double price = Double.parseDouble(product[3].toString());
+            feeField.setText(String.valueOf(quantity * price));
+        });
+        
         formPanel.add(quantityLabel);
         formPanel.add(quantitySpinner);
         formPanel.add(feeLabel);
         formPanel.add(feeField);
 
         JLabel paymentOptionLabel = new JLabel("Payment Option:");
-        String[] paymentOptions = { "Cash", "Cheque", "Credit" };
+        String[] paymentOptions = { "Cash", "Check", "Credit" };
         JComboBox<String> paymentOptionComboBox = new JComboBox<>(paymentOptions);
         formPanel.add(paymentOptionLabel);
         formPanel.add(paymentOptionComboBox);
@@ -172,18 +174,15 @@ public class Purchase extends JPanel {
 
         orderButton.addActionListener(e -> {
             // Order button action handling
-            String companyName = companyNameField.getText();
-            String SupplierComp = SupplierCompany.getText();
             String contactPerson = contactPersonField.getText();
             String contactNumber = contactNumberField.getText();
             String email = emailField.getText();
-            String deliveryDate = deliveryDateField.getText();
             int quantity = (int) quantitySpinner.getValue();
             String paymentOption = (String) paymentOptionComboBox.getSelectedItem();
             String note = additionalNotesField.getText();
 
-            if (companyName.isEmpty() || SupplierComp.isEmpty() || contactPerson.isEmpty() || contactNumber.isEmpty() ||
-                    email.isEmpty() || deliveryDate.isEmpty() || quantity == 0 || paymentOption.isEmpty() ||
+            if (contactPerson.isEmpty() || contactNumber.isEmpty() ||
+                    email.isEmpty() || quantity == 0 || paymentOption.isEmpty() ||
                     note.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please fill in all the fields.");
             } else {

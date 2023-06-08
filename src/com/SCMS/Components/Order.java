@@ -17,7 +17,7 @@ import javax.swing.border.LineBorder;
 
 public class Order extends JPanel {
 
-	String DB_URL = "jdbc:mysql://localhost/SCMS";
+	String DB_URL = "jdbc:mysql://localhost:3306/SCMS";
 	String USERNAME = "root";
 	String PASSWORD = "";
 	JPanel j = this;

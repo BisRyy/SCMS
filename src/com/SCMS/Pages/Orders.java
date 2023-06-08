@@ -25,7 +25,7 @@ public class Orders extends JPanel {
 
 	public Orders(String companyId) {
 		this.companyId = companyId;
-		String DB_URL = "jdbc:mysql://localhost/SCMS";
+		String DB_URL = "jdbc:mysql://localhost:3306/SCMS";
 		String USERNAME = "root";
 		String PASSWORD = "";
 		String QUERY = "select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where o.company_id = "

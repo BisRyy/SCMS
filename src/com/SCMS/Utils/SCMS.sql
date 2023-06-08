@@ -22,6 +22,7 @@ CREATE TABLE users(
     address varchar(25),
     role varchar(25),
     company_id int,
+    image_data VARCHAR(255),
     foreign key(company_id) references suppliers(supplier_id)
 );
 
@@ -84,74 +85,52 @@ CREATE TABLE orders(
     foreign key(shipment_id) references shipments(shipment_id)
 );
 
+INSERT INTO `suppliers` (`supplier_id`, `supplier_name`, `supplier_address`, `supplier_phone`, `supplier_email`, `manager_name`) VALUES
+(1, 'Apple Inc.', 'AMERICA', ' (800) 692–7753.', 'domain@apple.com', 'Apple'),
+(2, 'Google', 'UNITED KINGDOM', '(020) 444-555', 'domain@google.com', 'Google');
 
-INSERT INTO suppliers (supplier_name, supplier_address, supplier_phone, supplier_email, manager_name) VALUES ('Supplier 1', 'Address 1', '1234567890', 'supplier@supply.me', "user"),
-('Supplier 2', 'Address 2', '0987654321', 'supplier2@supply.me', 'user2');
-
-INSERT INTO users (username, password, email, phone, address, role, company_id) VALUES
-('admin', 'admin', 'admin', 'admin', 'admin', 'Administrator', 1),
-('user', 'user', 'user', 'user', 'user', 'Manager', 1),
-('user2', 'user2', 'user2', 'user2', 'user2', 'Employee', 2);
-
-INSERT INTO categories (category_name) VALUES
-('Category 1'),
-('Category 2'),
-('Category 3'),
-('Category 4');
-
-INSERT INTO products (name, code, price, unit, category_id, description, image, supplier_id) VALUES 
-('Product 1', 'P1', 10, 'Unit', 1, 'Description 1', 'lib/product.png', 1),
-('Product 2', 'P2', 20, 'Unit', 2, 'Description 2', 'lib/product.png', 1),
-('Product 3', 'P3', 30, 'Unit', 3, 'Description 3', 'lib/product.png', 1),
-('Product 4', 'P4', 40, 'Unit', 4, 'Description 4', 'lib/product.png', 1),
-('Product 5', 'P5', 50, 'Unit', 1, 'Description 5', 'lib/product.png', 2),
-('Product 6', 'P6', 60, 'Unit', 2, 'Description 6', 'lib/product.png', 2),
-('Product 7', 'P7', 70, 'Unit', 3, 'Description 7', 'lib/product.png', 2),
-('Product 8', 'P8', 80, 'Unit', 4, 'Description 8', 'lib/product.png', 2),
-('Product 9', 'P9', 90, 'Unit', 1, 'Description 9', 'lib/product.png', 1),
-('Product 10', 'P10', 100, 'Unit', 2, 'Description 10', 'lib/product.png', 1),
-('Product 11', 'P11', 110, 'Unit', 3, 'Description 11', 'lib/product.png', 1),
-('Product 12', 'P12', 120, 'Unit', 4, 'Description 12', 'lib/product.png', 1),
-('Product 13', 'P13', 130, 'Unit', 1, 'Description 13', 'lib/product.png', 2),
-('Product 14', 'P14', 140, 'Unit', 2, 'Description 14', 'lib/product.png', 2),
-('Product 15', 'P15', 150, 'Unit', 3, 'Description 15', 'lib/product.png', 2),
-('Product 16', 'P16', 160, 'Unit', 4, 'Description 16', 'lib/product.png', 2);
-
-INSERT INTO inventory (product_id, quantity, location, expiry_date, owner_id, info) VALUES
-(1, 10, 'Location 1', '2021-01-01', 1, 'Info 1'),
-(2, 20, 'Location 2', '2021-02-02', 1, 'Info 2'),
-(3, 30, 'Location 3', '2021-03-03', 1, 'Info 3'),
-(4, 40, 'Location 4', '2021-04-04', 1, 'Info 4'),
-(5, 50, 'Location 5', '2021-05-05', 2, 'Info 5'),
-(6, 60, 'Location 6', '2021-06-06', 2, 'Info 6'),
-(7, 70, 'Location 7', '2021-07-07', 2, 'Info 7'),
-(8, 80, 'Location 8', '2021-08-08', 2, 'Info 8'),
-(9, 90, 'Location 9', '2021-09-09', 1, 'Info 9'),
-(10, 100, 'Location 10', '2021-10-10', 1, 'Info 10'),
-(11, 110, 'Location 11', '2021-11-11', 1, 'Info 11'),
-(12, 120, 'Location 12', '2021-12-12', 1, 'Info 12'),
-(13, 130, 'Location 13', '2021-01-01', 2, 'Info 13'),
-(14, 140, 'Location 14', '2021-02-02', 2, 'Info 14'),
-(15, 150, 'Location 15', '2021-03-03', 2, 'Info 15'),
-(16, 160, 'Location 16', '2021-04-04', 2, 'Info 16');
+INSERT INTO `users` (`user_id`, `username`, `password`, `fname`, `lname`, `email`, `phone`, `address`, `role`, `company_id`, `image_Data`) VALUES
+(1, 'admin', 'admin', NULL, NULL, 'admin', 'admin', 'admin', 'Administrator', 1, NULL),
+(2, 'Biruk_M', '12345', 'Biruk', 'Mesfin', 'birukmesfin@apple.com', '(800) 643-7542', 'AMERICA', 'Manager', 1, NULL),
+(3, 'Bisry', '12345', 'Bisrat', 'Kebere', 'bisry@apple.com', '(020) 443-542', 'UNITED KINGDOM', 'Manager', 2, NULL);
 
 
-INSERT INTO orders(user_id, company_id, product_id, order_quantity, order_status, note) VALUES
-(2, 1, 1, 10, 'Waiting', 'Note 1'),
-(2, 1, 2, 20, 'Accepted', 'Note 2'),
-(2, 1, 3, 30, 'Declined', 'Note 3'),
-(2, 1, 4, 40, 'Waiting', 'Note 4'),
-(2, 2, 5, 50, 'Accepted', 'Note 5'),
-(2, 2, 6, 60, 'Accepted', 'Note 6'),
-(2, 2, 7, 70, 'Waiting', 'Note 7'),
-(2, 2, 8, 80, 'Declined', 'Note 8'),
-(2, 1, 9, 90, 'Waiting', 'Note 9'),
-(2, 1, 10, 100, 'Accepted', 'Note 10'),
-(2, 1, 11, 110, 'Accepted', 'Note 11'),
-(2, 1, 12, 120, 'Waiting', 'Note 12'),
-(2, 2, 13, 130, 'Declined', 'Note 13'),
-(2, 2, 14, 140, 'Waiting', 'Note 14'),
-(2, 2, 15, 150, 'Accepted', 'Note 15'),
-(2, 2, 16, 160, 'Accepted', 'Note 16');
+INSERT INTO `categories` (`category_id`, `category_name`) VALUES
+(3, 'Accessories'),
+(2, 'Laptop and Wearables'),
+(1, 'Phones'),
+(4, 'Tablets and Audio Devices');
+
+
+INSERT INTO `products` (`product_id`, `name`, `code`, `price`, `unit`, `category_id`, `description`, `image`, `supplier_id`) VALUES
+(1, 'Apple iPhone Pro Max 12', 'I12', '1000.00', '$', 1, 'This is the all new iPhone 12 Pro Max with many new interesting features, Buy now and save yourself a discount of 20%.', 'lib/product.png', 1),
+(2, 'Apple MacBook Pro ', 'MPO', '2000.00', '$', 2, 'MacBook, the best laptop any one could ever ask for with high efficiency and horse power no other laptop has ever equipped, Buy now and get a start up.', 'lib/product.png', 1),
+(3, 'A Magic Keyboard Folio', 'P3', '250.00', '$', 3, 'A Magic Keyboard Folio for your iPad, make your life even more easier with typing and getting what you desire with clicks of a keyboard, or shall I say magical keyboard.', 'lib/product.png', 1),
+(4, 'HomePod - Midnight', 'HPM', '300.00', '$', 4, 'Have at it with your Home Pod, quality audio, clear voice, voice cancellation, upgraded sound frequencies, and more.', 'lib/product.png', 1),
+(5, 'Google Pixels', 'GP', '1100.00', '$', 1, 'The ultimate creation, Google Pixels to get to the top, with their high quality camera clearness, small amount size occupied and more.', 'lib/product.png', 2),
+(6, 'Google Smart Watch', 'SW', '750.00', '$', 2, 'Your are running, maybe you are relaxing or waiting for planned alarm or just for fun, try our smart watches to add calendar and play as you like with the connection from your phone.', 'lib/product.png', 2),
+(7, 'Google Virtual Reality Models', 'VR', '1000.00', '$', 3, 'In the world filled with your dreams and imagination but unable to come to life, Buy VR to not let them know we can still.', 'lib/product.png', 2),
+(8, 'Google Android 13 Tablet', '13T', '1200.00', '$', 4, 'The newly improved android 13 tablet that lets you control all activities with one making you connect everywhere digitally and accessing all your accessories in one device, YOUR TABLET. ', 'lib/product.png', 2);
+
+INSERT INTO `inventory` (`inventory_id`, `product_id`, `quantity`, `location`, `date_added`, `expiry_date`, `owner_id`, `info`) VALUES
+(1, 1, 100, 'UNITED KINGDOM', '2023-06-07', '2021-01-01', 1, 'This is the all new iPhone 12 Pro Max with many new interesting features, Buy now and save yourself a discount of 20%.'),
+(2, 2, 100, 'UNITED KINGDOM', '2023-06-07', '2021-02-02', 1, 'MacBook, the best laptop any one could ever ask for with high efficiency and horse power no other laptop has ever equipped, Buy now and get a start up.'),
+(3, 3, 100, 'UNITED KINGDOM', '2023-06-07', '2021-03-03', 1, 'A Magic Keyboard Folio for your iPad, make your life even more easier with typing and getting what you desire with clicks of a keyboard, or shall I say magical keyboard.'),
+(4, 4, 100, 'UNITED KINGDOM', '2023-06-07', '2021-04-04', 1, 'Have at it with your Home Pod, quality audio, clear voice, voice cancellation, upgraded sound frequencies, and more.'),
+(5, 5, 100, 'AMERICA', '2023-06-07', '2021-05-05', 2, 'The ultimate creation, Google Pixels to get to the top, with their high quality camera clearness, small amount size occupied and more.'),
+(6, 6, 100, 'AMERICA', '2023-06-07', '2021-06-06', 2, 'Your are running, maybe you are relaxing or waiting for planned alarm or just for fun, try our smart watches to add calendar and play as you like with the connection from your phone.'),
+(7, 7, 100, 'AMERICA', '2023-06-07', '2021-07-07', 2, 'In the world filled with your dreams and imagination but unable to come to life, Buy VR to not let them know we can still.'),
+(8, 8, 100, 'AMERICA', '2023-06-07', '2021-08-08', 2, 'The newly improved android 13 tablet that lets you control all activities with one making you connect everywhere digitally and accessing all your accessories in one device, YOUR TABLET. ');
+
+
+INSERT INTO `orders` (`order_id`, `user_id`, `company_id`, `product_id`, `order_quantity`, `order_status`, `order_date`, `note`) VALUES
+(1, 2, 1, 1, 10, 'Waiting', '2023-06-07', 'Provide It Very Soon Please'),
+(2, 2, 1, 2, 20, 'Accepted', '2023-06-07', 'Provide It Very Soon Please'),
+(3, 2, 1, 3, 30, 'Declined', '2023-06-07', 'Provide It Very Soon Please'),
+(4, 2, 1, 4, 40, 'Waiting', '2023-06-07', 'Provide It Very Soon Please'),
+(5, 2, 2, 5, 50, 'Accepted', '2023-06-07', 'Provide It Very Soon Please'),
+(6, 2, 2, 6, 60, 'Accepted', '2023-06-07', 'Provide It Very Soon Please'),
+(7, 2, 2, 7, 70, 'Waiting', '2023-06-07', 'Provide It Very Soon Please'),
+(8, 2, 2, 8, 80, 'Declined', '2023-06-07', 'Provide It Very Soon Please');
 
 

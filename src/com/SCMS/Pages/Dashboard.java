@@ -27,14 +27,14 @@ public class Dashboard extends JPanel {
         // Header panel
         JPanel headerPanel = new JPanel();
         headerPanel.setPreferredSize(new Dimension(getWidth(), 60));
-        headerPanel.add(new JLabel("This Is Dashboard Page"));
+        headerPanel.add(new JLabel("Dashboard"));
         add(headerPanel, BorderLayout.NORTH);
 
         // Sidebar panel
         JPanel sidebarPanel = new JPanel();
         sidebarPanel.setPreferredSize(new Dimension(250, getHeight()));
         sidebarPanel.setBackground(Color.LIGHT_GRAY);
-        add(sidebarPanel, BorderLayout.WEST);
+        // add(sidebarPanel, BorderLayout.WEST);
 
         // Main content panel
         JPanel contentPanel = new JPanel();
@@ -95,6 +95,9 @@ public class Dashboard extends JPanel {
         usersLabel.setHorizontalAlignment(JLabel.CENTER);
         usersPanel.add(usersLabel, BorderLayout.NORTH);
         // Add dummy data or graph for users
+        JFreeChart catChart = createCatChart();
+        ChartPanel catChartPanel = new ChartPanel(catChart);
+        usersPanel.add(catChartPanel, BorderLayout.CENTER);
 
         contentPanel.add(usersPanel);
 
@@ -105,7 +108,10 @@ public class Dashboard extends JPanel {
         Object[][] orders = db.getOrders();
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < orders.length; i++) {
-            dataset.setValue((int) orders[i][2], "Orders", (String) orders[i][1]);
+            dataset.setValue((int) orders[i][2], "Recent Orders", (String) orders[i][1]);
+            if (i == 5) {
+                break;
+            }
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
@@ -146,9 +152,23 @@ public class Dashboard extends JPanel {
         DefaultPieDataset dataset = new DefaultPieDataset();
         for (int i = 0; i < inventory.length; i++) {
             dataset.setValue((String) inventory[i][1], (int) inventory[i][2]);
+            if (i == 8) {
+                break;
+            }
         }
 
         JFreeChart chart = ChartFactory.createPieChart("Inventory", dataset);
+        return chart;
+    }
+
+    private JFreeChart createCatChart() {
+        Object[][] inventory = db.getCategories();
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        for (int i = 0; i < inventory.length; i++) {
+            dataset.setValue((String) inventory[i][1], i);
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart("Categories", dataset);
         return chart;
     }
 }

@@ -1,4 +1,5 @@
 package com.SCMS.Utils;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -13,9 +14,10 @@ public class DB {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
     public static Connection getConnection() {
         try {
-            if(connection == null)
+            if (connection == null)
                 new DB();
             connection = DriverManager.getConnection(CONNECTION_STRING, "root", "");
             return connection;
