@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 public class Orders extends JPanel {
 
@@ -25,19 +26,19 @@ public class Orders extends JPanel {
 
 	public Orders(String companyId) {
 		this.companyId = companyId;
-		String DB_URL = "jdbc:mysql://localhost:3306/SCMS";
+		String DB_URL = "jdbc:mysql://localhost/SCMS";
 		String USERNAME = "root";
 		String PASSWORD = "";
 		String QUERY = "select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where o.company_id = "
 				+ companyId + " limit "
 				+ page + ",9";
-		setBackground(new Color(0, 0, 0));
+		// setBackground(new Color(0, 0, 0));
 		setLayout(null);
 
 		JPanel Headpanel = new JPanel();
 
 		Headpanel.setBounds(0, 0, 1266, 75);
-		Headpanel.setBackground(new Color(0, 0, 0));
+		Headpanel.setBackground(Color.LIGHT_GRAY);
 		add(Headpanel);
 		Headpanel.setLayout(null);
 
@@ -89,7 +90,7 @@ public class Orders extends JPanel {
 		JPanel Mainpanel = new JPanel();
 
 		Mainpanel.setBounds(0, 75, 1266, 570);
-		Mainpanel.setBackground(Color.black);
+		Mainpanel.setBackground(Color.lightGray);
 		add(Mainpanel);
 		Mainpanel.setLayout(new GridLayout(3, 3, 10, 10));
 
@@ -99,7 +100,8 @@ public class Orders extends JPanel {
 			ResultSet rsData = stmt.executeQuery(QUERY);
 			while (rsData.next()) {
 				Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
-						rsData.getString("name"), Integer.toString(rsData.getInt("price")),
+						rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+						Integer.toString(rsData.getInt("price")),
 						rsData.getString("order_status"), rsData.getString("order_date")));
 			}
 			rsData.close();
@@ -129,10 +131,11 @@ public class Orders extends JPanel {
 								"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where o.company_id = "
 										+ companyId + " limit " + page + ",9");
 						while (rsData.next()) {
-							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-									rsData.getString("username"), rsData.getString("name"),
-									Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-									rsData.getString("order_date")));
+							Mainpanel.add(
+									new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+											Integer.toString(rsData.getInt("price")),
+											rsData.getString("order_status"), rsData.getString("order_date")));
 						}
 						rsData.close();
 					} catch (Exception e1) {
@@ -153,7 +156,8 @@ public class Orders extends JPanel {
 				try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 					Statement stmt = jdbcConnect.createStatement();
 					Statement stmt1 = jdbcConnect.createStatement();
-					ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders;");
+					ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders o where o.company_id = "
+							+ companyId + ";");
 					count.next();
 					if (page + 9 < count.getInt("count")) {
 						page = page + 9;
@@ -165,10 +169,11 @@ public class Orders extends JPanel {
 						Mainpanel.revalidate();
 						Mainpanel.repaint();
 						while (rsData.next()) {
-							Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-									rsData.getString("username"), rsData.getString("name"),
-									Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-									rsData.getString("order_date")));
+							Mainpanel.add(
+									new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+											Integer.toString(rsData.getInt("price")),
+											rsData.getString("order_status"), rsData.getString("order_date")));
 						}
 						rsData.close();
 					}
@@ -198,10 +203,11 @@ public class Orders extends JPanel {
 											+ companyId + " limit " + page + ",9");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(
+								new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+										rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+										Integer.toString(rsData.getInt("price")),
+										rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();
@@ -234,7 +240,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -270,7 +277,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -310,10 +318,11 @@ public class Orders extends JPanel {
 					ResultSet rsData = stmt.executeQuery(QUERY);
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(
+								new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+										rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+										Integer.toString(rsData.getInt("price")),
+										rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();
@@ -330,7 +339,9 @@ public class Orders extends JPanel {
 						try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
-							ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders;");
+							ResultSet count = stmt1
+									.executeQuery("SELECT count(*) as count from orders o where o.company_id = "
+											+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
@@ -344,7 +355,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -377,7 +389,8 @@ public class Orders extends JPanel {
 												+ page + ",9");
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -419,10 +432,11 @@ public class Orders extends JPanel {
 									+ companyId + ";");
 					while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+						Mainpanel.add(
+								new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+										rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+										Integer.toString(rsData.getInt("price")),
+										rsData.getString("order_status"), rsData.getString("order_date")));
 
 					}
 					rsData.close();
@@ -440,7 +454,7 @@ public class Orders extends JPanel {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
 							ResultSet count = stmt1.executeQuery(
-									"SELECT count(*) as count from orders where order_status =\"Accepted\" and o.company_id = "
+									"SELECT count(*) as count from orders o where order_status =\"Accepted\" and o.company_id = "
 											+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
@@ -455,7 +469,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -489,7 +504,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -537,12 +553,11 @@ public class Orders extends JPanel {
 											+ companyId + " limit "
 											+ page + ",9");
 					while (rsData.next()) {
-
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
-
+						Mainpanel.add(
+								new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+										rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+										Integer.toString(rsData.getInt("price")),
+										rsData.getString("order_status"), rsData.getString("order_date")));
 					}
 					rsData.close();
 				} catch (Exception e1) {
@@ -559,7 +574,8 @@ public class Orders extends JPanel {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
 							ResultSet count = stmt1.executeQuery(
-									"SELECT count(*) as count from orders where order_status =\"Waiting\";");
+									"SELECT count(*) as count from orders o where order_status =\"Waiting\" and o.company_id = "
+											+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
@@ -573,7 +589,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -607,7 +624,8 @@ public class Orders extends JPanel {
 								Mainpanel.repaint();
 								while (rsData.next()) {
 									Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-											rsData.getString("username"), rsData.getString("name"),
+											rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
 											Integer.toString(rsData.getInt("price")),
 											rsData.getString("order_status"), rsData.getString("order_date")));
 								}
@@ -639,30 +657,35 @@ public class Orders extends JPanel {
 		});
 		SearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Mainpanel.removeAll();
-				Mainpanel.revalidate();
-				Mainpanel.repaint();
-				FooterPanel.removeAll();
-				FooterPanel.revalidate();
-				FooterPanel.repaint();
+				if (textField.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Please Enter a Username");
+				} else {
+					Mainpanel.removeAll();
+					Mainpanel.revalidate();
+					Mainpanel.repaint();
+					FooterPanel.removeAll();
+					FooterPanel.revalidate();
+					FooterPanel.repaint();
 
-				try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
-					Statement stmt = jdbcConnect.createStatement();
-					ResultSet rsData = stmt
-							.executeQuery(
-									"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where username =\""
-											+ textField.getText() + "\" and o.company_id = " + companyId + ";");
-					while (rsData.next()) {
+					try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
+						Statement stmt = jdbcConnect.createStatement();
+						ResultSet rsData = stmt
+								.executeQuery(
+										"select * from orders o join users u on o.user_id = u.user_id join products p on o.product_id = p.product_id where username =\""
+												+ textField.getText() + "\" and o.company_id = " + companyId + ";");
+						while (rsData.next()) {
 
-						Mainpanel.add(new Order(Integer.toString(rsData.getInt("order_id")),
-								rsData.getString("username"), rsData.getString("name"),
-								Integer.toString(rsData.getInt("price")), rsData.getString("order_status"),
-								rsData.getString("order_date")));
+							Mainpanel.add(
+									new Order(Integer.toString(rsData.getInt("order_id")), rsData.getString("username"),
+											rsData.getString("name"), Integer.toString(rsData.getInt("order_quantity")),
+											Integer.toString(rsData.getInt("price")),
+											rsData.getString("order_status"), rsData.getString("order_date")));
 
+						}
+						rsData.close();
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-					rsData.close();
-				} catch (Exception e1) {
-					e1.printStackTrace();
 				}
 			}
 

@@ -53,11 +53,11 @@ public class Menu extends JFrame {
 
         panelMap.put("Shipment", new Shipment());
         panelMap.put("Purchase", new Purchase(companyId));
-        panelMap.put("Suppliers", new Suppliers(companyId));
+        panelMap.put("Reports", new Reports());
         panelMap.put("Analytics", new Analytics(companyId));
         panelMap.put("Settings", new Settings());
 
-        String[] menuItemsNames = { "Dashboard", "Purchase", "Inventory", "Products", "Orders", "Shipment", "Suppliers",
+        String[] menuItemsNames = { "Dashboard", "Purchase", "Inventory", "Products", "Orders", "Shipment", "Reports",
                 "Analytics", "Settings", "Logout" };
 
         for (int i = 0; i < menuItems.length; i++) {
@@ -112,7 +112,7 @@ public class Menu extends JFrame {
         contentPane.add(workSpace, BorderLayout.CENTER);
 
         menuBar = new MenuBar();
-        setJMenuBar(menuBar);
+        // setJMenuBar(menuBar);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1400, 760);

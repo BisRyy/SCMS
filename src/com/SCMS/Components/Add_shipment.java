@@ -38,6 +38,7 @@ public class Add_shipment extends JFrame {
     String USERNAME = "root";
     String PASSWORD = "";
     int ship = 1;
+    private TableColumn checkboxColumn;
 
     private JPanel contentPane;
 
@@ -145,8 +146,8 @@ public class Add_shipment extends JFrame {
         showSelectedButton.addActionListener((e) -> {
             int rowCount = table.getRowCount();
             int colCount = table.getColumnCount();
+            int x = 0;
 
-            //
             try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 
                 Statement stmt1 = jdbcConnect.createStatement();
@@ -160,18 +161,15 @@ public class Add_shipment extends JFrame {
                     Object value1 = true;
                     Object value = table.getValueAt(i, 0);
                     if (value == value1) {
+                        x++;
                         for (int j = 1; j < 2; j++) {
 
                             Object value2 = table.getValueAt(i, j);
-
                             stmt1.executeUpdate("update orders set  shipment_id=" + ship + " where order_id=" + value2);
                             stmt2.executeUpdate("update orders set order_status=\"Shipped\" where order_id=" + value2);
-
                         }
                     }
-
                 }
-
             }
 
             catch (SQLException e1) {
@@ -179,7 +177,11 @@ public class Add_shipment extends JFrame {
             }
 
             ship++;
-            JOptionPane.showMessageDialog(null, "Shipment Placed Successfully");
+            if (x == 0) {
+                JOptionPane.showMessageDialog(null, "Please Select Order");
+            } else {
+                JOptionPane.showMessageDialog(null, "Shipment Placed Successfully");
+            }
             dispose();
 
         });
@@ -187,7 +189,5 @@ public class Add_shipment extends JFrame {
         buttonPanel.add(showSelectedButton);
         pack();
         setVisible(true);
-        //
-
     }
 }
