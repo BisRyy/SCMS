@@ -15,6 +15,7 @@ public class Analytics extends JPanel {
     String companyId;
 
     public Analytics(String companyId) {
+        this.companyId = companyId;
         setSize(1200, 800);
         setLayout(new BorderLayout());
         setBackground(Color.LIGHT_GRAY);
@@ -22,7 +23,7 @@ public class Analytics extends JPanel {
         // Header panel
         JPanel headerPanel = new JPanel();
         headerPanel.setPreferredSize(new Dimension(getWidth(), 60));
-        headerPanel.add(new JLabel("This Is Employees Page"));
+        headerPanel.add(new JLabel("Analytics"));
         add(headerPanel, BorderLayout.NORTH);
 
         // Sidebar panel
@@ -57,11 +58,10 @@ public class Analytics extends JPanel {
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inventoryPanel.setLayout(new BorderLayout());
         JLabel inventoryLabel = new JLabel("Inventory");
+        JFreeChart inventoryChart = createInventoryChart();
+        ChartPanel inventoryChartPanel = new ChartPanel(inventoryChart);
         inventoryLabel.setHorizontalAlignment(JLabel.CENTER);
         inventoryPanel.add(inventoryLabel, BorderLayout.NORTH);
-        // Add pie chart for inventory
-        JFreeChart inventoryChart = createPieChart();
-        ChartPanel inventoryChartPanel = new ChartPanel(inventoryChart);
         inventoryPanel.add(inventoryChartPanel, BorderLayout.CENTER);
 
         contentPanel.add(inventoryPanel);
@@ -82,24 +82,24 @@ public class Analytics extends JPanel {
         contentPanel.add(salesPanel);
 
         // Employees panel
-        JPanel employeesPanel = new JPanel();
-        employeesPanel.setBackground(Color.WHITE);
-        employeesPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        employeesPanel.setLayout(new BorderLayout());
-        JLabel employeesLabel = new JLabel("Employees");
-        employeesLabel.setHorizontalAlignment(JLabel.CENTER);
-        employeesPanel.add(employeesLabel, BorderLayout.NORTH);
-        // Add bar chart for employees
-        JFreeChart employeesChart = createBarChart();
-        ChartPanel employeesChartPanel = new ChartPanel(employeesChart);
-        employeesPanel.add(employeesChartPanel, BorderLayout.CENTER);
+        JPanel usersPanel = new JPanel();
+        usersPanel.setBackground(Color.WHITE);
+        usersPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        usersPanel.setLayout(new BorderLayout());
+        JLabel usersLabel = new JLabel("Users");
+        usersLabel.setHorizontalAlignment(JLabel.CENTER);
+        usersPanel.add(usersLabel, BorderLayout.NORTH);
+        // Add dummy data or graph for users
+        JFreeChart catChart = createCatChart();
+        ChartPanel catChartPanel = new ChartPanel(catChart);
+        usersPanel.add(catChartPanel, BorderLayout.CENTER);
 
-        contentPanel.add(employeesPanel);
+        contentPanel.add(usersPanel);
 
         // Footer panel
         JPanel footerPanel = new JPanel();
         footerPanel.setPreferredSize(new Dimension(getWidth(), 60));
-        footerPanel.add(new JLabel("This Is Footer"));
+        footerPanel.add(new JLabel("SCMS"));
         add(footerPanel, BorderLayout.SOUTH);
         
         setVisible(true);
@@ -131,9 +131,12 @@ public class Analytics extends JPanel {
         DefaultPieDataset dataset = new DefaultPieDataset();
         for (int i = 0; i < inventory.length; i++) {
             dataset.setValue((String) inventory[i][1], (int) inventory[i][2]);
+            if (i == 8) {
+                break;
+            }
         }
 
-        JFreeChart chart = ChartFactory.createPieChart("Inventory", dataset);
+        JFreeChart chart = ChartFactory.createPieChart("Status", dataset);
         return chart;
     }
 
@@ -157,5 +160,29 @@ public class Analytics extends JPanel {
         return chart;
     }
     
+    private JFreeChart createInventoryChart() {
+        Object[][] inventory = db.getInventory(companyId);
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        for (int i = 0; i < inventory.length; i++) {
+            dataset.setValue((String) inventory[i][1], (int) inventory[i][2]);
+            if (i == 8) {
+                break;
+            }
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart("Status", dataset);
+        return chart;
+    }
+
+    private JFreeChart createCatChart() {
+        Object[][] inventory = db.getCategories();
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        for (int i = 0; i < inventory.length; i++) {
+            dataset.setValue((String) inventory[i][1], i);
+        }
+
+        JFreeChart chart = ChartFactory.createPieChart("Categories", dataset);
+        return chart;
+    }
 
 }

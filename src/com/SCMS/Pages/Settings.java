@@ -197,8 +197,7 @@ public class Settings extends JPanel {
             String address = addressTextField.getText();
 
             // Save the information to the SQL database
-            boolean saved = db.saveUserInfo(SessionManager.getAuthenticatedUser(), firstName, lastName, email, phone,
-                    address, imagepath);
+            boolean saved = db.saveUserInfo(SessionManager.getAuthenticatedUser(), firstName, lastName, email, phone,address, imagepath);
             if (saved) {
                 JOptionPane.showMessageDialog(Settings.this, "Information saved successfully");
             } else {

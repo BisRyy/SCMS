@@ -67,7 +67,6 @@ public class Dashboard extends JPanel {
         inventoryLabel.setHorizontalAlignment(JLabel.CENTER);
         inventoryPanel.add(inventoryLabel, BorderLayout.NORTH);
         inventoryPanel.add(inventoryChartPanel, BorderLayout.CENTER);
-        // Add dummy data or graph for inventory
 
         contentPanel.add(inventoryPanel);
 
@@ -76,7 +75,7 @@ public class Dashboard extends JPanel {
         productsPanel.setBackground(Color.WHITE);
         productsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         productsPanel.setLayout(new BorderLayout());
-        JLabel productsLabel = new JLabel("Products");
+        JLabel productsLabel = new JLabel("recent");
         productsLabel.setHorizontalAlignment(JLabel.CENTER);
         productsPanel.add(productsLabel, BorderLayout.NORTH);
         // Add pie chart for products
@@ -115,7 +114,7 @@ public class Dashboard extends JPanel {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "",
+                "Report",
                 "Month",
                 "Orders",
                 dataset,
@@ -134,7 +133,7 @@ public class Dashboard extends JPanel {
             dataset.setValue((String) orders[i][8], (int) orders[i][2]);
         }
         JFreeChart chart = ChartFactory.createPieChart(
-                "",
+                "Orders",
                 dataset,
                 true,
                 true,
@@ -157,7 +156,7 @@ public class Dashboard extends JPanel {
             }
         }
 
-        JFreeChart chart = ChartFactory.createPieChart("Inventory", dataset);
+        JFreeChart chart = ChartFactory.createPieChart("Status", dataset);
         return chart;
     }
 
