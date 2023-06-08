@@ -154,7 +154,8 @@ public class Orders extends JPanel {
 				try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 					Statement stmt = jdbcConnect.createStatement();
 					Statement stmt1 = jdbcConnect.createStatement();
-					ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders;");
+					ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders o where o.company_id = "
+					+ companyId + ";");
 					count.next();
 					if (page + 9 < count.getInt("count")) {
 						page = page + 9;
@@ -331,7 +332,8 @@ public class Orders extends JPanel {
 						try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
-							ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders;");
+							ResultSet count = stmt1.executeQuery("SELECT count(*) as count from orders o where o.company_id = "
+							+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
@@ -441,7 +443,7 @@ public class Orders extends JPanel {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
 							ResultSet count = stmt1.executeQuery(
-									"SELECT count(*) as count from orders where order_status =\"Accepted\" and o.company_id = "
+									"SELECT count(*) as count from orders o where order_status =\"Accepted\" and o.company_id = "
 											+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
@@ -560,7 +562,8 @@ public class Orders extends JPanel {
 							Statement stmt = jdbcConnect.createStatement();
 							Statement stmt1 = jdbcConnect.createStatement();
 							ResultSet count = stmt1.executeQuery(
-									"SELECT count(*) as count from orders where order_status =\"Waiting\";");
+								"SELECT count(*) as count from orders o where order_status =\"Waiting\" and o.company_id = "
+								+ companyId + ";");
 							count.next();
 							if (page + 9 < count.getInt("count")) {
 								page = page + 9;
