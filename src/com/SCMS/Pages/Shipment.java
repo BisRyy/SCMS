@@ -102,7 +102,7 @@ public class Shipment extends JPanel {
 						Integer.toString(track_number * rsData.getInt("shipment_id"))));
 			}
 			rsData.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -124,7 +124,7 @@ public class Shipment extends JPanel {
 									Integer.toString(track_number * rsData.getInt("shipment_id"))));
 						}
 						rsData.close();
-					} catch (SQLException e1) {
+					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				}
@@ -152,7 +152,7 @@ public class Shipment extends JPanel {
 						}
 						rsData.close();
 					}
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 

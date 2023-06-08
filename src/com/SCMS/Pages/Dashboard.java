@@ -126,7 +126,6 @@ public class Dashboard extends JPanel {
         DefaultPieDataset dataset = new DefaultPieDataset();
         for (int i = 0; i < orders.length; i++) {
             dataset.setValue((String) orders[i][8], (int) orders[i][2]);
-            System.out.println((String) orders[i][8]);
         }
         JFreeChart chart = ChartFactory.createPieChart(
                 "",
