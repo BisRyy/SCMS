@@ -3,14 +3,9 @@ package com.SCMS.Pages;
 import com.SCMS.Auth.SessionManager;
 import com.SCMS.Utils.Database;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

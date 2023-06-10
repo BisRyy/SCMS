@@ -7,9 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
-
-import com.SCMS.Pages.Shipment;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 

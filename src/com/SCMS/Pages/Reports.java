@@ -14,7 +14,6 @@ public class Reports extends JPanel {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Report selection panel
         JPanel reportSelectionPanel = new JPanel();
         reportSelectionPanel.setLayout(new GridLayout(4, 1, 10, 10));
         reportSelectionPanel.setBorder(BorderFactory.createTitledBorder("Select a Report"));
@@ -58,7 +57,6 @@ public class Reports extends JPanel {
 
         mainPanel.add(reportSelectionPanel, BorderLayout.CENTER);
 
-        // Buttons panel
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
@@ -74,7 +72,6 @@ public class Reports extends JPanel {
 
         mainPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
-        // Header panel
         JPanel headerPanel = new JPanel();
         headerPanel.setBackground(Color.DARK_GRAY);
         headerPanel.setPreferredSize(new Dimension(getWidth(), 60));
@@ -91,30 +88,22 @@ public class Reports extends JPanel {
     }
 
     private void generateSalesReport() {
-        // Generate sales report logic here
         JOptionPane.showMessageDialog(this, "Sales report generated!");
     }
 
     private void generateInventoryReport() {
-        // Generate inventory report logic here
         JOptionPane.showMessageDialog(this, "Inventory report generated!");
     }
 
     private void generateOrdersReport() {
-        // Generate orders report logic here
         JOptionPane.showMessageDialog(this, "Orders report generated!");
     }
 
     private void generateShipmentReport() {
-        // Generate shipment report logic here
         JOptionPane.showMessageDialog(this, "Shipment report generated!");
     }
 
     private void goBack() {
-        // Close the Reports page and go back to the previous page
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Reports());
-    }
 }

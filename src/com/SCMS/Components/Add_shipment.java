@@ -2,13 +2,9 @@ package com.SCMS.Components;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +15,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import java.awt.Choice;
 
 public class Add_shipment extends JFrame {
 
@@ -38,16 +32,11 @@ public class Add_shipment extends JFrame {
     String USERNAME = "root";
     String PASSWORD = "";
 
-    private JPanel contentPane;
-
     public Add_shipment() {
         setTitle("Table Selection Example");
 
         setPreferredSize(new Dimension(700, 300));
         setResizable(false);
-        
-        // to center
-        
 
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Select");
@@ -76,16 +65,12 @@ public class Add_shipment extends JFrame {
         catch (Exception e1) {
             e1.printStackTrace();
         }
-        //
 
-        // Create JTable with the table model
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        // Create list to store selected row indices
         selectedRows = new ArrayList<>();
 
-        // Add list selection listener to the table
         ListSelectionModel selectionModel = table.getSelectionModel();
         selectionModel.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -127,10 +112,8 @@ public class Add_shipment extends JFrame {
         showSelectedButton = new JButton("Add To shipments");
         showSelectedButton.addActionListener((e) -> {
             int rowCount = table.getRowCount();
-            int colCount = table.getColumnCount();
             int x = 0;
 
-            //
             try (Connection jdbcConnect = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
 
                 Statement stmt1 = jdbcConnect.createStatement();
@@ -178,7 +161,6 @@ public class Add_shipment extends JFrame {
         buttonPanel.add(showSelectedButton);
         pack();
         setVisible(true);
-        //
 
     }
 }
